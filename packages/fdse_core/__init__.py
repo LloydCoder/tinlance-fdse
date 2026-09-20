@@ -11,7 +11,8 @@ from .contracts import (
     validate_tenant_scope,
 )
 from .domain import (
-    sha256_digest,\n    Assessment,\n    Evidence,\n    Finding,\n    FindingStatus,\n    Project,\n    Repository,\n    Severity,\n    Tenant,\n)
+    sha256_digest,
+    Assessment,\n    Evidence,\n    Finding,\n    FindingStatus,\n    Project,\n    Repository,\n    Severity,\n    Tenant,\n)
 
 __all__ = [
     "AgentPlatformPort",
