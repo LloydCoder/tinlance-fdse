@@ -12,6 +12,7 @@ dependencies = []
 [project.optional-dependencies]
 test = ["pytest>=8.3,<9"]
 quality = ["ruff>=0.12,<1", "mypy>=1.17,<2"]
+security = ["pip-audit>=2.9,<3"]
 
 [tool.setuptools.packages.find]
 where = ["packages"]
