@@ -1,52 +1,51 @@
 # Agent Platform Integration Contract
 
-FDSE depends on `LloydCoder/tinlance-agent-platform` as an external/private platform dependency. At the time of the M0 audit, that repository contains its architecture README but no executable implementation yet; therefore FDSE defines a domain-side port without pretending that the platform API already exists.
+**Contract version:** FDSE-AP-0.1 (M0 design contract; not a production API)
 
-## Required platform capabilities
+FDSE depends on `LloydCoder/tinlance-agent-platform` as an external/private platform dependency. At the M0 audit, that repository had architecture documentation but no executable implementation. FDSE therefore defines only a provider-neutral port.
 
-FDSE will require platform-backed capabilities for:
+## Ownership
 
-- tenant-bound agent identity
-- capability grants
-- risk classification and policy decisions
-- human approval references
-- sandboxed execution
-- command/filesystem/network controls
-- secrets isolation
-- bounded execution budgets/timeouts
-- trajectory and provenance references
-- audit/event correlation
-- cancellation and recovery
+FDSE owns engineering semantics. Agent Platform owns generic execution authority and infrastructure: identity, authentication/authorization, policy, approvals, sandboxing, secrets, budgets, trajectory, generic provenance/audit and generic observability.
 
-## Call pattern
+FDSE cannot grant itself authority by calling this port.
 
-```text
-FDSE workflow
-   ↓
-ExecutionRequest
-   ↓
-AgentPlatformPort
-   ↓
-Agent Platform authorization/policy/approval/sandbox
-   ↓
-controlled execution
-   ↓
-ExecutionHandle + trajectory/evidence references
-   ↓
-FDSE workflow
-```
+## Request contract
 
-FDSE must never accept a model response as proof that an action was authorized.
+Required: tenant_id, actor_id, project_id, assessment_id, workflow_id, requested task, risk tier, correlation_id, idempotency_key.
 
-## Versioning requirement
+Optional: requested_capabilities.
 
-The integration must use a versioned, contract-tested platform API/SDK before M4. Until that exists, the FDSE port remains intentionally minimal and provider-neutral.
+The tenant/project/assessment ancestry must be checked by FDSE before submission and independently enforced by Agent Platform.
 
-## Failure behavior
+## Response contract
 
-- Missing platform authorization: fail closed.
-- Missing required approval: pause/escalate; never auto-promote.
-- Expired execution handle: stop and request a new governed execution.
-- Platform unavailable: do not silently fall back to unrestricted local execution.
-- Tenant mismatch: reject the request.
-- Unknown capability: reject the request.
+Required: execution_id, execution status, provenance reference, evidence references.
+
+A failed response must include a non-sensitive error code. Malformed or unknown responses are rejected; they are never treated as success.
+
+## Semantics
+
+- correlation_id links the request across FDSE and Agent Platform.
+- idempotency_key prevents accidental duplicate submission where the platform supports idempotency.
+- execution_id identifies a platform execution; it is not a request ID.
+- evidence references point to observable evidence and do not by themselves establish truth.
+- provenance identifies how an execution/result was produced; it is not an authorization grant.
+- approval is authoritative only when issued by Agent Platform.
+
+## Fail-closed behavior
+
+- missing authority context → deny
+- tenant mismatch → deny
+- unknown capability → deny
+- unavailable authority provider → no consequential execution
+- missing approval → no consequential execution
+- malformed response → reject
+- unknown execution state → reject
+- platform output or model output → never treated as authority
+
+FDSE must never fall back to local unrestricted execution when the platform is unavailable.
+
+## Compatibility
+
+M4 must replace this design contract with a versioned, contract-tested platform API/SDK and explicit compatibility policy. No undocumented Agent Platform internals may become an FDSE dependency.
