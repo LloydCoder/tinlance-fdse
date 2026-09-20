@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 import pytest
 
 from fdse_core.contracts import AuthorityContext, ExecutionResult, ExecutionStatus
-from fdse_core.domain import Assessment, Evidence, Finding, FindingStatus, Project, Repository, Severity, Tenant
+from fdse_core.domain import (\n    Assessment,\n    Evidence,\n    Finding,\n    FindingStatus,\n    Project,\n    Repository,\n    Severity,\n    Tenant,\n)
 
 
 def test_core_domain_objects_preserve_tenant_and_traceability() -> None:
