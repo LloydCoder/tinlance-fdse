@@ -65,3 +65,15 @@ def test_missing_authority_context_fails_closed() -> None:
 def test_malformed_execution_failure_is_rejected() -> None:
     with pytest.raises(ValueError, match="error_code"):
         ExecutionResult("exec-1", ExecutionStatus.FAILED, (), "prov-1")
+
+
+
+def test_execution_tenant_mismatch_is_denied() -> None:
+    from fdse_core.contracts import ExecutionRequest, validate_tenant_scope
+
+    request = ExecutionRequest(
+        authority=AuthorityContext("tenant-a", "actor", "corr", "idem"),
+        project_id="p", assessment_id="a", workflow_id="w", task="read", risk_tier="read_only",
+    )
+    with pytest.raises(PermissionError, match="tenant mismatch"):
+        validate_tenant_scope(request, "tenant-b")
