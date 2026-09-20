@@ -8,6 +8,7 @@ from .contracts import (
     ExecutionStatus,
     EvidencePort,
     GitProviderPort,
+    validate_tenant_scope,
 )
 from .domain import (\n    Assessment,\n    Evidence,\n    Finding,\n    FindingStatus,\n    Project,\n    Repository,\n    Severity,\n    Tenant,\n)
 
@@ -27,4 +28,5 @@ __all__ = [
     "Repository",
     "Severity",
     "Tenant",
+    "validate_tenant_scope",
 ]
