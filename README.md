@@ -37,3 +37,5 @@ inspect → design → implement → test → security review → CI → review 
 ```
 
 See `docs/architecture/BOUNDARIES.md`, `docs/architecture/AGENT-PLATFORM-INTEGRATION.md` and `docs/ROADMAP.md`.
+
+M0 release state is authoritative only after the final branch commit has a successful GitHub Actions run and PR #1 is merged; until then it remains in progress.
