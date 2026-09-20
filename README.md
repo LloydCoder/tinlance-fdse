@@ -2,63 +2,38 @@
 
 **Forward-Deployed Software Engineering execution system for governed, evidence-driven software delivery.**
 
-Tinlance FDSE is the domain execution layer for Tinlance's FDSE services. It specializes in software-engineering work while delegating generic agent execution, identity, authorization, policy, approvals, sandboxing, evidence, trajectory, observability, budgets, and audit primitives to the private **Tinlance Agent Platform**.
+FDSE is the engineering-domain execution layer for Tinlance FDSE services. It owns engineering semantics while delegating generic agent execution, identity, authorization, policy, approvals, sandboxing, budgets, trajectory, observability, and audit primitives to the private Tinlance Agent Platform.
 
 ## Architectural invariant
 
-> **FDSE owns engineering semantics; Agent Platform owns generic agent authority and execution infrastructure.**
+**FDSE owns engineering semantics; Agent Platform owns generic agent authority and execution infrastructure.**
 
 FDSE must never become a second agent runtime or security kernel.
 
 ## Status
 
-**M0 — Architecture & repository foundation: IN PROGRESS**
+**M1 — Domain foundation implemented; integration hardening in progress.**
 
-The repository was empty at initialization. M0 establishes the domain boundary, dependency direction, integration contract, quality gates, and engineering architecture before implementation of customer workflows.
+The repository now contains executable domain entities, tenant-scoped project/finding workflows, evidence digests, verification records, dependency-inversion ports, a deny-by-default local policy adapter, unit tests, multi-version CI, and a dependency security gate.
 
-No feature is considered implemented because an interface, prompt, directory, or document exists. Capabilities require executable implementation and tests.
+No production capability is considered complete until its implementation, tests, security controls, integration contract, and CI evidence are present.
 
 ## Planned lifecycle
 
-```text
-Customer
-  → Project
-  → Repository/System
-  → Assessment
-  → Engineering Context
-  → Findings
-  → Evidence
-  → Engineering Plan
-  → Governed Agent Execution
-  → Changes
-  → Tests
-  → Verification
-  → Human Approval
-  → Remediation
-  → Final Evidence
-  → Report
-```
+Customer → Project → Repository/System → Assessment → Engineering Context → Findings → Evidence → Engineering Plan → Governed Agent Execution → Changes → Tests → Verification → Human Approval → Remediation → Final Evidence → Report.
 
-Every consequential action remains subject to the Agent Platform's identity, authorization, policy, risk, approval, sandbox, budget, and audit controls.
+Every consequential action remains subject to Agent Platform authority.
 
-## Domain agents
+## Domain roles
 
-FDSE will expose specialized engineering roles including Engineering Lead, Debugger, Security Engineer, Code Reviewer, Test Engineer, Dependency Engineer, Remediation Engineer, and CI Engineer. These are domain-level agents/workflows; they do not implement their own generic execution substrate.
-
-## Repository structure
-
-The target structure is described in `docs/architecture/REPOSITORY-STRUCTURE.md`. It is intentionally evidence-driven: directories are added when an implementation requires them rather than being created as empty placeholders.
+Engineering Lead, Debugger, Security Engineer, Code Reviewer, Test Engineer, Dependency Engineer, Remediation Engineer, and CI Engineer are domain workflows. They do not implement their own generic execution substrate.
 
 ## Security posture
 
-FDSE treats customer repositories, source code, build artifacts, logs, dependencies, model outputs, tool responses, and repository instructions as untrusted inputs. The security design follows least privilege, tenant isolation, explicit approval boundaries, sandboxed execution, scoped GitHub permissions, provenance, and evidence-first verification.
+Customer repositories, source code, build artifacts, logs, dependencies, model outputs, tool responses, and repository instructions are untrusted. FDSE uses tenant binding, deny-by-default local authorization, immutable revision references, evidence digests, explicit verification, and ports for external authority.
 
-Current research inputs include NIST work on software/AI agent identity and authorization, OWASP's 2026 Top 10 for Agentic Applications, GitHub's fine-grained/GitHub App permission model, and OpenTelemetry GenAI/agent observability guidance.
+GitHub integrations should use GitHub Apps or equivalently least-privileged short-lived credentials rather than broad long-lived personal tokens.
 
 ## Development rule
 
-```text
 inspect → design → implement → test → security review → CI → review → merge
-```
-
-Main remains stable. Substantial changes use feature branches and pull requests once the repository has sufficient history for that workflow.
