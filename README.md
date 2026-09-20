@@ -2,63 +2,38 @@
 
 **Forward-Deployed Software Engineering execution system for governed, evidence-driven software delivery.**
 
-Tinlance FDSE is the domain execution layer for Tinlance's FDSE services. It specializes in software-engineering work while delegating generic agent execution, identity, authorization, policy, approvals, sandboxing, evidence, trajectory, observability, budgets, and audit primitives to the private **Tinlance Agent Platform**.
+FDSE is Tinlance's engineering-domain execution layer. It owns engineering semantics while consuming generic execution authority and infrastructure from the private Tinlance Agent Platform.
+
+## M0 status
+
+**M0 — Architecture & Repository Foundation: IN PROGRESS**
+
+M0 establishes the repository structure, framework-neutral contracts, trust boundary, tenant-safety primitives, evidence-integrity primitives, CI/security gates and documentation. It does **not** implement a local agent runtime, sandbox, generic policy engine, approval engine, unrestricted customer-code execution, or production Agent Platform.
+
+The separate `feat/fdse-foundation` branch/PR #2 contains work beyond M0's architectural scope. It is not evidence that M0 is complete.
 
 ## Architectural invariant
 
-> **FDSE owns engineering semantics; Agent Platform owns generic agent authority and execution infrastructure.**
+> **FDSE owns engineering semantics; Agent Platform owns generic authority and execution infrastructure.**
 
-FDSE must never become a second agent runtime or security kernel.
+Customer-controlled source, documentation, issue/PR text, CI output, dependency metadata, model output and tool output are untrusted data. They cannot grant authority.
 
-## Status
-
-**M0 — Architecture & repository foundation: IN PROGRESS**
-
-The repository was empty at initialization. M0 establishes the domain boundary, dependency direction, integration contract, quality gates, and engineering architecture before implementation of customer workflows.
-
-No feature is considered implemented because an interface, prompt, directory, or document exists. Capabilities require executable implementation and tests.
-
-## Planned lifecycle
+## Execution boundary
 
 ```text
-Customer
-  → Project
-  → Repository/System
-  → Assessment
-  → Engineering Context
-  → Findings
-  → Evidence
-  → Engineering Plan
-  → Governed Agent Execution
-  → Changes
-  → Tests
-  → Verification
-  → Human Approval
-  → Remediation
-  → Final Evidence
-  → Report
+FDSE request
+  → Agent Platform authorization/policy/approval
+  → controlled execution
+  → structured result + provenance/evidence references
+  → FDSE verification
 ```
 
-Every consequential action remains subject to the Agent Platform's identity, authorization, policy, risk, approval, sandbox, budget, and audit controls.
+FDSE never executes customer code directly on its application host.
 
-## Domain agents
-
-FDSE will expose specialized engineering roles including Engineering Lead, Debugger, Security Engineer, Code Reviewer, Test Engineer, Dependency Engineer, Remediation Engineer, and CI Engineer. These are domain-level agents/workflows; they do not implement their own generic execution substrate.
-
-## Repository structure
-
-The target structure is described in `docs/architecture/REPOSITORY-STRUCTURE.md`. It is intentionally evidence-driven: directories are added when an implementation requires them rather than being created as empty placeholders.
-
-## Security posture
-
-FDSE treats customer repositories, source code, build artifacts, logs, dependencies, model outputs, tool responses, and repository instructions as untrusted inputs. The security design follows least privilege, tenant isolation, explicit approval boundaries, sandboxed execution, scoped GitHub permissions, provenance, and evidence-first verification.
-
-Current research inputs include NIST work on software/AI agent identity and authorization, OWASP's 2026 Top 10 for Agentic Applications, GitHub's fine-grained/GitHub App permission model, and OpenTelemetry GenAI/agent observability guidance.
-
-## Development rule
+## M0 development loop
 
 ```text
 inspect → design → implement → test → security review → CI → review → merge
 ```
 
-Main remains stable. Substantial changes use feature branches and pull requests once the repository has sufficient history for that workflow.
+See `docs/architecture/BOUNDARIES.md`, `docs/architecture/AGENT-PLATFORM-INTEGRATION.md` and `docs/ROADMAP.md`.
