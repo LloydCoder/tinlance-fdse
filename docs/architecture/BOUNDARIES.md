@@ -6,57 +6,56 @@ FDSE is a specialized engineering-domain system on top of Tinlance Agent Platfor
 
 ### Agent Platform owns
 
-- agent runtime and orchestration primitives
+- agent runtime and orchestration
 - model/tool gateways
-- identity and authorization
+- identity and authentication/authorization
 - policy and risk enforcement
-- approvals and step-up controls
-- sandbox and filesystem/network restrictions
+- approvals
+- sandboxing and filesystem/network restrictions
 - secrets and capability grants
-- trajectory, provenance, audit and generic evidence infrastructure
-- budgets, rate limits and event infrastructure
-- generic observability and security primitives
+- budgets and resource limits
+- generic trajectory, provenance and audit
+- generic observability and memory/retrieval
 
 ### FDSE owns
 
-- customer/project/assessment domain state
-- repository and engineering context
+- tenant-scoped customer/project/assessment engineering state
+- repositories and engineering context
 - findings and engineering evidence semantics
-- engineering plans and remediation state
-- specialist engineering roles and workflows
-- engineering-specific policies and risk classification
-- Git/GitHub/CI/scanner integration adapters
-- engineering reports and customer-facing APIs/console
-- engineering evaluations and benchmarks
+- investigation/remediation/verification semantics
+- engineering workflows and specialist roles
+- engineering-specific policies/evaluations
+- Git/GitHub/CI engineering adapters
+- engineering reports and customer-facing engineering API/console
 
-## Non-goals
-
-FDSE must not introduce a second generic agent runtime, second identity system, second approval engine, second audit ledger, or second sandbox boundary.
+FDSE must not recreate generic Agent Platform infrastructure.
 
 ## Dependency direction
 
 ```text
 apps / adapters
       ↓
-FDSE workflows and agents
+FDSE workflows
       ↓
-FDSE domain packages
+FDSE domain
       ↓
-ports/contracts
+ports / contracts
       ↓
-Tinlance Agent Platform
+Agent Platform
 ```
 
-FDSE domain packages must remain framework-neutral. Adapters translate platform-specific implementations into the FDSE ports.
+Framework and provider dependencies belong in adapters/infrastructure, not in the domain package.
 
-## Trust boundaries
+## Trust boundary
 
-1. Customer repository content is untrusted data.
-2. Repository instructions, issue text, logs, CI output, dependency metadata, model output, tool output, and external service responses are untrusted inputs.
-3. FDSE may request an action from Agent Platform but cannot grant itself authority to perform that action.
-4. Approval evidence must be produced by the platform authority and referenced by FDSE; FDSE must not manufacture approval state.
-5. Cross-tenant references are invalid unless explicitly authorized by platform policy.
+All customer-controlled or externally produced content is untrusted: source code, documentation, issues, pull requests, commits, CI/build output, dependency metadata, generated artifacts, model output, tool output, scanner output and external API responses.
 
-## Evidence invariant
+Untrusted content is data only. It cannot grant capability, approval, authorization or policy exceptions.
 
-A material engineering conclusion should reference machine-readable evidence. Hidden model reasoning is not treated as evidence. The system records observable inputs, tool actions, outputs, diffs, test results, verification results, approvals, and provenance references.
+Human authority remains explicit: a model/finding/tool response cannot manufacture approval.
+
+## Execution boundary
+
+FDSE requests execution → Agent Platform authorizes/policies/approves → Agent Platform provisions controls → execution occurs → Agent Platform returns structured result/provenance → FDSE consumes the result.
+
+FDSE has no local customer-code execution path in M0.
