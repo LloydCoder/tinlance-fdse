@@ -76,6 +76,14 @@ class ExecutionResult:
             raise ValueError("evidence references must be non-empty")
 
 
+def validate_tenant_scope(request: ExecutionRequest, target_tenant_id: str) -> None:
+    """Reject a request whose authority tenant differs from its target context."""
+    if not target_tenant_id.strip():
+        raise ValueError("target tenant id must be non-empty")
+    if request.authority.tenant_id != target_tenant_id:
+        raise PermissionError("tenant mismatch")
+
+
 class AgentPlatformPort(Protocol):
     """Minimal FDSE-to-Agent-Platform contract.
 
