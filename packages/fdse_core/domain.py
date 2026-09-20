@@ -70,7 +70,9 @@ class Repository:
         _require_id(self.tenant_id, "repository tenant id")
         _require_id(self.project_id, "repository project id")
         if not self.provider.strip() or not self.canonical_url.strip() or not self.default_branch.strip():
-            raise ValueError("repository provider, canonical_url and default_branch must be non-empty")
+            raise ValueError(
+                "repository provider, canonical_url and default_branch must be non-empty"
+            )
 
 
 @dataclass(frozen=True, slots=True)
