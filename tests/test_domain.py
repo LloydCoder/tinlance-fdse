@@ -6,6 +6,11 @@ from fdse_core.contracts import AuthorityContext, ExecutionResult, ExecutionStat
 from fdse_core.domain import (\n    Assessment,\n    Evidence,\n    Finding,\n    FindingStatus,\n    Project,\n    Repository,\n    Severity,\n    Tenant,\n)
 
 
+def test_sha256_digest_is_deterministic() -> None:
+    assert sha256_digest(b"evidence") == sha256_digest(b"evidence")
+    assert sha256_digest(b"evidence") != sha256_digest(b"tampered")
+
+
 def test_core_domain_objects_preserve_tenant_and_traceability() -> None:
     tenant = Tenant(id="t-1", name="Example")
     project = Project(id="p-1", tenant_id=tenant.id, name="Payments")
