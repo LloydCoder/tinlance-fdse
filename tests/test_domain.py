@@ -3,7 +3,8 @@ from datetime import datetime, timezone
 import pytest
 
 from fdse_core.contracts import AuthorityContext, ExecutionResult, ExecutionStatus
-from fdse_core.domain import (\n    Assessment,\n    Evidence,\n    Finding,\n    FindingStatus,\n    Project,\n    Repository,\n    Severity,\n    Tenant,\n)
+from fdse_core.domain import (
+    Assessment,\n    Evidence,\n    Finding,\n    FindingStatus,\n    Project,\n    Repository,\n    Severity,\n    Tenant,\n)
 
 
 def test_sha256_digest_is_deterministic() -> None:
