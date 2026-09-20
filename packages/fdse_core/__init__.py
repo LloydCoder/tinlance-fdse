@@ -9,7 +9,7 @@ from .contracts import (
     EvidencePort,
     GitProviderPort,
 )
-from .domain import Assessment, Evidence, Finding, FindingStatus, Project, Repository, Severity, Tenant
+from .domain import (\n    Assessment,\n    Evidence,\n    Finding,\n    FindingStatus,\n    Project,\n    Repository,\n    Severity,\n    Tenant,\n)
 
 __all__ = [
     "AgentPlatformPort",
