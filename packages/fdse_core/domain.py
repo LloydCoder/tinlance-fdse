@@ -7,6 +7,12 @@ authority remain owned by Tinlance Agent Platform.
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import StrEnum
+import hashlib
+
+
+def sha256_digest(data: bytes) -> str:
+    """Return deterministic integrity metadata; this is not authenticity or proof."""
+    return "sha256:" + hashlib.sha256(data).hexdigest()
 
 
 def _require_id(value: str, field_name: str) -> None:
