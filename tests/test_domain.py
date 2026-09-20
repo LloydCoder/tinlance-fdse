@@ -73,7 +73,7 @@ def test_execution_tenant_mismatch_is_denied() -> None:
 
     request = ExecutionRequest(
         authority=AuthorityContext("tenant-a", "actor", "corr", "idem"),
-        project_id="p", assessment_id="a", workflow_id="w", task="read", risk_tier="read_only",
+        project_id="p",\n        assessment_id="a",\n        workflow_id="w",\n        task="read",\n        risk_tier="read_only",
     )
     with pytest.raises(PermissionError, match="tenant mismatch"):
         validate_tenant_scope(request, "tenant-b")
