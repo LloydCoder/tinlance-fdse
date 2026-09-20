@@ -10,7 +10,8 @@ from .contracts import (
     GitProviderPort,
     validate_tenant_scope,
 )
-from .domain import (\n    Assessment,\n    Evidence,\n    Finding,\n    FindingStatus,\n    Project,\n    Repository,\n    Severity,\n    Tenant,\n)
+from .domain import (
+    sha256_digest,\n    Assessment,\n    Evidence,\n    Finding,\n    FindingStatus,\n    Project,\n    Repository,\n    Severity,\n    Tenant,\n)
 
 __all__ = [
     "AgentPlatformPort",
@@ -28,5 +29,6 @@ __all__ = [
     "Repository",
     "Severity",
     "Tenant",
+    "sha256_digest",
     "validate_tenant_scope",
 ]
