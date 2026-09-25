@@ -2,15 +2,21 @@
 
 ## Runner
 
-FDSE CI uses the repository-scoped self-hosted runner named `pcidss-hp`.
+FDSE CI uses the repository-scoped self-hosted runner named pcidss-hp.
 
-- Host account: `pcidss`
-- Runner directory: `/home/pcidss/actions-runner-fdse`
-- systemd service: `actions.runner.LloydCoder-tinlance-fdse.pcidss-hp.service`
-- Required labels: `self-hosted`, `Linux`, `X64`, `pcidss-hp`
+- Host account: pcidss
+- Runner directory: /home/pcidss/actions-runner-fdse
+- systemd service: actions.runner.LloydCoder-tinlance-fdse.pcidss-hp.service
+- Required labels: self-hosted, Linux, X64, pcidss-hp
 - Runner application: v2.337.0 or newer
 
 The runner is for this private FDSE repository. A physical host may run additional repository-scoped runner instances for other trusted private repositories, but each instance must have its own runner directory and service.
+
+## Python CI coverage
+
+FDSE declares Python >=3.12. The current HP runner validates the CI workflow with the host's native Python 3.14 because the older HP CPU cannot execute the prebuilt CPython 3.12 artifact supplied by actions/setup-python.
+
+This is an infrastructure limitation, not a change to FDSE's supported Python range. Until a compatible runner is available, CI on pcidss-hp proves the workflow on Python 3.14 only. Python 3.12 and 3.13 should be covered on a compatible runner before making compatibility claims specific to those interpreter versions.
 
 ## Health check
 
@@ -40,7 +46,7 @@ Do not paste registration tokens, GitHub tokens, or other secrets into tickets, 
 
 ## Host security requirements
 
-- Run the runner as the non-root `pcidss` account.
+- Run the runner as the non-root pcidss account.
 - Keep Ubuntu and the runner application patched.
 - Do not store production credentials on the runner host.
 - Do not route public-repository or untrusted fork workflows to this runner.
