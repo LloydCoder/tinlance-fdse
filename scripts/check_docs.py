@@ -13,7 +13,7 @@ def main() -> int:
     failures: list[str] = []
 
     for document in ROOT.rglob("*.md"):
-        if any(part in {".git", "dist", "build"} for part in document.parts):
+        if any(part in {".git", ".venv", "dist", "build", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox", "node_modules"} for part in document.parts):
             continue
         text = document.read_text(encoding="utf-8")
         for target in MARKDOWN_LINK.findall(text):
