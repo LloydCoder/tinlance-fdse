@@ -25,9 +25,7 @@ def validate_workspace_relative_path(value: str) -> str:
 
     path = PurePosixPath(value)
     if path.is_absolute() or ".." in path.parts:
-        raise BoundaryViolation(
-            "workspace path must remain relative to the governed workspace"
-        )
+        raise BoundaryViolation("workspace path must remain relative to the governed workspace")
 
     normalized = path.as_posix()
     if normalized in {"", "."}:
