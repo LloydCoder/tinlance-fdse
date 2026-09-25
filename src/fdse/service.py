@@ -14,7 +14,12 @@ _ALLOWED_STATUSES = {"accepted", "rejected", "completed", "failed", "cancelled"}
 
 
 class EngineeringService:
-    """Orchestration layer that does not implement agent execution."""
+    """Orchestration layer that does not implement agent execution.
+
+    FDSE validates domain invariants and delegates authority to Agent
+    Platform. approval_required=True requests governance; it does not
+    assert that an approval has already been granted.
+    """
 
     def __init__(self, gateway: AgentPlatformGateway) -> None:
         self._gateway = gateway
@@ -37,6 +42,7 @@ class EngineeringService:
 
         validate_workspace_relative_path(request.workspace_id)
 
+        # The gateway is the authority boundary. FDSE does not grant approval.
         result = self._gateway.submit(request)
         if not result.execution_id.strip():
             raise ContractViolation("Agent Platform returned an empty execution_id")
