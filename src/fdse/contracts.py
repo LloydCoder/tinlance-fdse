@@ -19,7 +19,11 @@ class EngineeringTask:
 
 @dataclass(frozen=True, slots=True)
 class ExecutionRequest:
-    """Request handed to the Agent Platform authority for governed execution."""
+    """Request for Agent Platform governance and, if authorized, execution.
+
+    approval_required is a governance requirement, not proof that approval
+    has been granted. FDSE never creates or attests to approval evidence.
+    """
 
     task: EngineeringTask
     workspace_id: str
@@ -28,7 +32,11 @@ class ExecutionRequest:
 
 @dataclass(frozen=True, slots=True)
 class ExecutionHandle:
-    """Opaque reference to an Agent Platform execution."""
+    """Opaque reference to an Agent Platform execution lifecycle.
+
+    submit is a boundary operation. M0 does not define polling, lifecycle
+    queries, evidence retrieval, cancellation, or execution control APIs.
+    """
 
     execution_id: str
     status: Literal["accepted", "rejected", "completed", "failed", "cancelled"]
@@ -43,5 +51,10 @@ class AgentPlatformGateway(Protocol):
     """
 
     def submit(self, request: ExecutionRequest) -> ExecutionHandle:
-        """Submit an already-authorized domain request to the platform."""
+        """Submit a domain request for platform governance and execution.
+
+        A returned handle identifies the platform-owned lifecycle. FDSE must
+        not interpret approval_required=True as approval having occurred.
+        Lifecycle queries and control operations are deferred beyond M0.
+        """
         ...
