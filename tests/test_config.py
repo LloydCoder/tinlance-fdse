@@ -60,9 +60,7 @@ def test_https_endpoint_is_accepted(monkeypatch: pytest.MonkeyPatch) -> None:
         "https://[invalid",
     ],
 )
-def test_unsafe_endpoint_forms_are_rejected(
-    monkeypatch: pytest.MonkeyPatch, endpoint: str
-) -> None:
+def test_unsafe_endpoint_forms_are_rejected(monkeypatch: pytest.MonkeyPatch, endpoint: str) -> None:
     monkeypatch.setenv("FDSE_ENV", "production")
     monkeypatch.setenv("FDSE_AGENT_PLATFORM_ENDPOINT", endpoint)
 
