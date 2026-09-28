@@ -6,6 +6,7 @@ from typing import Protocol
 from uuid import UUID
 
 PLATFORM_API_VERSION = "1.0"
+_ALLOWED_RISKS = {"low", "medium", "high", "critical"}
 
 
 @dataclass(frozen=True, slots=True)
@@ -29,8 +30,13 @@ class PlatformIntent:
     approval_required: bool = True
 
     def __post_init__(self) -> None:
-        if not self.revision.strip() or not self.role.strip() or not self.objective.strip():
-            raise ValueError("platform intent fields are required")
+        if (
+            not self.revision.strip()
+            or not self.role.strip()
+            or not self.objective.strip()
+            or self.risk not in _ALLOWED_RISKS
+        ):
+            raise ValueError("platform intent fields are invalid")
         if not self.approval_required:
             raise ValueError("FDSE consequential intents must require approval")
 
@@ -49,6 +55,8 @@ class AgentPlatformAdapter(Protocol):
 
 class PlatformCompatibility:
     def validate(self, caps: PlatformCapabilities) -> None:
+        if not caps.api_version.strip():
+            raise ValueError("Agent Platform API version is required")
         if caps.api_version != PLATFORM_API_VERSION:
             raise ValueError("unsupported Agent Platform API version")
         if not (
