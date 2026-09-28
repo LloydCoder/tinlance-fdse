@@ -1,4 +1,4 @@
-"""Domain security controls and threat-model declarations (M12)."""
+"""Domain security controls and conservative secret redaction (M12)."""
 from __future__ import annotations
 
 import re
@@ -25,12 +25,17 @@ class SecurityControl:
             raise ValueError("security control is required")
 
 
+_AUTHORIZATION = re.compile(
+    r"(?im)(authorization\s*:\s*)[^\r\n]+"
+)
 _SECRET = re.compile(
-    r"(?i)(api[_-]?key|token|password|secret|authorization)\s*[:=]\s*[^\s,;]+"
+    r"(?i)(api[_-]?key|token|password|passwd|secret)\s*[:=]\s*"
+    r"(?:"[^"]*"|'[^']*'|[^\s,;}]+)"
 )
 
 
 def redact(value: str) -> str:
     if "\x00" in value:
         raise ValueError("NUL is not permitted")
+    value = _AUTHORIZATION.sub(r"\1[REDACTED]", value)
     return _SECRET.sub(lambda match: match.group(1) + "=[REDACTED]", value)
