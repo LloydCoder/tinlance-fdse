@@ -2,19 +2,27 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from uuid import UUID
 
 
 @dataclass(frozen=True, slots=True)
 class CustomerProject:
-    project_id: UUID
-    tenant_id: UUID
+    project_id: str
+    tenant_id: str
     repository_id: str
     revision: str
     name: str
 
     def __post_init__(self) -> None:
-        if not self.repository_id.strip() or not self.revision.strip() or not self.name.strip():
+        if not all(
+            value.strip()
+            for value in (
+                self.project_id,
+                self.tenant_id,
+                self.repository_id,
+                self.revision,
+                self.name,
+            )
+        ):
             raise ValueError("customer project fields are required")
 
 
