@@ -14,7 +14,6 @@ class EngineeringService:
     def submit(self, request: ExecutionRequest) -> ExecutionHandle:
         if not request.approval_required:
             raise BoundaryViolation("consequential execution requires approval gating")
-
         task = request.task
         if not task.task_id.strip():
             raise BoundaryViolation("task_id is required")
@@ -24,10 +23,8 @@ class EngineeringService:
             raise BoundaryViolation("task description is required")
         if task.risk not in _ALLOWED_RISKS:
             raise BoundaryViolation("task risk is invalid")
-
         validate_workspace_relative_path(request.workspace_id)
         result = self._gateway.submit(request)
-
         if not result.execution_id.strip():
             raise ContractViolation("Agent Platform returned an empty execution_id")
         if result.status not in _ALLOWED_STATUSES:
