@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from .domain import EngineeringPlan
+from .domain import EngineeringPlan, PlanStatus
 from .ports import AgentExecutionRequest, AgentExecutionResult, GovernedExecutor
 
 
@@ -22,6 +22,8 @@ class ExecutionGateway:
             raise ValueError("role is required")
         if not project_revision.strip():
             raise ValueError("project revision is required")
+        if plan.status is not PlanStatus.EXECUTING:
+            raise ValueError("plan must be in EXECUTING state before submission")
         request = AgentExecutionRequest(
             tenant_id=tenant_id,
             project_id=plan.project_id,
