@@ -1,104 +1,90 @@
 """Explicit domain lifecycle transition rules."""
-from __future__ import annotations  # noqa: I001
+from __future__ import annotations
 
-import fdse.domain
+from . import domain  # noqa: I001
 
 
-_PLAN = {
-    fdse.domain.PlanStatus.DRAFT: frozenset(
-        {fdse.domain.PlanStatus.READY, fdse.domain.PlanStatus.FAILED}
+_PLAN: dict[domain.PlanStatus, frozenset[domain.PlanStatus]] = {
+    domain.PlanStatus.DRAFT: frozenset(
+        {domain.PlanStatus.READY, domain.PlanStatus.FAILED}
     ),
-    fdse.domain.PlanStatus.READY: frozenset(
+    domain.PlanStatus.READY: frozenset(
         {
-            fdse.domain.PlanStatus.EXECUTING,
-            fdse.domain.PlanStatus.AWAITING_APPROVAL,
-            fdse.domain.PlanStatus.FAILED,
+            domain.PlanStatus.EXECUTING,
+            domain.PlanStatus.AWAITING_APPROVAL,
+            domain.PlanStatus.FAILED,
         }
     ),
-    fdse.domain.PlanStatus.EXECUTING: frozenset(
+    domain.PlanStatus.EXECUTING: frozenset(
         {
-            fdse.domain.PlanStatus.AWAITING_APPROVAL,
-            fdse.domain.PlanStatus.COMPLETED,
-            fdse.domain.PlanStatus.FAILED,
+            domain.PlanStatus.AWAITING_APPROVAL,
+            domain.PlanStatus.COMPLETED,
+            domain.PlanStatus.FAILED,
         }
     ),
-    fdse.domain.PlanStatus.AWAITING_APPROVAL: frozenset(
+    domain.PlanStatus.AWAITING_APPROVAL: frozenset(
         {
-            fdse.domain.PlanStatus.EXECUTING,
-            fdse.domain.PlanStatus.COMPLETED,
-            fdse.domain.PlanStatus.FAILED,
+            domain.PlanStatus.EXECUTING,
+            domain.PlanStatus.COMPLETED,
+            domain.PlanStatus.FAILED,
         }
     ),
-    fdse.domain.PlanStatus.COMPLETED: frozenset(),
-    fdse.domain.PlanStatus.FAILED: frozenset(),
+    domain.PlanStatus.COMPLETED: frozenset(),
+    domain.PlanStatus.FAILED: frozenset(),
 }
 
-_CHANGE = {
-    fdse.domain.ChangeStatus.PROPOSED: frozenset(
-        {
-            fdse.domain.ChangeStatus.APPLIED,
-            fdse.domain.ChangeStatus.REJECTED,
-        }
+_CHANGE: dict[domain.ChangeStatus, frozenset[domain.ChangeStatus]] = {
+    domain.ChangeStatus.PROPOSED: frozenset(
+        {domain.ChangeStatus.APPLIED, domain.ChangeStatus.REJECTED}
     ),
-    fdse.domain.ChangeStatus.APPLIED: frozenset(
-        {
-            fdse.domain.ChangeStatus.VERIFIED,
-            fdse.domain.ChangeStatus.REJECTED,
-        }
+    domain.ChangeStatus.APPLIED: frozenset(
+        {domain.ChangeStatus.VERIFIED, domain.ChangeStatus.REJECTED}
     ),
-    fdse.domain.ChangeStatus.VERIFIED: frozenset(),
-    fdse.domain.ChangeStatus.REJECTED: frozenset(),
+    domain.ChangeStatus.VERIFIED: frozenset(),
+    domain.ChangeStatus.REJECTED: frozenset(),
 }
 
-_FINDING = {
-    fdse.domain.FindingStatus.OPEN: frozenset(
+_FINDING: dict[domain.FindingStatus, frozenset[domain.FindingStatus]] = {
+    domain.FindingStatus.OPEN: frozenset(
+        {domain.FindingStatus.ACCEPTED, domain.FindingStatus.REJECTED}
+    ),
+    domain.FindingStatus.ACCEPTED: frozenset(
         {
-            fdse.domain.FindingStatus.ACCEPTED,
-            fdse.domain.FindingStatus.REJECTED,
+            domain.FindingStatus.REMEDIATION_PLANNED,
+            domain.FindingStatus.REJECTED,
         }
     ),
-    fdse.domain.FindingStatus.ACCEPTED: frozenset(
-        {
-            fdse.domain.FindingStatus.REMEDIATION_PLANNED,
-            fdse.domain.FindingStatus.REJECTED,
-        }
+    domain.FindingStatus.REMEDIATION_PLANNED: frozenset(
+        {domain.FindingStatus.REMEDIATED, domain.FindingStatus.REJECTED}
     ),
-    fdse.domain.FindingStatus.REMEDIATION_PLANNED: frozenset(
-        {
-            fdse.domain.FindingStatus.REMEDIATED,
-            fdse.domain.FindingStatus.REJECTED,
-        }
-    ),
-    fdse.domain.FindingStatus.REMEDIATED: frozenset(
-        {fdse.domain.FindingStatus.VERIFIED}
-    ),
-    fdse.domain.FindingStatus.VERIFIED: frozenset(),
-    fdse.domain.FindingStatus.REJECTED: frozenset(),
+    domain.FindingStatus.REMEDIATED: frozenset({domain.FindingStatus.VERIFIED}),
+    domain.FindingStatus.VERIFIED: frozenset(),
+    domain.FindingStatus.REJECTED: frozenset(),
 }
 
 
 def transition_plan(
-    current: fdse.domain.PlanStatus,
-    target: fdse.domain.PlanStatus,
-) -> fdse.domain.PlanStatus:
+    current: domain.PlanStatus,
+    target: domain.PlanStatus,
+) -> domain.PlanStatus:
     if target not in _PLAN[current]:
         raise ValueError(f"invalid plan transition: {current} -> {target}")
     return target
 
 
 def transition_change(
-    current: fdse.domain.ChangeStatus,
-    target: fdse.domain.ChangeStatus,
-) -> fdse.domain.ChangeStatus:
+    current: domain.ChangeStatus,
+    target: domain.ChangeStatus,
+) -> domain.ChangeStatus:
     if target not in _CHANGE[current]:
         raise ValueError(f"invalid change transition: {current} -> {target}")
     return target
 
 
 def transition_finding(
-    current: fdse.domain.FindingStatus,
-    target: fdse.domain.FindingStatus,
-) -> fdse.domain.FindingStatus:
+    current: domain.FindingStatus,
+    target: domain.FindingStatus,
+) -> domain.FindingStatus:
     if target not in _FINDING[current]:
         raise ValueError(f"invalid finding transition: {current} -> {target}")
     return target
