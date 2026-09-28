@@ -1,8 +1,8 @@
 """Evidence/provenance graph primitives (M8)."""
 from __future__ import annotations
 
-from dataclasses import dataclass
 import re
+from dataclasses import dataclass
 from enum import StrEnum
 from uuid import UUID
 
