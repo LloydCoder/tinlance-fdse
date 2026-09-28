@@ -19,8 +19,10 @@ class HealthStatus:
     detail: str
 
     def __post_init__(self) -> None:
-        if not self.component.strip():
+        if not self.component.strip() or "\x00" in self.component:
             raise ValueError("component is required")
+        if not self.detail.strip() or "\x00" in self.detail:
+            raise ValueError("health detail is required")
 
 
 class HealthProbe(Protocol):
@@ -35,9 +37,12 @@ class IdempotencyRecord:
 
     def __post_init__(self) -> None:
         if not all(
-            value.strip() for value in (self.tenant_id, self.key, self.request_digest)
+            value.strip()
+            for value in (self.tenant_id, self.key, self.request_digest)
         ):
             raise ValueError("idempotency record is required")
+        if any("\x00" in value for value in (self.tenant_id, self.key, self.request_digest)):
+            raise ValueError("idempotency record contains a NUL byte")
 
 
 class ReadinessGate:
