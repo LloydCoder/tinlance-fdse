@@ -1,4 +1,6 @@
 """Explicit domain lifecycle transition rules."""
+from __future__ import annotations
+
 import fdse.domain
 
 
