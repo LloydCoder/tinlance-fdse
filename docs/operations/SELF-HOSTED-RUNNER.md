@@ -27,7 +27,7 @@ The former repository-scoped runner was:
 
 - Host account: pcidss
 - Runner directory: /home/pcidss/actions-runner-fdse
-- systemd service: actions.runner.LloydCoder-tinlance-fdse.pcidss-hp-hp.service
+- systemd service: actions.runner.LloydCoder-tinlance-fdse.pcidss-hp.service
 - Required labels: self-hosted, Linux, X64, pcidss-hp
 
 These values are historical only.
