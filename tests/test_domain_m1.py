@@ -20,7 +20,7 @@ from fdse.domain import (
 )
 from fdse.evidence import digest
 from fdse.integrity import chain_digest, record_digest
-from fdse.transitions import transition_change, transition_plan
+from fdse.transitions import transition_change, transition_finding, transition_plan
 
 
 def repo() -> RepositoryRef:
@@ -107,3 +107,21 @@ def test_integrity_and_canonical_evidence_are_deterministic() -> None:
     assert digest({"b": 2, "a": 1}) == digest({"a": 1, "b": 2})
     first = record_digest({"id": "1"})
     assert chain_digest(first, {"id": "2"}) != chain_digest(first, {"id": "1"})
+
+
+def test_plan_and_finding_lifecycles_include_governance_states() -> None:
+    assert transition_plan(PlanStatus.READY, PlanStatus.AWAITING_APPROVAL) is PlanStatus.AWAITING_APPROVAL
+    assert transition_plan(
+        PlanStatus.AWAITING_APPROVAL,
+        PlanStatus.EXECUTING,
+    ) is PlanStatus.EXECUTING
+    assert transition_finding(FindingStatus.OPEN, FindingStatus.ACCEPTED) is FindingStatus.ACCEPTED
+    assert transition_finding(
+        FindingStatus.REMEDIATED,
+        FindingStatus.VERIFIED,
+    ) is FindingStatus.VERIFIED
+
+
+def test_terminal_finding_transition_is_rejected() -> None:
+    with pytest.raises(ValueError):
+        transition_finding(FindingStatus.VERIFIED, FindingStatus.OPEN)
