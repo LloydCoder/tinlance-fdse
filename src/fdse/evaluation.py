@@ -6,7 +6,7 @@ from enum import StrEnum
 
 
 class EvaluationOutcome(StrEnum):
-    PASS = "pass"
+    PASS = "pass"  # noqa: S105
     FAIL = "fail"
     UNKNOWN = "unknown"
 
