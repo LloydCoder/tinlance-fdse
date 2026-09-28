@@ -110,7 +110,10 @@ def test_integrity_and_canonical_evidence_are_deterministic() -> None:
 
 
 def test_plan_and_finding_lifecycles_include_governance_states() -> None:
-    assert transition_plan(PlanStatus.READY, PlanStatus.AWAITING_APPROVAL) is PlanStatus.AWAITING_APPROVAL
+    assert (
+        transition_plan(PlanStatus.READY, PlanStatus.AWAITING_APPROVAL)
+        is PlanStatus.AWAITING_APPROVAL
+    )
     assert transition_plan(
         PlanStatus.AWAITING_APPROVAL,
         PlanStatus.EXECUTING,
