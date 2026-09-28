@@ -52,3 +52,32 @@ def test_intake_rejects_nul() -> None:
 def test_intake_rejects_oversized_objective() -> None:
     with pytest.raises(BoundaryViolation):
         request(objective="x" * 4097)
+
+
+
+def test_intake_rejects_invalid_runtime_risk() -> None:
+    with pytest.raises(BoundaryViolation):
+        request(risk="unknown")
+
+
+def test_intake_registry_is_idempotent_and_tenant_scoped() -> None:
+    from fdse.intake import IntakeRegistry
+
+    validator = IntakeValidator()
+    first = validator.validate(request())
+    registry = IntakeRegistry()
+    assert registry.put(first) == first
+    assert registry.put(first) == first
+    assert registry.get("tenant-1", "idem-1") == first
+
+
+def test_intake_registry_rejects_reused_key_for_different_request() -> None:
+    from fdse.intake import IntakeRegistry
+
+    validator = IntakeValidator()
+    first = validator.validate(request())
+    second = validator.validate(request(objective="Different objective"))
+    registry = IntakeRegistry()
+    registry.put(first)
+    with pytest.raises(BoundaryViolation):
+        registry.put(second)
