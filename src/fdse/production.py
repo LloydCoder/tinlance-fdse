@@ -38,3 +38,15 @@ class IdempotencyRecord:
             value.strip() for value in (self.tenant_id, self.key, self.request_digest)
         ):
             raise ValueError("idempotency record is required")
+
+
+class ReadinessGate:
+    def evaluate(self, probes: tuple[HealthProbe, ...]) -> Readiness:
+        if not probes:
+            return Readiness.UNKNOWN
+        statuses = tuple(probe.check() for probe in probes)
+        if any(status.readiness is Readiness.NOT_READY for status in statuses):
+            return Readiness.NOT_READY
+        if any(status.readiness is Readiness.UNKNOWN for status in statuses):
+            return Readiness.UNKNOWN
+        return Readiness.READY
