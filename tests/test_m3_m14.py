@@ -21,7 +21,7 @@ from fdse.git_ci import CheckResult, RepositorySnapshot
 from fdse.governance import ApprovalStatus, GovernanceBoundary, GovernanceReference
 from fdse.platform import PlatformCapabilities, PlatformCompatibility
 from fdse.product import TenantBoundary
-from fdse.production import HealthStatus, IdempotencyRecord, Readiness
+from fdse.production import HealthStatus, IdempotencyRecord, Readiness, ReadinessGate
 from fdse.security_hardening import redact
 from fdse.workflows import WorkflowInstance, WorkflowState
 
@@ -107,7 +107,7 @@ def test_m9_authority_is_external() -> None:
 
 
 def test_m10_evaluation_is_fail_closed() -> None:
-    case = EvaluationCase("1", "objective", ("invariant",))
+    case = EvaluationCase("1", "objective", "abc", ("invariant",))
     assert EvaluationSuite().evaluate((case,), ()) is EvaluationOutcome.UNKNOWN
     result = EvaluationResult("1", EvaluationOutcome.PASS, ("ok",), "abc")
     assert EvaluationSuite().evaluate((case,), (result,)) is EvaluationOutcome.PASS
