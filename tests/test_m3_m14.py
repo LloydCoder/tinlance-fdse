@@ -50,7 +50,8 @@ def source() -> ContextSource:
         "abc",
         "repository",
         datetime.now(UTC),
-        "tenant/repo",
+        "t",
+        "r",
         0,
         ContextQuality.HIGH,
     )
