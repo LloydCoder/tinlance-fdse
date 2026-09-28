@@ -38,9 +38,18 @@ from fdse.governance import (
     GovernanceBoundary,
     GovernanceReference,
 )
-from fdse.platform import PlatformCapabilities, PlatformCompatibility, PlatformIntent
+from fdse.platform import (
+    PlatformCapabilities,
+    PlatformCompatibility,
+    PlatformIntent,
+)
 from fdse.product import TenantBoundary
-from fdse.production import HealthStatus, IdempotencyRecord, Readiness, ReadinessGate
+from fdse.production import (
+    HealthStatus,
+    IdempotencyRecord,
+    Readiness,
+    ReadinessGate,
+)
 from fdse.security_hardening import redact
 from fdse.transitions import transition_change, transition_finding, transition_plan
 from fdse.workflows import WorkflowInstance, WorkflowState
