@@ -3,7 +3,7 @@ from uuid import uuid4
 import pytest
 
 from fdse.errors import BoundaryViolation
-from fdse.intake import IntakeRecord, IntakeRegistry, IntakeRequest, IntakeStatus, IntakeValidator
+from fdse.intake import IntakeRegistry, IntakeRequest, IntakeStatus, IntakeValidator
 
 
 def request(**overrides: object) -> IntakeRequest:
