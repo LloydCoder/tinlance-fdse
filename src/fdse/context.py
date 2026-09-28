@@ -81,7 +81,11 @@ class ContextSnapshot:
     snapshot_digest: str
 
     def __post_init__(self) -> None:
-        if not self.tenant_id.strip() or not self.repository_id.strip() or not self.revision.strip():
+        if (
+            not self.tenant_id.strip()
+            or not self.repository_id.strip()
+            or not self.revision.strip()
+        ):
             raise ValueError("context scope is required")
         if len(self.items) > _MAX_ITEMS:
             raise ValueError("context snapshot is too large")
