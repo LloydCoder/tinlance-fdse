@@ -101,13 +101,13 @@ def test_m6_invalid_workflow_transition() -> None:
 
 
 def test_m7_revision_bound_contracts() -> None:
-    assert RepositorySnapshot("github", "r", "abc", "main").revision == "abc"
-    assert CheckResult("ci", "completed", "success", "abc").revision == "abc"
+    assert RepositorySnapshot("t", "github", "r", "abc", "main").revision == "abc"
+    assert CheckResult("t", "ci", "completed", "success", "abc").revision == "abc"
 
 
 def test_m8_graph_is_integrity_digestable() -> None:
-    first = EvidenceNode(uuid4(), "test", "abc", "d1", "ci")
-    second = EvidenceNode(uuid4(), "report", "abc", "d2", "report")
+    first = EvidenceNode(uuid4(), "t", "r", "test", "abc", "d1", "ci")
+    second = EvidenceNode(uuid4(), "t", "r", "report", "abc", "d2", "report")
     graph = EvidenceGraph()
     graph.add_node(first)
     graph.add_node(second)
@@ -152,7 +152,7 @@ def test_m14_certification_fail_closed_and_certified() -> None:
         for i in range(15)
     )
     evidence = digest(sorted(phases))
-    bundle = CertificationBundle("abc", phases, evidence)
+    bundle = CertificationBundle("abc", phases, evidence, "att-1", "github", "run-1", "abc")
     assert CertificationValidator().validate(bundle) is CertificationStatus.CERTIFIED
-    incomplete = CertificationBundle("abc", phases[:-1], evidence)
+    incomplete = CertificationBundle("abc", phases[:-1], evidence, "att-1", "github", "run-1", "abc")
     assert CertificationValidator().validate(incomplete) is CertificationStatus.UNKNOWN
