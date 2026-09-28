@@ -16,9 +16,15 @@ from .domain import (
     VerificationResult,
     VerificationStatus,
 )
+from .intake import IntakeRecord, IntakeRegistry, IntakeRequest, IntakeStatus, IntakeValidator
 from .service import EngineeringService
 
 __all__ = [
+    "IntakeRecord",
+    "IntakeRegistry",
+    "IntakeRequest",
+    "IntakeStatus",
+    "IntakeValidator",
     "Assessment",
     "ChangeSet",
     "ChangeStatus",
