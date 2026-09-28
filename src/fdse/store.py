@@ -17,17 +17,6 @@ class MemoryProjectStore:
         return self._items.get(project_id)
 
 
-class MemoryEvidenceStore:
-    def __init__(self) -> None:
-        self._items: dict[UUID, Evidence] = {}
-
-    def save(self, evidence: Evidence) -> None:
-        self._items[evidence.evidence_id] = evidence
-
-    def get(self, evidence_id: UUID) -> Evidence | None:
-        return self._items.get(evidence_id)
-
-
 class MemoryFindingStore:
     def __init__(self) -> None:
         self._items: dict[UUID, Finding] = {}
@@ -39,6 +28,17 @@ class MemoryFindingStore:
         return self._items.get(finding_id)
 
 
+class MemoryEvidenceStore:
+    def __init__(self) -> None:
+        self._items: dict[UUID, Evidence] = {}
+
+    def save(self, evidence: Evidence) -> None:
+        self._items[evidence.evidence_id] = evidence
+
+    def get(self, evidence_id: UUID) -> Evidence | None:
+        return self._items.get(evidence_id)
+
+
 class MemoryVerificationStore:
     def __init__(self) -> None:
         self._items: dict[UUID, list[VerificationResult]] = {}
@@ -46,7 +46,5 @@ class MemoryVerificationStore:
     def save(self, result: VerificationResult) -> None:
         self._items.setdefault(result.finding_id, []).append(result)
 
-    def get_for_finding(
-        self, finding_id: UUID
-    ) -> tuple[VerificationResult, ...]:
+    def get_for_finding(self, finding_id: UUID) -> tuple[VerificationResult, ...]:
         return tuple(self._items.get(finding_id, ()))
