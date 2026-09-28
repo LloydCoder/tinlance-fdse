@@ -53,11 +53,8 @@ def test_service_rejects_escaping_workspace() -> None:
 
 
 def test_blank_identity_is_rejected() -> None:
-    gateway = FakeGateway([])
-    task_value = EngineeringTask("task-1", TenantScope("  ", "repo-1"), "inspect", "low")
-    request = ExecutionRequest(task=task_value, workspace_id="workspace-1")
-    with pytest.raises(BoundaryViolation):
-        EngineeringService(gateway).submit(request)
+    with pytest.raises(ValueError):
+        TenantScope("  ", "repo-1")
 
 
 @pytest.mark.parametrize(
