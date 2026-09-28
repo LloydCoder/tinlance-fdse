@@ -79,19 +79,25 @@ _CHANGE_TRANSITIONS: dict[ChangeStatus, frozenset[ChangeStatus]] = {
 
 def transition_finding(current: FindingStatus, target: FindingStatus) -> FindingStatus:
     if target not in _FINDING_TRANSITIONS[current]:
-        raise ValueError(f"invalid finding transition: {current} -> {target}")
+        raise ValueError(
+            f"invalid finding transition: {current} -> {target}"
+        )
     return target
 
 
 def transition_plan(current: PlanStatus, target: PlanStatus) -> PlanStatus:
     if target not in _PLAN_TRANSITIONS[current]:
-        raise ValueError(f"invalid plan transition: {current} -> {target}")
+        raise ValueError(
+            f"invalid plan transition: {current} -> {target}"
+        )
     return target
 
 
 def transition_change(current: ChangeStatus, target: ChangeStatus) -> ChangeStatus:
     if target not in _CHANGE_TRANSITIONS[current]:
-        raise ValueError(f"invalid change transition: {current} -> {target}")
+        raise ValueError(
+            f"invalid change transition: {current} -> {target}"
+        )
     return target
 
 
