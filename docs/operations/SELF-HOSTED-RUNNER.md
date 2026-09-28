@@ -1,43 +1,33 @@
 # FDSE Self-Hosted Runner Runbook
 
-FDSE is intentionally public. The persistent repository-scoped runner pcidss-hp is therefore reserved for trusted pushes to main.
+## Current policy
 
-## Public PR safety
+The FDSE CI workflow no longer executes repository code on the persistent self-hosted runner. Public pull requests, merge-queue validation, and main-branch validation run on GitHub-hosted infrastructure.
 
-Pull-request workflows run on GitHub-hosted ubuntu-latest infrastructure. They must never execute on the persistent self-hosted runner.
+This is the safer default for a public repository: GitHub's secure-use guidance recommends least-privilege workflow permissions and immutable Action references, and a persistent runner should not be exposed to untrusted repository-controlled execution.
 
-Do not introduce pull_request_target workflows that check out or execute PR-controlled code.
+The historical host details below are retained only as decommissioning/incident-response information. They are **not** a supported CI execution path.
 
-The self-hosted runner is used only for trusted main-branch pushes and must remain non-root, patched, repository-scoped, and free of production credentials.
+## Decommissioning requirements
 
-## Runner
+If the historical runner still exists:
+
+- remove it from the repository's available runners;
+- stop and disable its service;
+- revoke its registration/authentication material;
+- remove cached workspaces and build credentials;
+- confirm that no production credentials were ever stored on the host;
+- rebuild/rotate the host if compromise is suspected.
+
+Never place runner registration tokens or credentials in repository files or chat.
+
+## Historical host record
+
+The former repository-scoped runner was:
 
 - Host account: pcidss
 - Runner directory: /home/pcidss/actions-runner-fdse
 - systemd service: actions.runner.LloydCoder-tinlance-fdse.pcidss-hp.service
 - Required labels: self-hosted, Linux, X64, pcidss-hp
 
-## Python coverage
-
-FDSE declares Python >=3.12. Public PR CI validates Python 3.12 on GitHub-hosted infrastructure. The HP runner currently validates trusted main pushes using native Python 3.14 because its CPU cannot execute the required prebuilt CPython 3.12 artifact.
-
-This is an infrastructure limitation, not a reduction of FDSE's supported Python range. A compatible runner should add Python 3.13 and 3.14 matrix coverage before release compatibility claims are expanded.
-
-## Host requirements
-
-- non-root runner account;
-- automatic Ubuntu security updates;
-- patched runner application;
-- no production credentials;
-- no public/untrusted PR execution;
-- separate workspaces and services for repository-scoped runners;
-- rebuild/rotate the host if runner compromise is suspected.
-
-## Health
-
-    cd /home/pcidss/actions-runner-fdse
-    sudo ./svc.sh status
-    systemctl is-enabled actions.runner.LloydCoder-tinlance-fdse.pcidss-hp.service
-    systemctl is-active actions.runner.LloydCoder-tinlance-fdse.pcidss-hp.service
-
-Never place runner registration tokens or credentials in repository files or chat.
+These values are historical operational records only and must not be used to configure new CI jobs.
