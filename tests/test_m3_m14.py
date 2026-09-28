@@ -38,7 +38,7 @@ from fdse.governance import (
     GovernanceBoundary,
     GovernanceReference,
 )
-from fdse.platform import PlatformCapabilities, PlatformCompatibility
+from fdse.platform import PlatformCapabilities, PlatformCompatibility, PlatformIntent
 from fdse.product import TenantBoundary
 from fdse.production import HealthStatus, IdempotencyRecord, Readiness, ReadinessGate
 from fdse.security_hardening import redact
@@ -85,6 +85,18 @@ def test_m3_secret_filter() -> None:
     item = ContextItem(ContextKind.REPOSITORY, "language", "python", mismatched)
     with pytest.raises(ValueError):
         ContextBuilder().build("t", "r", "abc", (item,))
+
+
+def test_m4_platform_intent_rejects_invalid_risk() -> None:
+    with pytest.raises(ValueError):
+        PlatformIntent(
+            uuid4(),
+            uuid4(),
+            "abc",
+            "security",
+            "inspect",
+            "extreme",
+        )
 
 
 def test_m4_requires_platform_authority_capabilities() -> None:
