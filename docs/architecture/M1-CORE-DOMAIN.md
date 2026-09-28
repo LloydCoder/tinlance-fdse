@@ -10,11 +10,11 @@ M1 turns the M0 boundary into an executable engineering-domain model.
 - findings with evidence references;
 - verification results explicitly bound to a revision;
 - engineering plans, change sets, and reports;
-- explicit lifecycle transition rules;
+- explicit plan, change-set, and finding lifecycle transition rules, including approval state;
 - dependency-inversion ports for persistence, repository providers, policy, and Agent Platform execution;
 - deny-by-default local policy adapter;
 - Agent Platform execution gateway that always requires approval and carries repository revision;
-- deterministic in-memory stores for tests.
+- deterministic in-memory stores conforming to the persistence ports for tests.
 
 ## Authority boundary
 
