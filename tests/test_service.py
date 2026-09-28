@@ -63,9 +63,9 @@ def test_blank_identity_is_rejected() -> None:
 @pytest.mark.parametrize(
     "bad_task",
     [
-        EngineeringTask("", "tenant-1", "repo-1", "inspect", "low"),
-        EngineeringTask("task-1", "tenant-1", "repo-1", " ", "low"),
-        EngineeringTask("task-1", "tenant-1", "repo-1", "inspect", "unknown"),  # type: ignore[arg-type]
+        EngineeringTask("", TenantScope("tenant-1", "repo-1"), "inspect", "low"),
+        EngineeringTask("task-1", TenantScope("tenant-1", "repo-1"), " ", "low"),
+        EngineeringTask("task-1", TenantScope("tenant-1", "repo-1"), "inspect", "unknown"),  # type: ignore[arg-type]
     ],
 )
 def test_invalid_task_contract_is_rejected(bad_task: EngineeringTask) -> None:
