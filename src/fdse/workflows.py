@@ -18,17 +18,17 @@ class WorkflowState(StrEnum):
     FAILED = "failed"
 
 
-_ALLOWED: dict[WorkflowState, set[WorkflowState]] = {
-    WorkflowState.INTAKE: {WorkflowState.CONTEXT, WorkflowState.FAILED},
-    WorkflowState.CONTEXT: {WorkflowState.ANALYSIS, WorkflowState.FAILED},
-    WorkflowState.ANALYSIS: {WorkflowState.PLAN, WorkflowState.FAILED},
-    WorkflowState.PLAN: {WorkflowState.APPROVAL, WorkflowState.FAILED},
-    WorkflowState.APPROVAL: {WorkflowState.EXECUTION, WorkflowState.FAILED},
-    WorkflowState.EXECUTION: {WorkflowState.VERIFICATION, WorkflowState.FAILED},
-    WorkflowState.VERIFICATION: {WorkflowState.REPORT, WorkflowState.FAILED},
-    WorkflowState.REPORT: {WorkflowState.COMPLETED, WorkflowState.FAILED},
-    WorkflowState.COMPLETED: set(),
-    WorkflowState.FAILED: set(),
+_ALLOWED: dict[WorkflowState, frozenset[WorkflowState]] = {
+    WorkflowState.INTAKE: frozenset({WorkflowState.CONTEXT, WorkflowState.FAILED}),
+    WorkflowState.CONTEXT: frozenset({WorkflowState.ANALYSIS, WorkflowState.FAILED}),
+    WorkflowState.ANALYSIS: frozenset({WorkflowState.PLAN, WorkflowState.FAILED}),
+    WorkflowState.PLAN: frozenset({WorkflowState.APPROVAL, WorkflowState.FAILED}),
+    WorkflowState.APPROVAL: frozenset({WorkflowState.EXECUTION, WorkflowState.FAILED}),
+    WorkflowState.EXECUTION: frozenset({WorkflowState.VERIFICATION, WorkflowState.FAILED}),
+    WorkflowState.VERIFICATION: frozenset({WorkflowState.REPORT, WorkflowState.FAILED}),
+    WorkflowState.REPORT: frozenset({WorkflowState.COMPLETED, WorkflowState.FAILED}),
+    WorkflowState.COMPLETED: frozenset(),
+    WorkflowState.FAILED: frozenset(),
 }
 
 
@@ -45,6 +45,18 @@ class WorkflowInstance:
     repository_id: str
     revision: str
     state: WorkflowState = WorkflowState.INTAKE
+
+    def __post_init__(self) -> None:
+        if not all(
+            value.strip()
+            for value in (
+                self.workflow_id,
+                self.tenant_id,
+                self.repository_id,
+                self.revision,
+            )
+        ):
+            raise ValueError("workflow scope and identifier are required")
 
     def advance(self, target: WorkflowState) -> WorkflowInstance:
         return WorkflowInstance(
