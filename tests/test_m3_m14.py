@@ -3,6 +3,15 @@ from uuid import uuid4
 
 import pytest
 
+from fdse.domain import (
+    ChangeStatus,
+    FindingStatus,
+    PlanStatus,
+    transition_change,
+    transition_finding,
+    transition_plan,
+)
+
 from fdse.agents import SpecialistRegistry, SpecialistRole, SpecialistSpec
 from fdse.certification import (
     CertificationBundle,
@@ -157,3 +166,24 @@ def test_m14_certification_fail_closed_and_certified() -> None:
     assert CertificationValidator().validate(bundle) is CertificationStatus.CERTIFIED
     incomplete = CertificationBundle("abc", phases[:-1], evidence, "att-1", "github", "run-1", "abc")
     assert CertificationValidator().validate(incomplete) is CertificationStatus.UNKNOWN
+
+
+def test_m1_lifecycle_transitions_are_fail_closed() -> None:
+    assert (
+        transition_finding(FindingStatus.OPEN, FindingStatus.ACCEPTED)
+        is FindingStatus.ACCEPTED
+    )
+    assert (
+        transition_plan(PlanStatus.DRAFT, PlanStatus.READY)
+        is PlanStatus.READY
+    )
+    assert (
+        transition_change(ChangeStatus.PROPOSED, ChangeStatus.APPLIED)
+        is ChangeStatus.APPLIED
+    )
+    with pytest.raises(ValueError):
+        transition_finding(FindingStatus.OPEN, FindingStatus.VERIFIED)
+    with pytest.raises(ValueError):
+        transition_plan(PlanStatus.COMPLETED, PlanStatus.EXECUTING)
+    with pytest.raises(ValueError):
+        transition_change(ChangeStatus.VERIFIED, ChangeStatus.APPLIED)
