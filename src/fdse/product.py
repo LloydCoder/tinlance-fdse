@@ -4,6 +4,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 
+def _required(value: str, field_name: str) -> str:
+    value = value.strip()
+    if not value:
+        raise ValueError(f"{field_name} is required")
+    if "\x00" in value:
+        raise ValueError(f"{field_name} contains a NUL byte")
+    return value
+
+
 @dataclass(frozen=True, slots=True)
 class CustomerProject:
     project_id: str
@@ -13,17 +22,14 @@ class CustomerProject:
     name: str
 
     def __post_init__(self) -> None:
-        if not all(
-            value.strip()
-            for value in (
-                self.project_id,
-                self.tenant_id,
-                self.repository_id,
-                self.revision,
-                self.name,
-            )
+        for value, name in (
+            (self.project_id, "project_id"),
+            (self.tenant_id, "tenant_id"),
+            (self.repository_id, "repository_id"),
+            (self.revision, "revision"),
+            (self.name, "name"),
         ):
-            raise ValueError("customer project fields are required")
+            _required(value, name)
 
 
 @dataclass(frozen=True, slots=True)
@@ -35,20 +41,20 @@ class CustomerRequest:
     revision: str
 
     def __post_init__(self) -> None:
-        if not all(
-            value.strip()
-            for value in (
-                self.request_id,
-                self.tenant_id,
-                self.repository_id,
-                self.objective,
-                self.revision,
-            )
+        for value, name in (
+            (self.request_id, "request_id"),
+            (self.tenant_id, "tenant_id"),
+            (self.repository_id, "repository_id"),
+            (self.objective, "objective"),
+            (self.revision, "revision"),
         ):
-            raise ValueError("customer request fields are required")
+            _required(value, name)
 
 
 class TenantBoundary:
     def ensure(self, tenant_id: str, requested_tenant_id: str) -> None:
-        if tenant_id.strip() != requested_tenant_id.strip():
+        if _required(tenant_id, "tenant_id") != _required(
+            requested_tenant_id,
+            "requested_tenant_id",
+        ):
             raise PermissionError("tenant boundary violation")
