@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import re
 from enum import StrEnum
 from uuid import UUID
 
@@ -38,6 +39,8 @@ class EvidenceNode:
             )
         ):
             raise ValueError("evidence node fields are required")
+        if not re.fullmatch(r"[0-9a-f]{64}", self.payload_digest):
+            raise ValueError("evidence payload digest must be a SHA-256 hex digest")
 
 
 @dataclass(frozen=True, slots=True)
