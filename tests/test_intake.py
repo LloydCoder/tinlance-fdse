@@ -3,7 +3,7 @@ from uuid import uuid4
 import pytest
 
 from fdse.errors import BoundaryViolation
-from fdse.intake import IntakeRequest, IntakeStatus, IntakeValidator
+from fdse.intake import IntakeRecord, IntakeRegistry, IntakeRequest, IntakeStatus, IntakeValidator
 
 
 def request(**overrides: object) -> IntakeRequest:
@@ -61,8 +61,6 @@ def test_intake_rejects_invalid_runtime_risk() -> None:
 
 
 def test_intake_registry_is_idempotent_and_tenant_scoped() -> None:
-    from fdse.intake import IntakeRegistry
-
     validator = IntakeValidator()
     first = validator.validate(request())
     registry = IntakeRegistry()
@@ -72,8 +70,6 @@ def test_intake_registry_is_idempotent_and_tenant_scoped() -> None:
 
 
 def test_intake_registry_rejects_reused_key_for_different_request() -> None:
-    from fdse.intake import IntakeRegistry
-
     validator = IntakeValidator()
     first = validator.validate(request())
     second = validator.validate(request(objective="Different objective"))
