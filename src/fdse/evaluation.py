@@ -15,10 +15,16 @@ class EvaluationOutcome(StrEnum):
 class EvaluationCase:
     case_id: str
     objective: str
+    revision: str
     expected_invariants: tuple[str, ...]
 
     def __post_init__(self) -> None:
-        if not self.case_id.strip() or not self.objective.strip() or not self.expected_invariants:
+        if (
+            not self.case_id.strip()
+            or not self.objective.strip()
+            or not self.revision.strip()
+            or not self.expected_invariants
+        ):
             raise ValueError("invalid evaluation case")
 
 
@@ -43,7 +49,15 @@ class EvaluationSuite:
         by_id = {result.case_id: result for result in results}
         if any(case.case_id not in by_id for case in cases):
             return EvaluationOutcome.UNKNOWN
-        if any(by_id[case.case_id].outcome is EvaluationOutcome.FAIL for case in cases):
+        if any(
+            by_id[case.case_id].revision != case.revision
+            for case in cases
+        ):
+            return EvaluationOutcome.UNKNOWN
+        if any(
+            by_id[case.case_id].outcome is EvaluationOutcome.FAIL
+            for case in cases
+        ):
             return EvaluationOutcome.FAIL
         if any(
             by_id[case.case_id].outcome is EvaluationOutcome.UNKNOWN
