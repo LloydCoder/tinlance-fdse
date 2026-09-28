@@ -137,12 +137,24 @@ def test_m9_authority_is_external() -> None:
 def test_m10_evaluation_is_fail_closed() -> None:
     case = EvaluationCase("1", "objective", "abc", ("invariant",))
     assert EvaluationSuite().evaluate((case,), ()) is EvaluationOutcome.UNKNOWN
-    duplicate = EvaluationResult("1", EvaluationOutcome.PASS, ("ok",), "abc")
+    duplicate = EvaluationResult(
+        "1",
+        EvaluationOutcome.PASS,
+        ("ok",),
+        "abc",
+        ("invariant",),
+    )
     assert (
         EvaluationSuite().evaluate((case,), (duplicate, duplicate))
         is EvaluationOutcome.UNKNOWN
     )
-    result = EvaluationResult("1", EvaluationOutcome.PASS, ("ok",), "abc")
+    result = EvaluationResult(
+        "1",
+        EvaluationOutcome.PASS,
+        ("ok",),
+        "abc",
+        ("invariant",),
+    )
     assert EvaluationSuite().evaluate((case,), (result,)) is EvaluationOutcome.PASS
 
 
