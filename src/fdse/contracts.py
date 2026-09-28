@@ -1,4 +1,5 @@
 """Explicit FDSE domain contracts."""
+
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
@@ -87,5 +88,4 @@ class ExecutionHandle:
 class AgentPlatformGateway(Protocol):
     """FDSE engineering semantics -> Agent Platform authority boundary."""
 
-    def submit(self, request: ExecutionRequest) -> ExecutionHandle:
-        ...
+    def submit(self, request: ExecutionRequest) -> ExecutionHandle: ...
