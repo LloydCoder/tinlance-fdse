@@ -83,9 +83,15 @@ def test_m4_requires_platform_authority_capabilities() -> None:
         PlatformCompatibility().validate(
             PlatformCapabilities("1.0", True, False, True, True, True)
         )
+    with pytest.raises(ValueError):
+        PlatformCompatibility().validate(
+            PlatformCapabilities("2.0", True, True, True, True, True)
+        )
 
 
 def test_m5_registry_rejects_duplicates() -> None:
+    with pytest.raises(ValueError):
+        SpecialistSpec(SpecialistRole.TEST, "test", True, ("",))
     spec = SpecialistSpec(
         SpecialistRole.TEST,
         "test changes",
@@ -131,6 +137,11 @@ def test_m9_authority_is_external() -> None:
 def test_m10_evaluation_is_fail_closed() -> None:
     case = EvaluationCase("1", "objective", "abc", ("invariant",))
     assert EvaluationSuite().evaluate((case,), ()) is EvaluationOutcome.UNKNOWN
+    duplicate = EvaluationResult("1", EvaluationOutcome.PASS, ("ok",), "abc")
+    assert (
+        EvaluationSuite().evaluate((case,), (duplicate, duplicate))
+        is EvaluationOutcome.UNKNOWN
+    )
     result = EvaluationResult("1", EvaluationOutcome.PASS, ("ok",), "abc")
     assert EvaluationSuite().evaluate((case,), (result,)) is EvaluationOutcome.PASS
 
@@ -187,3 +198,15 @@ def test_m1_lifecycle_transitions_are_fail_closed() -> None:
         transition_plan(PlanStatus.COMPLETED, PlanStatus.EXECUTING)
     with pytest.raises(ValueError):
         transition_change(ChangeStatus.VERIFIED, ChangeStatus.APPLIED)
+
+
+def test_m6_workflow_scope_is_required() -> None:
+    with pytest.raises(ValueError):
+        WorkflowInstance("", "t", "r", "abc")
+
+
+def test_m11_product_scope_rejects_nul() -> None:
+    from fdse.product import CustomerRequest
+
+    with pytest.raises(ValueError):
+        CustomerRequest("req", "t", "r", "bad\x00objective", "abc")
