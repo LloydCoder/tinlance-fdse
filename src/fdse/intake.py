@@ -65,7 +65,10 @@ class IntakeValidator:
             revision=_normalized(request.revision, "revision"),
             objective=_normalized(request.objective, "objective"),
             risk=request.risk,
-            idempotency_key=_normalized(request.idempotency_key, "idempotency_key"),
+            idempotency_key=_normalized(
+                request.idempotency_key,
+                "idempotency_key",
+            ),
             status=IntakeStatus.ACCEPTED,
         )
 
@@ -80,12 +83,21 @@ class IntakeRegistry:
         key = (record.scope.tenant_id, record.idempotency_key)
         existing = self._records.get(key)
         if existing is not None and existing != record:
-            raise BoundaryViolation("idempotency key is already bound to another request")
+            raise BoundaryViolation(
+                "idempotency key is already bound to another request"
+            )
         self._records[key] = record
         return record
 
-    def get(self, tenant_id: str, idempotency_key: str) -> IntakeRecord | None:
-        key = (_normalized(tenant_id, "tenant_id"), _normalized(idempotency_key, "idempotency_key"))
+    def get(
+        self,
+        tenant_id: str,
+        idempotency_key: str,
+    ) -> IntakeRecord | None:
+        key = (
+            _normalized(tenant_id, "tenant_id"),
+            _normalized(idempotency_key, "idempotency_key"),
+        )
         return self._records.get(key)
 
 
@@ -109,4 +121,6 @@ def _required_uuid(value: str, field_name: str) -> UUID:
     try:
         return UUID(value)
     except ValueError as exc:
-        raise BoundaryViolation(f"{field_name} must be a valid UUID") from exc
+        raise BoundaryViolation(
+            f"{field_name} must be a valid UUID"
+        ) from exc
