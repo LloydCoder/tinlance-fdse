@@ -149,6 +149,8 @@ def test_m11_tenant_boundary() -> None:
 
 def test_m12_redacts_secrets() -> None:
     assert "secret=[REDACTED]" in redact("secret=abc")
+    assert redact("Authorization: Bearer super-secret-token") == "Authorization: [REDACTED]"
+    assert redact('token: "super-secret-token"') == "token=[REDACTED]"
 
 
 def test_m13_readiness_contracts() -> None:
