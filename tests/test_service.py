@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from fdse.contracts import EngineeringTask, ExecutionHandle, ExecutionRequest
+from fdse.contracts import EngineeringTask, ExecutionHandle, ExecutionRequest, TenantScope
 from fdse.errors import BoundaryViolation, ContractViolation
 from fdse.service import EngineeringService, make_request
 
@@ -20,8 +20,7 @@ class FakeGateway:
 def task() -> EngineeringTask:
     return EngineeringTask(
         task_id="task-1",
-        tenant_id="tenant-1",
-        repository_id="repo-1",
+        scope=TenantScope("tenant-1", "repo-1"),
         description="inspect repository",
         risk="low",
     )
@@ -54,19 +53,16 @@ def test_service_rejects_escaping_workspace() -> None:
 
 
 def test_blank_identity_is_rejected() -> None:
-    gateway = FakeGateway([])
-    task_value = EngineeringTask("task-1", "  ", "repo-1", "inspect", "low")
-    request = ExecutionRequest(task=task_value, workspace_id="workspace-1")
-    with pytest.raises(BoundaryViolation):
-        EngineeringService(gateway).submit(request)
+    with pytest.raises(ValueError):
+        TenantScope("  ", "repo-1")
 
 
 @pytest.mark.parametrize(
     "bad_task",
     [
-        EngineeringTask("", "tenant-1", "repo-1", "inspect", "low"),
-        EngineeringTask("task-1", "tenant-1", "repo-1", " ", "low"),
-        EngineeringTask("task-1", "tenant-1", "repo-1", "inspect", "unknown"),  # type: ignore[arg-type]
+        EngineeringTask("", TenantScope("tenant-1", "repo-1"), "inspect", "low"),
+        EngineeringTask("task-1", TenantScope("tenant-1", "repo-1"), " ", "low"),
+        EngineeringTask("task-1", TenantScope("tenant-1", "repo-1"), "inspect", "unknown"),  # type: ignore[arg-type]
     ],
 )
 def test_invalid_task_contract_is_rejected(bad_task: EngineeringTask) -> None:

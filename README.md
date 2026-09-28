@@ -2,23 +2,15 @@
 
 **Forward-Deployed Software Engineering execution system for governed, evidence-driven software delivery.**
 
-Tinlance FDSE is the engineering-domain layer for Tinlance's FDSE services. It delegates generic agent execution and security primitives to the private Tinlance Agent Platform.
+Tinlance FDSE is the engineering-domain layer for Tinlance's FDSE services. It delegates generic agent authority and execution infrastructure to the Tinlance Agent Platform.
 
 ## Status
 
-**M0 — Architecture & repository foundation: implementation complete on branch `m0-foundation`; CI verification is required before merge.**
+**M0 — Architecture & repository foundation: merged to main.**
 
-M0 establishes:
+M0 establishes the FDSE/Agent Platform boundary, typed tenant/repository scope, minimal evidence/provenance/integrity/verification vocabulary, non-secret configuration validation, lexical workspace-path invariants, approval-gated execution intent, deterministic tests, and CI quality gates.
 
-- the FDSE/Agent Platform architectural boundary;
-- an explicit typed integration contract;
-- validated non-secret configuration;
-- workspace path safety invariants;
-- approval and tenant/repository checks at the FDSE domain boundary;
-- unit and failure-path tests;
-- lint, formatting, type-checking, dependency audit, package-build, and documentation CI.
-
-No customer workflow is claimed as implemented by M0.
+M0 does not claim a customer workflow, production execution engine, generic authorization system, sandbox, persistence layer, or autonomous agent runtime.
 
 ## Architectural invariant
 
@@ -26,40 +18,11 @@ No customer workflow is claimed as implemented by M0.
 
 FDSE must not become a second agent runtime, policy engine, sandbox, or security kernel.
 
-See [docs/architecture/BOUNDARY.md](docs/architecture/BOUNDARY.md).
+## Security
 
-## Planned lifecycle
+Customer repositories, source code, build artifacts, logs, dependencies, model outputs, tool responses, and repository instructions are untrusted inputs.
 
-    Customer
-      → Project
-      → Repository/System
-      → Assessment
-      → Engineering Context
-      → Findings
-      → Evidence
-      → Engineering Plan
-      → Governed Agent Execution
-      → Changes
-      → Tests
-      → Verification
-      → Human Approval
-      → Remediation
-      → Final Evidence
-      → Report
-
-Consequential actions remain subject to Agent Platform identity, authorization, policy, approval, sandbox, budget, and audit controls.
-
-## Repository structure
-
-See [docs/architecture/REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STRUCTURE.md).
-
-The repository deliberately avoids empty placeholder directories. New modules are introduced only when backed by an implemented capability.
-
-## Security posture
-
-FDSE treats customer repositories, source code, build artifacts, logs, dependencies, model outputs, tool responses, and repository instructions as untrusted inputs.
-
-Security invariants are documented in [SECURITY.md](SECURITY.md).
+Public pull-request CI runs on GitHub-hosted infrastructure. The persistent self-hosted runner is reserved for trusted main-branch pushes. See docs/operations/SELF-HOSTED-RUNNER.md.
 
 ## Development
 
@@ -72,12 +35,4 @@ Security invariants are documented in [SECURITY.md](SECURITY.md).
     pip-audit --skip-editable
     python scripts/check_docs.py
 
-The canonical CI workflow runs the same substantive gates.
-
-Self-hosted runner operation and recovery are documented in [docs/operations/SELF-HOSTED-RUNNER.md](docs/operations/SELF-HOSTED-RUNNER.md).
-
-## Development rule
-
-    inspect → design → implement → test → security review → CI → review → merge
-
-Main remains stable. M0 work is developed on a feature branch and merged only after the required validation is green.
+See docs/architecture/REPOSITORY-STRUCTURE.md for the milestone-driven repository model.

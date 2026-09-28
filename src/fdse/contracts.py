@@ -1,29 +1,78 @@
-"""Explicit contracts between FDSE and the private Agent Platform."""
+"""Explicit FDSE domain contracts."""
 
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
 ExecutionRisk = Literal["low", "medium", "high", "critical"]
+ExecutionStatus = Literal["accepted", "rejected", "completed", "failed", "cancelled"]
+EvidenceKind = Literal["observation", "artifact", "test_result", "tool_result", "report"]
+VerificationStatus = Literal["unverified", "verified", "failed", "unknown"]
+
+
+@dataclass(frozen=True, slots=True)
+class TenantScope:
+    """Atomic tenant/repository domain scope; not an authorization decision."""
+
+    tenant_id: str
+    repository_id: str
+
+    def __post_init__(self) -> None:
+        if not self.tenant_id.strip() or not self.repository_id.strip():
+            raise ValueError("tenant_id and repository_id are required")
+
+
+@dataclass(frozen=True, slots=True)
+class ProvenanceRef:
+    source_id: str
+    revision: str
+
+    def __post_init__(self) -> None:
+        if not self.source_id.strip() or not self.revision.strip():
+            raise ValueError("source_id and revision are required")
+
+
+@dataclass(frozen=True, slots=True)
+class EvidenceRef:
+    evidence_id: str
+    kind: EvidenceKind
+    provenance: ProvenanceRef
+    integrity_digest: str
+
+    def __post_init__(self) -> None:
+        if not self.evidence_id.strip() or not self.integrity_digest.strip():
+            raise ValueError("evidence_id and integrity_digest are required")
+
+
+@dataclass(frozen=True, slots=True)
+class VerificationRef:
+    verification_id: str
+    evidence_id: str
+    status: VerificationStatus
+
+    def __post_init__(self) -> None:
+        if not self.verification_id.strip() or not self.evidence_id.strip():
+            raise ValueError("verification_id and evidence_id are required")
 
 
 @dataclass(frozen=True, slots=True)
 class EngineeringTask:
-    """An engineering intent; it contains no executable command or host credential."""
-
     task_id: str
-    tenant_id: str
-    repository_id: str
+    scope: TenantScope
     description: str
     risk: ExecutionRisk
+
+    @property
+    def tenant_id(self) -> str:
+        return self.scope.tenant_id
+
+    @property
+    def repository_id(self) -> str:
+        return self.scope.repository_id
 
 
 @dataclass(frozen=True, slots=True)
 class ExecutionRequest:
-    """Request for Agent Platform governance and, if authorized, execution.
-
-    approval_required is a governance requirement, not proof that approval
-    has been granted. FDSE never creates or attests to approval evidence.
-    """
+    """approval_required requests governance; it does not prove approval."""
 
     task: EngineeringTask
     workspace_id: str
@@ -32,29 +81,11 @@ class ExecutionRequest:
 
 @dataclass(frozen=True, slots=True)
 class ExecutionHandle:
-    """Opaque reference to an Agent Platform execution lifecycle.
-
-    submit is a boundary operation. M0 does not define polling, lifecycle
-    queries, evidence retrieval, cancellation, or execution control APIs.
-    """
-
     execution_id: str
-    status: Literal["accepted", "rejected", "completed", "failed", "cancelled"]
+    status: ExecutionStatus
 
 
 class AgentPlatformGateway(Protocol):
-    """Minimal FDSE integration boundary.
+    """FDSE engineering semantics -> Agent Platform authority boundary."""
 
-    FDSE owns engineering semantics. The Agent Platform owns identity,
-    authorization, policy, approvals, sandboxing, execution, budgets,
-    evidence, trajectory, observability, and audit primitives.
-    """
-
-    def submit(self, request: ExecutionRequest) -> ExecutionHandle:
-        """Submit a domain request for platform governance and execution.
-
-        A returned handle identifies the platform-owned lifecycle. FDSE must
-        not interpret approval_required=True as approval having occurred.
-        Lifecycle queries and control operations are deferred beyond M0.
-        """
-        ...
+    def submit(self, request: ExecutionRequest) -> ExecutionHandle: ...
