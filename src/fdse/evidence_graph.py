@@ -18,6 +18,8 @@ class EvidenceRelation(StrEnum):
 @dataclass(frozen=True, slots=True)
 class EvidenceNode:
     evidence_id: UUID
+    tenant_id: str
+    repository_id: str
     kind: str
     revision: str
     payload_digest: str
@@ -26,7 +28,14 @@ class EvidenceNode:
     def __post_init__(self) -> None:
         if not all(
             value.strip()
-            for value in (self.kind, self.revision, self.payload_digest, self.source)
+            for value in (
+                self.tenant_id,
+                self.repository_id,
+                self.kind,
+                self.revision,
+                self.payload_digest,
+                self.source,
+            )
         ):
             raise ValueError("evidence node fields are required")
 
@@ -44,6 +53,9 @@ class EvidenceGraph:
         self._edges: set[EvidenceEdge] = set()
 
     def add_node(self, node: EvidenceNode) -> None:
+        existing = self._nodes.get(node.evidence_id)
+        if existing is not None and existing != node:
+            raise ValueError("evidence identifier is already bound to another node")
         self._nodes[node.evidence_id] = node
 
     def add_edge(self, edge: EvidenceEdge) -> None:
@@ -51,8 +63,12 @@ class EvidenceGraph:
         target = self._nodes.get(edge.target_id)
         if source is None or target is None:
             raise ValueError("evidence edge references unknown node")
-        if source.revision != target.revision:
-            raise ValueError("evidence edge crosses repository revisions")
+        if (
+            source.tenant_id != target.tenant_id
+            or source.repository_id != target.repository_id
+            or source.revision != target.revision
+        ):
+            raise ValueError("evidence edge crosses scope or repository revision")
         if edge.source_id == edge.target_id:
             raise ValueError("self-referential evidence edge")
         self._edges.add(edge)
@@ -61,6 +77,8 @@ class EvidenceGraph:
         nodes = sorted(
             (
                 str(node.evidence_id),
+                node.tenant_id,
+                node.repository_id,
                 node.kind,
                 node.revision,
                 node.payload_digest,
