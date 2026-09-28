@@ -30,11 +30,15 @@ from .domain import (
     RepositoryRef,
     VerificationResult,
     VerificationStatus,
+    transition_change,
+    transition_finding,
+    transition_plan,
 )
 from .evaluation import EvaluationCase, EvaluationOutcome, EvaluationResult, EvaluationSuite
 from .governance import ApprovalStatus, GovernanceBoundary, GovernanceReference
 from .intake import IntakeRecord, IntakeRegistry, IntakeRequest, IntakeStatus, IntakeValidator
 from .platform import (
+    AgentPlatformAdapter,
     GovernedPlatformAdapter,
     PlatformCapabilities,
     PlatformCompatibility,
@@ -67,6 +71,9 @@ __all__ = [
     "RepositoryRef",
     "VerificationResult",
     "VerificationStatus",
+    "transition_change",
+    "transition_finding",
+    "transition_plan",
     "IntakeRecord",
     "IntakeRegistry",
     "IntakeRequest",
