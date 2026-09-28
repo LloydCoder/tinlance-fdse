@@ -48,7 +48,6 @@ from fdse.production import (
     HealthStatus,
     IdempotencyRecord,
     Readiness,
-    ReadinessGate,
 )
 from fdse.security_hardening import redact
 from fdse.transitions import transition_change, transition_finding, transition_plan
