@@ -1,4 +1,5 @@
 """Governance references owned by the Agent Platform (M9)."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -29,8 +30,5 @@ class GovernanceReference:
 
 class GovernanceBoundary:
     def validate(self, reference: GovernanceReference) -> None:
-        if (
-            reference.status is ApprovalStatus.APPROVED
-            and reference.authority != "agent-platform"
-        ):
+        if reference.status is ApprovalStatus.APPROVED and reference.authority != "agent-platform":
             raise ValueError("approval authority must remain external")

@@ -1,4 +1,5 @@
 """Deterministic evaluation contracts (M10)."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

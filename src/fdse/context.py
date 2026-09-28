@@ -1,4 +1,5 @@
 """Deterministic, tenant-scoped engineering context assembly (M3)."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

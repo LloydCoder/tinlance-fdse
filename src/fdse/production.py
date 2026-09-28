@@ -1,4 +1,5 @@
 """Production-readiness contracts without owning infrastructure (M13)."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -36,10 +37,7 @@ class IdempotencyRecord:
     request_digest: str
 
     def __post_init__(self) -> None:
-        if not all(
-            value.strip()
-            for value in (self.tenant_id, self.key, self.request_digest)
-        ):
+        if not all(value.strip() for value in (self.tenant_id, self.key, self.request_digest)):
             raise ValueError("idempotency record is required")
         if any("\x00" in value for value in (self.tenant_id, self.key, self.request_digest)):
             raise ValueError("idempotency record contains a NUL byte")

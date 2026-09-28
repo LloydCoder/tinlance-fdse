@@ -1,4 +1,5 @@
 """Evidence/provenance graph primitives (M8)."""
+
 from __future__ import annotations
 
 import re
@@ -90,7 +91,6 @@ class EvidenceGraph:
             for node in self._nodes.values()
         )
         edges = sorted(
-            (str(edge.source_id), str(edge.target_id), edge.relation.value)
-            for edge in self._edges
+            (str(edge.source_id), str(edge.target_id), edge.relation.value) for edge in self._edges
         )
         return digest({"nodes": nodes, "edges": edges})

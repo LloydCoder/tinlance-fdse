@@ -1,4 +1,5 @@
 """Domain security controls and conservative secret redaction (M12)."""
+
 from __future__ import annotations
 
 import re
@@ -25,12 +26,10 @@ class SecurityControl:
             raise ValueError("security control is required")
 
 
-_AUTHORIZATION = re.compile(
-    r"(?im)(authorization\s*:\s*)[^\r\n]+"
-)
+_AUTHORIZATION = re.compile(r"(?im)(authorization\s*:\s*)[^\r\n]+")
 _SECRET = re.compile(
     r"(?i)(api[_-]?key|token|password|passwd|secret)\s*[:=]\s*"
-    r'''(?:"[^"]*"|'[^']*'|[^\s,;}]+)'''
+    r"""(?:"[^"]*"|'[^']*'|[^\s,;}]+)"""
 )
 
 
