@@ -164,9 +164,13 @@ def test_m14_certification_fail_closed_and_certified() -> None:
         for i in range(15)
     )
     evidence = digest(sorted(phases))
-    bundle = CertificationBundle("abc", phases, evidence, "att-1", "github", "run-1", "abc")
+    bundle = CertificationBundle(
+        "abc", phases, evidence, "att-1", "github", "run-1", "abc"
+    )
     assert CertificationValidator().validate(bundle) is CertificationStatus.CERTIFIED
-    incomplete = CertificationBundle("abc", phases[:-1], evidence, "att-1", "github", "run-1", "abc")
+    incomplete = CertificationBundle(
+        "abc", phases[:-1], evidence, "att-1", "github", "run-1", "abc"
+    )
     assert CertificationValidator().validate(incomplete) is CertificationStatus.UNKNOWN
 
 
