@@ -30,9 +30,6 @@ from .domain import (
     RepositoryRef,
     VerificationResult,
     VerificationStatus,
-    transition_change,
-    transition_finding,
-    transition_plan,
 )
 from .evaluation import EvaluationCase, EvaluationOutcome, EvaluationResult, EvaluationSuite
 from .governance import ApprovalStatus, GovernanceBoundary, GovernanceReference
@@ -54,6 +51,7 @@ from .production import (
     ReadinessGate,
 )
 from .security_hardening import ControlClass, SecurityControl, redact
+from .transitions import transition_change, transition_finding, transition_plan
 from .workflows import WorkflowInstance, WorkflowState, transition
 
 __all__ = [
