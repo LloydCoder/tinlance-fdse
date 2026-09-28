@@ -1,6 +1,4 @@
 """Explicit domain lifecycle transition rules."""
-from __future__ import annotations
-
 from .domain import ChangeStatus, FindingStatus, PlanStatus
 
 
