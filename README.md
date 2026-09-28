@@ -44,3 +44,4 @@ Public pull-request CI runs on GitHub-hosted infrastructure. Trusted main-branch
     python -m build --no-isolation
     pip-audit --skip-editable
     python scripts/check_docs.py
+
