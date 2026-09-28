@@ -1,4 +1,5 @@
 """Core FDSE engineering-domain entities and lifecycle values."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

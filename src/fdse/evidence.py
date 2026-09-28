@@ -1,4 +1,5 @@
 """Canonical evidence serialization and integrity digests."""
+
 from __future__ import annotations
 
 import hashlib

@@ -1,4 +1,5 @@
 """Adapter boundary from FDSE plans to Agent Platform authority."""
+
 from __future__ import annotations
 
 from uuid import UUID

@@ -1,4 +1,5 @@
 """Validated engineering intake at the FDSE domain boundary."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -83,9 +84,7 @@ class IntakeRegistry:
         key = (record.scope.tenant_id, record.idempotency_key)
         existing = self._records.get(key)
         if existing is not None and existing != record:
-            raise BoundaryViolation(
-                "idempotency key is already bound to another request"
-            )
+            raise BoundaryViolation("idempotency key is already bound to another request")
         self._records[key] = record
         return record
 
@@ -121,6 +120,4 @@ def _required_uuid(value: str, field_name: str) -> UUID:
     try:
         return UUID(value)
     except ValueError as exc:
-        raise BoundaryViolation(
-            f"{field_name} must be a valid UUID"
-        ) from exc
+        raise BoundaryViolation(f"{field_name} must be a valid UUID") from exc

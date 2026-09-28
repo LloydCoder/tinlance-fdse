@@ -1,4 +1,5 @@
 """Explicit domain lifecycle transition rules."""
+
 # ruff: noqa: I001
 from __future__ import annotations
 
@@ -6,9 +7,7 @@ from . import domain
 
 
 _PLAN: dict[domain.PlanStatus, frozenset[domain.PlanStatus]] = {
-    domain.PlanStatus.DRAFT: frozenset(
-        {domain.PlanStatus.READY, domain.PlanStatus.FAILED}
-    ),
+    domain.PlanStatus.DRAFT: frozenset({domain.PlanStatus.READY, domain.PlanStatus.FAILED}),
     domain.PlanStatus.READY: frozenset(
         {
             domain.PlanStatus.EXECUTING,
