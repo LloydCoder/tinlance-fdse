@@ -47,8 +47,12 @@ class EvidenceGraph:
         self._nodes[node.evidence_id] = node
 
     def add_edge(self, edge: EvidenceEdge) -> None:
-        if edge.source_id not in self._nodes or edge.target_id not in self._nodes:
+        source = self._nodes.get(edge.source_id)
+        target = self._nodes.get(edge.target_id)
+        if source is None or target is None:
             raise ValueError("evidence edge references unknown node")
+        if source.revision != target.revision:
+            raise ValueError("evidence edge crosses repository revisions")
         if edge.source_id == edge.target_id:
             raise ValueError("self-referential evidence edge")
         self._edges.add(edge)
