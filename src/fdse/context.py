@@ -40,7 +40,8 @@ class ContextSource:
     revision: str
     provenance: str
     observed_at: datetime
-    scope: str
+    tenant_id: str
+    repository_id: str
     freshness_seconds: int
     confidence: ContextQuality = ContextQuality.UNKNOWN
 
@@ -49,7 +50,7 @@ class ContextSource:
             raise ValueError("context source identifiers are required")
         if self.freshness_seconds < 0:
             raise ValueError("freshness cannot be negative")
-        if not self.scope.strip():
+        if not self.tenant_id.strip() or not self.repository_id.strip():
             raise ValueError("context scope is required")
 
 
@@ -99,6 +100,13 @@ class ContextBuilder:
         revision = revision.strip()
         if not tenant_id or not repository_id or not revision:
             raise ValueError("context scope is required")
+        if any(
+            item.source.tenant_id != tenant_id
+            or item.source.repository_id != repository_id
+            or item.source.revision != revision
+            for item in items
+        ):
+            raise ValueError("context source scope or revision does not match snapshot")
         normalized = tuple(
             ContextItem(item.kind, item.key.strip(), filter_secret_like(item.value), item.source)
             for item in items
@@ -125,7 +133,8 @@ class ContextBuilder:
                 "revision": item.source.revision,
                 "provenance": item.source.provenance,
                 "observed_at": item.source.observed_at.isoformat(),
-                "scope": item.source.scope,
+                "tenant_id": item.source.tenant_id,
+                "repository_id": item.source.repository_id,
                 "freshness_seconds": item.source.freshness_seconds,
                 "confidence": item.source.confidence.value,
             }
