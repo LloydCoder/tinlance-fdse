@@ -116,8 +116,8 @@ def test_m7_revision_bound_contracts() -> None:
 
 
 def test_m8_graph_is_integrity_digestable() -> None:
-    first = EvidenceNode(uuid4(), "t", "r", "test", "abc", "d1", "ci")
-    second = EvidenceNode(uuid4(), "t", "r", "report", "abc", "d2", "report")
+    first = EvidenceNode(uuid4(), "t", "r", "test", "abc", "a" * 64, "ci")
+    second = EvidenceNode(uuid4(), "t", "r", "report", "abc", "b" * 64, "report")
     graph = EvidenceGraph()
     graph.add_node(first)
     graph.add_node(second)
