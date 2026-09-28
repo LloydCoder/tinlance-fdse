@@ -38,19 +38,33 @@ class CheckResult:
     def __post_init__(self) -> None:
         if not all(
             value.strip()
-            for value in (self.tenant_id, self.name, self.status, self.conclusion, self.revision)
+            for value in (
+                self.tenant_id,
+                self.name,
+                self.status,
+                self.conclusion,
+                self.revision,
+            )
         ):
             raise ValueError("check result fields are required")
 
 
 class RepositoryReader(Protocol):
-    def snapshot(self, tenant_id: str, repository_id: str, revision: str) -> RepositorySnapshot: ...
+    def snapshot(
+        self, tenant_id: str, repository_id: str, revision: str
+    ) -> RepositorySnapshot: ...
 
 
 class CIRunReader(Protocol):
-    def checks(self, tenant_id: str, repository_id: str, revision: str) -> tuple[CheckResult, ...]: ...
+    def checks(
+        self, tenant_id: str, repository_id: str, revision: str
+    ) -> tuple[CheckResult, ...]: ...
 
 
 class GitHubProvider(Protocol):
-    def snapshot(self, tenant_id: str, repository_id: str, revision: str) -> RepositorySnapshot: ...
-    def checks(self, tenant_id: str, repository_id: str, revision: str) -> tuple[CheckResult, ...]: ...
+    def snapshot(
+        self, tenant_id: str, repository_id: str, revision: str
+    ) -> RepositorySnapshot: ...
+    def checks(
+        self, tenant_id: str, repository_id: str, revision: str
+    ) -> tuple[CheckResult, ...]: ...
