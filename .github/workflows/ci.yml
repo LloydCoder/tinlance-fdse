@@ -56,6 +56,39 @@ jobs:
           print("\n".join(str(p) for p in artifacts))
           PY
 
+  # Temporary formatting repair for the documentation-reconciliation branch.
+  # This job is deliberately branch-scoped and will be removed after the
+  # repository is fully formatted.
+  format_repair:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'docs/reconcile-readme-2026-09-28'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: true
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Install Ruff
+        run: python -m pip install ruff==0.13.0
+      - name: Format branch
+        run: ruff format .
+      - name: Commit formatting
+        run: |
+          if git diff --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "style: format Python sources"
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+
   compatibility:
     if: github.event_name == 'pull_request' || github.event_name == 'merge_group'
     runs-on: ubuntu-latest
