@@ -26,8 +26,10 @@ class SpecialistSpec:
     def __post_init__(self) -> None:
         if not self.objective.strip():
             raise ValueError("specialist objective is required")
-        if not self.required_evidence:
-            raise ValueError("specialist must declare evidence requirements")
+        if not self.required_evidence or any(
+            not evidence.strip() for evidence in self.required_evidence
+        ):
+            raise ValueError("specialist must declare non-empty evidence requirements")
 
 
 class SpecialistRegistry:
