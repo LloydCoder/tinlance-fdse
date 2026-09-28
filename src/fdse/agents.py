@@ -1,4 +1,5 @@
 """Deterministic specialist-agent role contracts (M5)."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

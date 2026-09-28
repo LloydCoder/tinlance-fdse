@@ -1,4 +1,5 @@
 """Repository and CI provider contracts (M7); no execution authority."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -50,9 +51,7 @@ class CheckResult:
 
 
 class RepositoryReader(Protocol):
-    def snapshot(
-        self, tenant_id: str, repository_id: str, revision: str
-    ) -> RepositorySnapshot: ...
+    def snapshot(self, tenant_id: str, repository_id: str, revision: str) -> RepositorySnapshot: ...
 
 
 class CIRunReader(Protocol):
@@ -62,9 +61,7 @@ class CIRunReader(Protocol):
 
 
 class GitHubProvider(Protocol):
-    def snapshot(
-        self, tenant_id: str, repository_id: str, revision: str
-    ) -> RepositorySnapshot: ...
+    def snapshot(self, tenant_id: str, repository_id: str, revision: str) -> RepositorySnapshot: ...
     def checks(
         self, tenant_id: str, repository_id: str, revision: str
     ) -> tuple[CheckResult, ...]: ...

@@ -1,4 +1,5 @@
 """Tenant-safe customer product contracts (M11)."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

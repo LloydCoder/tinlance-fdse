@@ -1,4 +1,5 @@
 """Explicit workflow state machines (M6)."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

@@ -48,7 +48,6 @@ from fdse.production import (
     HealthStatus,
     IdempotencyRecord,
     Readiness,
-    ReadinessGate,
 )
 from fdse.security_hardening import redact
 from fdse.transitions import transition_change, transition_finding, transition_plan
@@ -109,17 +108,11 @@ def test_m4_platform_intent_rejects_invalid_risk() -> None:
 
 
 def test_m4_requires_platform_authority_capabilities() -> None:
-    PlatformCompatibility().validate(
-        PlatformCapabilities("1.0", True, True, True, True, True)
-    )
+    PlatformCompatibility().validate(PlatformCapabilities("1.0", True, True, True, True, True))
     with pytest.raises(ValueError):
-        PlatformCompatibility().validate(
-            PlatformCapabilities("1.0", True, False, True, True, True)
-        )
+        PlatformCompatibility().validate(PlatformCapabilities("1.0", True, False, True, True, True))
     with pytest.raises(ValueError):
-        PlatformCompatibility().validate(
-            PlatformCapabilities("2.0", True, True, True, True, True)
-        )
+        PlatformCompatibility().validate(PlatformCapabilities("2.0", True, True, True, True, True))
 
 
 def test_m5_registry_rejects_duplicates() -> None:
@@ -154,9 +147,7 @@ def test_m8_graph_is_integrity_digestable() -> None:
     graph = EvidenceGraph()
     graph.add_node(first)
     graph.add_node(second)
-    graph.add_edge(
-        EvidenceEdge(first.evidence_id, second.evidence_id, EvidenceRelation.SUPPORTS)
-    )
+    graph.add_edge(EvidenceEdge(first.evidence_id, second.evidence_id, EvidenceRelation.SUPPORTS))
     assert len(graph.snapshot_digest()) == 64
     foreign = EvidenceNode(uuid4(), "other", "r", "test", "abc", "c" * 64, "ci")
     graph.add_node(foreign)
@@ -187,10 +178,7 @@ def test_m10_evaluation_is_fail_closed() -> None:
         "abc",
         ("invariant",),
     )
-    assert (
-        EvaluationSuite().evaluate((case,), (duplicate, duplicate))
-        is EvaluationOutcome.UNKNOWN
-    )
+    assert EvaluationSuite().evaluate((case,), (duplicate, duplicate)) is EvaluationOutcome.UNKNOWN
     result = EvaluationResult(
         "1",
         EvaluationOutcome.PASS,
@@ -209,10 +197,7 @@ def test_m11_tenant_boundary() -> None:
 
 def test_m12_redacts_secrets() -> None:
     assert "secret=[REDACTED]" in redact("secret=abc")
-    assert (
-        redact("Authorization: Bearer super-secret-token")
-        == "Authorization: [REDACTED]"
-    )
+    assert redact("Authorization: Bearer super-secret-token") == "Authorization: [REDACTED]"
     assert redact('token: "super-secret-token"') == "token=[REDACTED]"
 
 
@@ -222,14 +207,9 @@ def test_m13_readiness_contracts() -> None:
 
 
 def test_m14_certification_fail_closed_and_certified() -> None:
-    phases = tuple(
-        (f"M{i}", CertificationStatus.CERTIFIED)
-        for i in range(15)
-    )
+    phases = tuple((f"M{i}", CertificationStatus.CERTIFIED) for i in range(15))
     evidence = digest(sorted(phases))
-    bundle = CertificationBundle(
-        "abc", phases, evidence, "att-1", "github", "run-1", "abc"
-    )
+    bundle = CertificationBundle("abc", phases, evidence, "att-1", "github", "run-1", "abc")
     assert CertificationValidator().validate(bundle) is CertificationStatus.CERTIFIED
     incomplete = CertificationBundle(
         "abc", phases[:-1], evidence, "att-1", "github", "run-1", "abc"
@@ -238,18 +218,9 @@ def test_m14_certification_fail_closed_and_certified() -> None:
 
 
 def test_m1_lifecycle_transitions_are_fail_closed() -> None:
-    assert (
-        transition_finding(FindingStatus.OPEN, FindingStatus.ACCEPTED)
-        is FindingStatus.ACCEPTED
-    )
-    assert (
-        transition_plan(PlanStatus.DRAFT, PlanStatus.READY)
-        is PlanStatus.READY
-    )
-    assert (
-        transition_change(ChangeStatus.PROPOSED, ChangeStatus.APPLIED)
-        is ChangeStatus.APPLIED
-    )
+    assert transition_finding(FindingStatus.OPEN, FindingStatus.ACCEPTED) is FindingStatus.ACCEPTED
+    assert transition_plan(PlanStatus.DRAFT, PlanStatus.READY) is PlanStatus.READY
+    assert transition_change(ChangeStatus.PROPOSED, ChangeStatus.APPLIED) is ChangeStatus.APPLIED
     with pytest.raises(ValueError):
         transition_finding(FindingStatus.OPEN, FindingStatus.VERIFIED)
     with pytest.raises(ValueError):

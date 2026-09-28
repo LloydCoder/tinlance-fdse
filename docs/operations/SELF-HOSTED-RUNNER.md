@@ -2,13 +2,13 @@
 
 ## Current policy
 
-The FDSE CI workflow no longer executes repository code on the persistent self-hosted runner. Public pull requests, merge-queue validation, and main-branch validation run on GitHub-hosted infrastructure.
+The FDSE CI workflow **does not execute repository code on a persistent self-hosted runner**. Public pull requests, merge-queue validation, and main-branch validation run on GitHub-hosted infrastructure.
 
-This is the safer default for a public repository: GitHub's secure-use guidance recommends least-privilege workflow permissions and immutable Action references, and a persistent runner should not be exposed to untrusted repository-controlled execution.
+This is the supported CI path for this public repository.
 
-The historical host details below are retained only as decommissioning/incident-response information. They are **not** a supported CI execution path.
+## Historical decommissioning guidance
 
-## Decommissioning requirements
+The details below are retained only as historical operational records and incident-response guidance. They must not be used to configure a new FDSE CI job.
 
 If the historical runner still exists:
 
@@ -16,7 +16,7 @@ If the historical runner still exists:
 - stop and disable its service;
 - revoke its registration/authentication material;
 - remove cached workspaces and build credentials;
-- confirm that no production credentials were ever stored on the host;
+- confirm that no production credentials were stored on the host;
 - rebuild/rotate the host if compromise is suspected.
 
 Never place runner registration tokens or credentials in repository files or chat.
@@ -30,4 +30,4 @@ The former repository-scoped runner was:
 - systemd service: actions.runner.LloydCoder-tinlance-fdse.pcidss-hp.service
 - Required labels: self-hosted, Linux, X64, pcidss-hp
 
-These values are historical operational records only and must not be used to configure new CI jobs.
+These values are historical only.

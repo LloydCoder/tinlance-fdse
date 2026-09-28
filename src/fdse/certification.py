@@ -1,4 +1,5 @@
 """End-to-end certification bundle and fail-closed validation (M14)."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -58,10 +59,7 @@ class CertificationValidator:
             return CertificationStatus.FAILED
         if expected_commit_sha is not None and bundle.commit_sha != expected_commit_sha:
             return CertificationStatus.FAILED
-        if any(
-            results[phase] is not CertificationStatus.CERTIFIED
-            for phase in self.REQUIRED
-        ):
+        if any(results[phase] is not CertificationStatus.CERTIFIED for phase in self.REQUIRED):
             return CertificationStatus.FAILED
         expected_evidence_digest = digest(sorted(bundle.phase_results))
         if bundle.evidence_digest != expected_evidence_digest:

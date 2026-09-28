@@ -1,4 +1,5 @@
 """Dependency-inversion ports owned by FDSE and implemented by adapters."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

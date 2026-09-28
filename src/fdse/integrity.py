@@ -1,4 +1,5 @@
 """Tamper-evident digest helpers for domain records."""
+
 from __future__ import annotations
 
 import hashlib
@@ -19,6 +20,4 @@ def record_digest(record: Any) -> str:
 def chain_digest(previous_digest: str, record: Any) -> str:
     if not previous_digest:
         raise ValueError("previous digest is required")
-    return hashlib.sha256(
-        (previous_digest + record_digest(record)).encode("ascii")
-    ).hexdigest()
+    return hashlib.sha256((previous_digest + record_digest(record)).encode("ascii")).hexdigest()

@@ -1,4 +1,5 @@
 """Deterministic evaluation contracts (M10)."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -6,7 +7,7 @@ from enum import StrEnum
 
 
 class EvaluationOutcome(StrEnum):
-    PASS = "pass"
+    PASS = "pass"  # noqa: S105
     FAIL = "fail"
     UNKNOWN = "unknown"
 

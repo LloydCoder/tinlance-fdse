@@ -1,4 +1,5 @@
 """Versioned Agent Platform integration contract (M4)."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -60,11 +61,7 @@ class PlatformCompatibility:
         if caps.api_version != PLATFORM_API_VERSION:
             raise ValueError("unsupported Agent Platform API version")
         if not (
-            caps.execution
-            and caps.approvals
-            and caps.sandbox
-            and caps.identity
-            and caps.audit
+            caps.execution and caps.approvals and caps.sandbox and caps.identity and caps.audit
         ):
             raise ValueError("Agent Platform lacks required authority capabilities")
 
