@@ -16,5 +16,6 @@ def record_digest(record: Any) -> str:
 def chain_digest(previous_digest: str, record: Any) -> str:
     if not previous_digest:
         raise ValueError("previous digest is required")
-    payload = previous_digest + record_digest(record)
-    return hashlib.sha256(payload.encode("ascii")).hexdigest()
+    return hashlib.sha256(
+        (previous_digest + record_digest(record)).encode("ascii")
+    ).hexdigest()
