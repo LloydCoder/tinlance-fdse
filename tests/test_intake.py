@@ -54,7 +54,6 @@ def test_intake_rejects_oversized_objective() -> None:
         request(objective="x" * 4097)
 
 
-
 def test_intake_rejects_invalid_runtime_risk() -> None:
     with pytest.raises(BoundaryViolation):
         request(risk="unknown")
