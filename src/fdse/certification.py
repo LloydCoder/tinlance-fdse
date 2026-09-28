@@ -4,6 +4,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum
 
+from .evidence import digest
+
 
 class CertificationStatus(StrEnum):
     CERTIFIED = "certified"
@@ -60,5 +62,8 @@ class CertificationValidator:
             results[phase] is not CertificationStatus.CERTIFIED
             for phase in self.REQUIRED
         ):
+            return CertificationStatus.FAILED
+        expected_evidence_digest = digest(sorted(bundle.phase_results))
+        if bundle.evidence_digest != expected_evidence_digest:
             return CertificationStatus.FAILED
         return CertificationStatus.CERTIFIED
