@@ -9,7 +9,10 @@ from .evidence import canonical_json
 
 
 def record_digest(record: Any) -> str:
-    value = asdict(record) if is_dataclass(record) else record
+    if is_dataclass(record) and not isinstance(record, type):
+        value = asdict(record)
+    else:
+        value = record
     return hashlib.sha256(canonical_json(value)).hexdigest()
 
 
