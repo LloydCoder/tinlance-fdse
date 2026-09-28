@@ -1,9 +1,9 @@
 """Explicit domain lifecycle transition rules."""
-from fdse import domain
+import fdse.domain
 
 
 _PLAN = {
-    domain.PlanStatus.DRAFT: frozenset({domain.PlanStatus.READY, domain.PlanStatus.FAILED}),
+    fdse.domain.PlanStatus.DRAFT: frozenset({domain.PlanStatus.READY, domain.PlanStatus.FAILED}),
     domain.PlanStatus.READY: frozenset(
         {
             domain.PlanStatus.EXECUTING,
@@ -30,7 +30,7 @@ _PLAN = {
 }
 
 _CHANGE = {
-    domain.ChangeStatus.PROPOSED: frozenset(
+    fdse.domain.ChangeStatus.PROPOSED: frozenset(
         {domain.ChangeStatus.APPLIED, domain.ChangeStatus.REJECTED}
     ),
     domain.ChangeStatus.APPLIED: frozenset(
@@ -41,7 +41,7 @@ _CHANGE = {
 }
 
 _FINDING = {
-    domain.FindingStatus.OPEN: frozenset(
+    fdse.domain.FindingStatus.OPEN: frozenset(
         {
             domain.FindingStatus.ACCEPTED,
             domain.FindingStatus.REJECTED,
