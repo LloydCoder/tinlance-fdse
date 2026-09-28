@@ -79,6 +79,19 @@ def test_m3_snapshot_is_deterministic_and_scoped() -> None:
 
 def test_m3_secret_filter() -> None:
     assert filter_secret_like("token=abc") == "[REDACTED]"
+    mismatched = ContextSource(
+        "git",
+        "other-revision",
+        "repository",
+        datetime.now(UTC),
+        "t",
+        "other-repo",
+        0,
+        ContextQuality.HIGH,
+    )
+    item = ContextItem(ContextKind.REPOSITORY, "language", "python", mismatched)
+    with pytest.raises(ValueError):
+        ContextBuilder().build("t", "r", "abc", (item,))
 
 
 def test_m4_requires_platform_authority_capabilities() -> None:
@@ -125,6 +138,12 @@ def test_m8_graph_is_integrity_digestable() -> None:
         EvidenceEdge(first.evidence_id, second.evidence_id, EvidenceRelation.SUPPORTS)
     )
     assert len(graph.snapshot_digest()) == 64
+    foreign = EvidenceNode(uuid4(), "other", "r", "test", "abc", "d3", "ci")
+    graph.add_node(foreign)
+    with pytest.raises(ValueError):
+        graph.add_edge(
+            EvidenceEdge(first.evidence_id, foreign.evidence_id, EvidenceRelation.SUPPORTS)
+        )
 
 
 def test_m9_authority_is_external() -> None:
@@ -166,6 +185,10 @@ def test_m14_certification_fail_closed_and_certified() -> None:
     evidence = digest(sorted(phases))
     bundle = CertificationBundle("abc", phases, evidence, "att-1", "github", "run-1", "abc")
     assert CertificationValidator().validate(bundle) is CertificationStatus.CERTIFIED
+    assert (
+        CertificationValidator().validate(bundle, expected_commit_sha="different")
+        is CertificationStatus.FAILED
+    )
     incomplete = CertificationBundle("abc", phases[:-1], evidence, "att-1", "github", "run-1", "abc")
     assert CertificationValidator().validate(incomplete) is CertificationStatus.UNKNOWN
 
