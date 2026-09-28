@@ -6,11 +6,13 @@ Tinlance FDSE is the engineering-domain layer for Tinlance's FDSE services. It d
 
 ## Status
 
-**M0 — Architecture & repository foundation: merged to main.**
+**M1 — Core domain implemented; integration work remains.**
 
-M0 establishes the FDSE/Agent Platform boundary, typed tenant/repository scope, minimal evidence/provenance/integrity/verification vocabulary, non-secret configuration validation, lexical workspace-path invariants, approval-gated execution intent, deterministic tests, and CI quality gates.
+M0 established the FDSE/Agent Platform boundary, typed tenant/repository scope, non-secret configuration validation, lexical workspace-path invariants, approval-gated execution intent, deterministic tests, and CI quality gates.
 
-M0 does not claim a customer workflow, production execution engine, generic authorization system, sandbox, persistence layer, or autonomous agent runtime.
+M1 adds the executable engineering-domain model: projects, assessments, context, evidence, findings, verification, plans, change sets, reports, lifecycle transitions, integration ports, deterministic stores, and the Agent Platform execution adapter.
+
+M1 does not claim production persistence, customer repository adapters, autonomous execution, a sandbox, a model gateway, or an FDSE-owned authorization/approval engine.
 
 ## Architectural invariant
 
