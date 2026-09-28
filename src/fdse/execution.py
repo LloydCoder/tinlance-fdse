@@ -22,7 +22,6 @@ class ExecutionGateway:
             raise ValueError("role is required")
         if not project_revision.strip():
             raise ValueError("project revision is required")
-
         request = AgentExecutionRequest(
             tenant_id=tenant_id,
             project_id=plan.project_id,
