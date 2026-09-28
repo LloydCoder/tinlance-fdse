@@ -1,86 +1,86 @@
 """Explicit domain lifecycle transition rules."""
-from fdse.domain import ChangeStatus, FindingStatus, PlanStatus
+from fdse import domain
 
 
 _PLAN = {
-    PlanStatus.DRAFT: frozenset({PlanStatus.READY, PlanStatus.FAILED}),
-    PlanStatus.READY: frozenset(
+    domain.PlanStatus.DRAFT: frozenset({domain.PlanStatus.READY, domain.PlanStatus.FAILED}),
+    domain.PlanStatus.READY: frozenset(
         {
-            PlanStatus.EXECUTING,
-            PlanStatus.AWAITING_APPROVAL,
-            PlanStatus.FAILED,
+            domain.PlanStatus.EXECUTING,
+            domain.PlanStatus.AWAITING_APPROVAL,
+            domain.PlanStatus.FAILED,
         }
     ),
-    PlanStatus.EXECUTING: frozenset(
+    domain.PlanStatus.EXECUTING: frozenset(
         {
-            PlanStatus.AWAITING_APPROVAL,
-            PlanStatus.COMPLETED,
-            PlanStatus.FAILED,
+            domain.PlanStatus.AWAITING_APPROVAL,
+            domain.PlanStatus.COMPLETED,
+            domain.PlanStatus.FAILED,
         }
     ),
-    PlanStatus.AWAITING_APPROVAL: frozenset(
+    domain.PlanStatus.AWAITING_APPROVAL: frozenset(
         {
-            PlanStatus.EXECUTING,
-            PlanStatus.COMPLETED,
-            PlanStatus.FAILED,
+            domain.PlanStatus.EXECUTING,
+            domain.PlanStatus.COMPLETED,
+            domain.PlanStatus.FAILED,
         }
     ),
-    PlanStatus.COMPLETED: frozenset(),
-    PlanStatus.FAILED: frozenset(),
+    domain.PlanStatus.COMPLETED: frozenset(),
+    domain.PlanStatus.FAILED: frozenset(),
 }
 
 _CHANGE = {
-    ChangeStatus.PROPOSED: frozenset(
-        {ChangeStatus.APPLIED, ChangeStatus.REJECTED}
+    domain.ChangeStatus.PROPOSED: frozenset(
+        {domain.ChangeStatus.APPLIED, domain.ChangeStatus.REJECTED}
     ),
-    ChangeStatus.APPLIED: frozenset(
-        {ChangeStatus.VERIFIED, ChangeStatus.REJECTED}
+    domain.ChangeStatus.APPLIED: frozenset(
+        {domain.ChangeStatus.VERIFIED, domain.ChangeStatus.REJECTED}
     ),
-    ChangeStatus.VERIFIED: frozenset(),
-    ChangeStatus.REJECTED: frozenset(),
+    domain.ChangeStatus.VERIFIED: frozenset(),
+    domain.ChangeStatus.REJECTED: frozenset(),
 }
 
 _FINDING = {
-    FindingStatus.OPEN: frozenset(
+    domain.FindingStatus.OPEN: frozenset(
         {
-            FindingStatus.ACCEPTED,
-            FindingStatus.REJECTED,
+            domain.FindingStatus.ACCEPTED,
+            domain.FindingStatus.REJECTED,
         }
     ),
-    FindingStatus.ACCEPTED: frozenset(
+    domain.FindingStatus.ACCEPTED: frozenset(
         {
-            FindingStatus.REMEDIATION_PLANNED,
-            FindingStatus.REJECTED,
+            domain.FindingStatus.REMEDIATION_PLANNED,
+            domain.FindingStatus.REJECTED,
         }
     ),
-    FindingStatus.REMEDIATION_PLANNED: frozenset(
+    domain.FindingStatus.REMEDIATION_PLANNED: frozenset(
         {
-            FindingStatus.REMEDIATED,
-            FindingStatus.REJECTED,
+            domain.FindingStatus.REMEDIATED,
+            domain.FindingStatus.REJECTED,
         }
     ),
-    FindingStatus.REMEDIATED: frozenset({FindingStatus.VERIFIED}),
-    FindingStatus.VERIFIED: frozenset(),
-    FindingStatus.REJECTED: frozenset(),
+    domain.FindingStatus.REMEDIATED: frozenset({domain.FindingStatus.VERIFIED}),
+    domain.FindingStatus.VERIFIED: frozenset(),
+    domain.FindingStatus.REJECTED: frozenset(),
 }
 
 
-def transition_plan(current: PlanStatus, target: PlanStatus) -> PlanStatus:
+def transition_plan(current: domain.PlanStatus, target: domain.PlanStatus) -> domain.PlanStatus:
     if target not in _PLAN[current]:
         raise ValueError(f"invalid plan transition: {current} -> {target}")
     return target
 
 
-def transition_change(current: ChangeStatus, target: ChangeStatus) -> ChangeStatus:
+def transition_change(current: domain.ChangeStatus, target: domain.ChangeStatus) -> domain.ChangeStatus:
     if target not in _CHANGE[current]:
         raise ValueError(f"invalid change transition: {current} -> {target}")
     return target
 
 
 def transition_finding(
-    current: FindingStatus,
-    target: FindingStatus,
-) -> FindingStatus:
+    current: domain.FindingStatus,
+    target: domain.FindingStatus,
+) -> domain.FindingStatus:
     if target not in _FINDING[current]:
         raise ValueError(f"invalid finding transition: {current} -> {target}")
     return target
