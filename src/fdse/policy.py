@@ -13,10 +13,5 @@ class DenyByDefaultPolicy(PolicyGateway):
     ) -> None:
         self._allowed = allowed_actions or set()
 
-    def authorize(
-        self,
-        tenant_id: UUID,
-        action: str,
-        risk_level: str,
-    ) -> bool:
+    def authorize(self, tenant_id: UUID, action: str, risk_level: str) -> bool:
         return (tenant_id, action, risk_level) in self._allowed
