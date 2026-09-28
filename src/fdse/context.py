@@ -99,9 +99,13 @@ class ContextBuilder:
         revision = revision.strip()
         if not tenant_id or not repository_id or not revision:
             raise ValueError("context scope is required")
+        normalized = tuple(
+            ContextItem(item.kind, item.key.strip(), filter_secret_like(item.value), item.source)
+            for item in items
+        )
         ordered = tuple(
             sorted(
-                items,
+                normalized,
                 key=lambda item: (
                     item.kind.value,
                     item.key,
@@ -120,6 +124,10 @@ class ContextBuilder:
                 "source": item.source.source_id,
                 "revision": item.source.revision,
                 "provenance": item.source.provenance,
+                "observed_at": item.source.observed_at.isoformat(),
+                "scope": item.source.scope,
+                "freshness_seconds": item.source.freshness_seconds,
+                "confidence": item.source.confidence.value,
             }
             for item in ordered
         ]
