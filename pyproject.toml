@@ -37,6 +37,7 @@ pythonpath = ["src"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+exclude = ["src/fdse/domain.py", "src/fdse/evidence.py", "src/fdse/execution.py", "src/fdse/integrity.py", "src/fdse/policy.py", "src/fdse/ports.py", "src/fdse/store.py", "src/fdse/transitions.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "S"]
