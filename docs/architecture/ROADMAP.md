@@ -1,44 +1,66 @@
 # FDSE M0–M14 Capability Roadmap
 
-This document is the canonical capability map for the repository.
+This document is the **canonical capability map** for the repository. README and phase documents must remain consistent with it.
 
-## Definition of completion
+## Completion vocabulary
 
-A phase is **implemented in FDSE** when its domain semantics, invariants, public contracts, tests, and documentation exist and are compatible with the architecture boundary.
+A phase is **FDSE-implemented** when its domain semantics, invariants, public contracts, regression tests, and documentation exist and conform to the FDSE/Agent Platform boundary.
 
 A phase is **production-integrated** only when the external service/runtime it depends on exists, is connected through a versioned adapter, is exercised by integration/E2E tests, and its operational controls are verified.
 
-FDSE must never convert a contract into a claim that an external system exists.
+A phase being FDSE-implemented must never be represented as proof that its external dependencies are deployed or healthy.
 
-| Phase | Capability | FDSE ownership | External dependency |
-| --- | --- | --- | --- |
-| M0 | Foundation | Domain boundary, security invariants, CI/documentation foundation | GitHub Actions/runner |
-| M1 | Core Domain | Engineering entities, lifecycle vocabulary, evidence/integrity | Durable infrastructure |
-| M2 | Intake | Validation, normalization, scope, idempotency semantics | Durable intake store |
-| M3 | Context | Context source/item/snapshot semantics, deterministic digest | Repository/context collectors |
-| M4 | Agent Platform | Versioned adapter and capability compatibility | Tinlance Agent Platform |
-| M5 | Specialist Agents | Specialist role/evidence specifications | Agent runtime/model/tooling |
-| M6 | Workflows | Explicit transition graph and fail-closed transitions | Workflow persistence/orchestration |
-| M7 | Git/GitHub/CI | Provider-neutral repository/check ports | GitHub/Git provider and CI APIs |
-| M8 | Evidence | Evidence graph and integrity relations | Durable evidence/event store |
-| M9 | Governance | References to approvals/policies owned externally | Agent Platform governance |
-| M10 | Evaluation | Deterministic evaluation semantics | Concrete test/evaluator engines |
-| M11 | Customer Product | Tenant-safe customer domain contracts | API/UI/billing/product infrastructure |
-| M12 | Security | Domain security controls and redaction | IAM, secret manager, sandbox, network controls |
-| M13 | Production | Readiness and idempotency semantics | Deployment, monitoring, alerting, SLO infrastructure |
-| M14 | E2E Certification | Fail-closed certification verification contract | Real E2E execution and external attestation |
+| Phase | FDSE ownership | External dependency |
+|---|---|---|
+| M0 | Domain boundary, security/config, CI/documentation foundation | GitHub Actions |
+| M1 | Engineering entities, lifecycle, evidence/integrity | Durable infrastructure |
+| M2 | Validation, normalization, scope, idempotency semantics | Durable intake store |
+| M3 | Context-source/item/snapshot semantics and deterministic digest | Repository/context collectors |
+| M4 | Versioned Agent Platform adapter/capability contract | Tinlance Agent Platform |
+| M5 | Specialist role/evidence specifications | Agent runtime, models, tooling |
+| M6 | Explicit fail-closed workflow state machine | Workflow persistence/orchestration |
+| M7 | Provider-neutral repository/check ports | Git/GitHub and CI services |
+| M8 | Evidence graph and integrity relations | Durable evidence/event store |
+| M9 | External governance references | Agent Platform governance |
+| M10 | Deterministic evaluation semantics | Concrete evaluator/test engines |
+| M11 | Tenant-safe customer domain contracts | Customer API/UI/billing infrastructure |
+| M12 | Domain validation, tenant, secret, integrity and authority controls | IAM, secret manager, sandbox, network controls |
+| M13 | Health/readiness/idempotency semantics | Deployment, monitoring, alerting, SLO infrastructure |
+| M14 | Fail-closed certification-bundle verifier | Real E2E execution and external attestation |
+
+## Phase status
+
+| Phase | FDSE status |
+|---|---|
+| M0 | Implemented |
+| M1 | Implemented |
+| M2 | Implemented |
+| M3 | Implemented |
+| M4 | Implemented as an adapter contract |
+| M5 | Implemented as domain contracts |
+| M6 | Implemented as a domain state machine |
+| M7 | Implemented as provider ports |
+| M8 | Implemented as domain graph primitives |
+| M9 | Implemented as governance references |
+| M10 | Implemented as deterministic evaluation semantics |
+| M11 | Implemented as tenant-scoped contracts |
+| M12 | Implemented as domain security controls |
+| M13 | Implemented as readiness/idempotency contracts |
+| M14 | Implemented as a fail-closed verifier |
 
 ## Architectural boundary
 
-FDSE does not own identity, authorization, approvals, sandboxing, model access, generic tools, consequential execution, or audit infrastructure. Those capabilities belong to the Tinlance Agent Platform.
+FDSE does not own identity, authentication, authorization, approvals, sandboxing, model access, generic tools, consequential execution, durable audit infrastructure, or deployment infrastructure. Those capabilities belong to the Tinlance Agent Platform or other explicit infrastructure services.
 
 ## Certification rule
 
-M14 may return CERTIFIED only for a supplied bundle whose required phase results, revision, evidence digest, and external attestation fields validate. A constructed in-memory bundle is not evidence that production FDSE has been certified.
+M14 may return CERTIFIED only for a supplied bundle whose required phase results, revision/commit constraints, deterministic evidence digest, and external attestation metadata validate.
+
+A constructed in-memory bundle is not proof that production FDSE has been certified.
 
 ## Security references
 
-- OWASP ASVS 5.0.0 for application security verification and positive input validation.
+- OWASP ASVS 5.0.0 for application-security verification and positive input validation.
 - NIST SP 800-218 (SSDF 1.1) as the finalized SSDF baseline.
-- NIST SP 800-218 Rev. 1 (SSDF 1.2) is currently a draft.
 - GitHub Actions secure-use guidance for least-privilege permissions and immutable action references.
+- GitHub artifact attestations for signed build provenance and independent verification.
