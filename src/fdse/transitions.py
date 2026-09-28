@@ -1,5 +1,5 @@
 """Explicit domain lifecycle transition rules."""
-from .domain import ChangeStatus, FindingStatus, PlanStatus
+from fdse.domain import ChangeStatus, FindingStatus, PlanStatus
 
 
 _PLAN = {
