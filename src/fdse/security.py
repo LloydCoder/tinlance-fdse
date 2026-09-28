@@ -1,4 +1,5 @@
 """Lexical security invariants; never a substitute for a sandbox."""
+
 from pathlib import PurePosixPath
 
 from .errors import BoundaryViolation
