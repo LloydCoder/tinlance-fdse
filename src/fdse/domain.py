@@ -2,13 +2,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import StrEnum
 from uuid import UUID, uuid4
 
 
 def utc_now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def _required(value: str, field_name: str) -> str:
@@ -75,7 +75,7 @@ class Project:
     created_at: datetime = field(default_factory=utc_now)
 
     @classmethod
-    def create(cls, tenant_id: UUID, name: str, repository: RepositoryRef) -> "Project":
+    def create(cls, tenant_id: UUID, name: str, repository: RepositoryRef) -> Project:
         return cls(uuid4(), tenant_id, _required(name, "project name"), repository)
 
 
@@ -87,7 +87,7 @@ class Assessment:
     created_at: datetime = field(default_factory=utc_now)
 
     @classmethod
-    def create(cls, project_id: UUID, purpose: str) -> "Assessment":
+    def create(cls, project_id: UUID, purpose: str) -> Assessment:
         return cls(uuid4(), project_id, _required(purpose, "assessment purpose"))
 
 
@@ -107,7 +107,7 @@ class EngineeringContext:
         revision: str,
         constraints: tuple[str, ...] = (),
         relevant_paths: tuple[str, ...] = (),
-    ) -> "EngineeringContext":
+    ) -> EngineeringContext:
         return cls(
             uuid4(),
             project_id,
@@ -137,7 +137,7 @@ class Evidence:
         payload_digest: str,
         source: str,
         revision: str,
-    ) -> "Evidence":
+    ) -> Evidence:
         return cls(
             uuid4(),
             project_id,
@@ -168,7 +168,7 @@ class Finding:
         category: str,
         severity: str,
         evidence_ids: tuple[UUID, ...] = (),
-    ) -> "Finding":
+    ) -> Finding:
         return cls(
             uuid4(),
             project_id,
@@ -198,7 +198,7 @@ class VerificationResult:
         checks: tuple[str, ...],
         evidence_ids: tuple[UUID, ...],
         revision: str,
-    ) -> "VerificationResult":
+    ) -> VerificationResult:
         if not checks or any(not check.strip() for check in checks):
             raise ValueError("verification requires non-empty checks")
         return cls(
@@ -228,7 +228,7 @@ class EngineeringPlan:
         objective: str,
         steps: tuple[str, ...],
         risk_level: str,
-    ) -> "EngineeringPlan":
+    ) -> EngineeringPlan:
         if not steps or any(not step.strip() for step in steps):
             raise ValueError("plan requires non-empty steps")
         return cls(
@@ -257,7 +257,7 @@ class ChangeSet:
         base_revision: str,
         proposed_revision: str,
         summary: str,
-    ) -> "ChangeSet":
+    ) -> ChangeSet:
         return cls(
             uuid4(),
             plan_id,
@@ -283,7 +283,7 @@ class EngineeringReport:
         revision: str,
         outcome: str,
         evidence_ids: tuple[UUID, ...],
-    ) -> "EngineeringReport":
+    ) -> EngineeringReport:
         return cls(
             uuid4(),
             project_id,
