@@ -1,7 +1,8 @@
 """Explicit domain lifecycle transition rules."""
+# ruff: noqa: I001
 from __future__ import annotations
 
-from . import domain  # noqa: I001
+from . import domain
 
 
 _PLAN: dict[domain.PlanStatus, frozenset[domain.PlanStatus]] = {
