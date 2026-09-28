@@ -9,7 +9,7 @@ from enum import StrEnum
 class ControlClass(StrEnum):
     INPUT = "input"
     TENANT = "tenant"
-    SECRET = "secret"
+    SECRET = "secret"  # noqa: S105
     INTEGRITY = "integrity"
     AUTHORITY = "authority"
 
