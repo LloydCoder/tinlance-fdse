@@ -59,3 +59,19 @@ class PlatformCompatibility:
             and caps.audit
         ):
             raise ValueError("Agent Platform lacks required authority capabilities")
+
+
+class GovernedPlatformAdapter:
+    """Concrete FDSE adapter that delegates authority to an external platform."""
+
+    def __init__(self, executor: AgentPlatformAdapter) -> None:
+        self._executor = executor
+
+    def capabilities(self) -> PlatformCapabilities:
+        capabilities = self._executor.capabilities()
+        PlatformCompatibility().validate(capabilities)
+        return capabilities
+
+    def submit(self, intent: PlatformIntent) -> PlatformExecution:
+        self.capabilities()
+        return self._executor.submit(intent)
