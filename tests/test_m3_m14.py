@@ -3,14 +3,7 @@ from uuid import uuid4
 
 import pytest
 
-from fdse.domain import (
-    ChangeStatus,
-    FindingStatus,
-    PlanStatus,
-    transition_change,
-    transition_finding,
-    transition_plan,
-)
+from fdse.domain import ChangeStatus, FindingStatus, PlanStatus
 
 from fdse.agents import SpecialistRegistry, SpecialistRole, SpecialistSpec
 from fdse.certification import (
@@ -50,6 +43,7 @@ from fdse.platform import PlatformCapabilities, PlatformCompatibility
 from fdse.product import TenantBoundary
 from fdse.production import HealthStatus, IdempotencyRecord, Readiness, ReadinessGate
 from fdse.security_hardening import redact
+from fdse.transitions import transition_change, transition_finding, transition_plan
 from fdse.workflows import WorkflowInstance, WorkflowState
 
 
