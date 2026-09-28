@@ -7,7 +7,7 @@ M2 defines the trusted FDSE intake boundary for externally supplied engineering 
 - require a valid request identifier and explicit tenant/repository scope;
 - require a repository revision and bounded engineering objective;
 - normalize surrounding whitespace exactly once at the domain boundary;
-- reject NUL bytes and oversized objective/idempotency fields;
+- reject NUL bytes and oversized scope, revision, objective, and idempotency fields;
 - require an idempotency key for repeatable submission semantics;
 - produce an immutable, typed IntakeRecord.
 
@@ -29,5 +29,6 @@ These controls align with trusted service-layer validation in OWASP ASVS 5.0 and
 
 - valid intake becomes an immutable IntakeRecord;
 - malformed UUIDs, blank scope/revision/objective/idempotency values, NUL bytes, and oversized objectives are rejected;
+- repeated tenant-scoped idempotency keys are deterministic and conflicting reuse is rejected;
 - tests cover the rejection paths;
 - M0/M1 architectural boundaries remain unchanged.
