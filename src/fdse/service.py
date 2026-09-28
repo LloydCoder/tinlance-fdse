@@ -1,6 +1,6 @@
 """M0 domain service: validate engineering intent before platform submission."""
 
-from .contracts import AgentPlatformGateway, ExecutionHandle, ExecutionRequest
+from .contracts import AgentPlatformGateway, EngineeringTask, ExecutionHandle, ExecutionRequest
 from .errors import BoundaryViolation, ContractViolation
 from .security import validate_workspace_relative_path
 
@@ -33,7 +33,7 @@ class EngineeringService:
         return result
 
 
-def make_request(task, workspace_id: str) -> ExecutionRequest:
+def make_request(task: EngineeringTask, workspace_id: str) -> ExecutionRequest:
     if not workspace_id.strip():
         raise BoundaryViolation("workspace_id is required")
     validate_workspace_relative_path(workspace_id)
