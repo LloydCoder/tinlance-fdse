@@ -3,8 +3,6 @@ from uuid import uuid4
 
 import pytest
 
-from fdse.domain import ChangeStatus, FindingStatus, PlanStatus
-
 from fdse.agents import SpecialistRegistry, SpecialistRole, SpecialistSpec
 from fdse.certification import (
     CertificationBundle,
@@ -20,6 +18,7 @@ from fdse.context import (
     ContextStore,
     filter_secret_like,
 )
+from fdse.domain import ChangeStatus, FindingStatus, PlanStatus
 from fdse.evaluation import (
     EvaluationCase,
     EvaluationOutcome,
@@ -73,6 +72,19 @@ def test_m3_snapshot_is_deterministic_and_scoped() -> None:
 
 def test_m3_secret_filter() -> None:
     assert filter_secret_like("token=abc") == "[REDACTED]"
+    mismatched = ContextSource(
+        "git",
+        "other-revision",
+        "repository",
+        datetime.now(UTC),
+        "t",
+        "other-repo",
+        0,
+        ContextQuality.HIGH,
+    )
+    item = ContextItem(ContextKind.REPOSITORY, "language", "python", mismatched)
+    with pytest.raises(ValueError):
+        ContextBuilder().build("t", "r", "abc", (item,))
 
 
 def test_m4_requires_platform_authority_capabilities() -> None:
@@ -125,6 +137,16 @@ def test_m8_graph_is_integrity_digestable() -> None:
         EvidenceEdge(first.evidence_id, second.evidence_id, EvidenceRelation.SUPPORTS)
     )
     assert len(graph.snapshot_digest()) == 64
+    foreign = EvidenceNode(uuid4(), "other", "r", "test", "abc", "c" * 64, "ci")
+    graph.add_node(foreign)
+    with pytest.raises(ValueError):
+        graph.add_edge(
+            EvidenceEdge(
+                first.evidence_id,
+                foreign.evidence_id,
+                EvidenceRelation.SUPPORTS,
+            )
+        )
 
 
 def test_m9_authority_is_external() -> None:
@@ -166,7 +188,10 @@ def test_m11_tenant_boundary() -> None:
 
 def test_m12_redacts_secrets() -> None:
     assert "secret=[REDACTED]" in redact("secret=abc")
-    assert redact("Authorization: Bearer super-secret-token") == "Authorization: [REDACTED]"
+    assert (
+        redact("Authorization: Bearer super-secret-token")
+        == "Authorization: [REDACTED]"
+    )
     assert redact('token: "super-secret-token"') == "token=[REDACTED]"
 
 
