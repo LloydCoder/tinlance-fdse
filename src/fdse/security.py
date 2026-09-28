@@ -11,11 +11,9 @@ def validate_workspace_relative_path(value: str) -> str:
         raise BoundaryViolation("workspace path is empty or contains a NUL byte")
     if "\" in value:
         raise BoundaryViolation("workspace path must use POSIX separators")
-
     path = PurePosixPath(value)
     if path.is_absolute() or ".." in path.parts:
         raise BoundaryViolation("workspace path must remain relative")
-
     normalized = path.as_posix()
     if normalized != value:
         raise BoundaryViolation("workspace path must already be normalized")
