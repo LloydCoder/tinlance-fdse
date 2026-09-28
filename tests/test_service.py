@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from fdse.contracts import EngineeringTask, ExecutionHandle, ExecutionRequest
+from fdse.contracts import EngineeringTask, ExecutionHandle, ExecutionRequest, TenantScope
 from fdse.errors import BoundaryViolation, ContractViolation
 from fdse.service import EngineeringService, make_request
 
@@ -20,8 +20,7 @@ class FakeGateway:
 def task() -> EngineeringTask:
     return EngineeringTask(
         task_id="task-1",
-        tenant_id="tenant-1",
-        repository_id="repo-1",
+        scope=TenantScope("tenant-1", "repo-1"),
         description="inspect repository",
         risk="low",
     )
