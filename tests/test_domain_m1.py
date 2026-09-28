@@ -118,7 +118,10 @@ def test_plan_and_finding_lifecycles_include_governance_states() -> None:
         PlanStatus.AWAITING_APPROVAL,
         PlanStatus.EXECUTING,
     ) is PlanStatus.EXECUTING
-    assert transition_finding(FindingStatus.OPEN, FindingStatus.ACCEPTED) is FindingStatus.ACCEPTED
+    assert (
+        transition_finding(FindingStatus.OPEN, FindingStatus.ACCEPTED)
+        is FindingStatus.ACCEPTED
+    )
     assert transition_finding(
         FindingStatus.REMEDIATED,
         FindingStatus.VERIFIED,
