@@ -24,6 +24,7 @@ class EvaluationCase:
             or not self.objective.strip()
             or not self.revision.strip()
             or not self.expected_invariants
+            or any(not invariant.strip() for invariant in self.expected_invariants)
         ):
             raise ValueError("invalid evaluation case")
 
@@ -36,7 +37,11 @@ class EvaluationResult:
     revision: str
 
     def __post_init__(self) -> None:
-        if not self.case_id.strip() or not self.revision.strip():
+        if (
+            not self.case_id.strip()
+            or not self.revision.strip()
+            or any(not observation.strip() for observation in self.observations)
+        ):
             raise ValueError("invalid evaluation result")
 
 
@@ -47,6 +52,8 @@ class EvaluationSuite:
         results: tuple[EvaluationResult, ...],
     ) -> EvaluationOutcome:
         by_id = {result.case_id: result for result in results}
+        if len(by_id) != len(results):
+            return EvaluationOutcome.UNKNOWN
         if any(case.case_id not in by_id for case in cases):
             return EvaluationOutcome.UNKNOWN
         if any(
