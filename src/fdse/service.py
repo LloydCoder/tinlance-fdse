@@ -1,4 +1,5 @@
 """M0 domain service: validate engineering intent before platform submission."""
+
 from .contracts import AgentPlatformGateway, ExecutionHandle, ExecutionRequest
 from .errors import BoundaryViolation, ContractViolation
 from .security import validate_workspace_relative_path
