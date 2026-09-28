@@ -2,17 +2,20 @@
 
 The repository is capability-driven.
 
-- `src/fdse/contracts.py`: M0 boundary contracts.
-- `src/fdse/security.py`: M0 lexical path invariants.
-- `src/fdse/config.py`: M0 non-secret configuration validation.
-- `src/fdse/domain.py`: M1 engineering-domain entities.
-- `src/fdse/evidence.py`: canonical evidence serialization and digests.
-- `src/fdse/integrity.py`: record and chain digests.
-- `src/fdse/transitions.py`: explicit lifecycle transitions.
-- `src/fdse/ports.py`: dependency-inversion integration ports.
-- `src/fdse/store.py`: deterministic test adapters.
-- `src/fdse/policy.py`: deny-by-default local policy adapter.
-- `src/fdse/execution.py`: Agent Platform boundary adapter.
-- `src/fdse/service.py`: M0 boundary service.
+- M0: contracts.py, security.py, config.py, service.py
+- M1: domain.py, evidence.py, integrity.py, transitions.py, ports.py, store.py, policy.py, execution.py
+- M2: intake.py
+- M3: context.py
+- M4: platform.py
+- M5: agents.py
+- M6: workflows.py
+- M7: git_ci.py
+- M8: evidence_graph.py
+- M9: governance.py
+- M10: evaluation.py
+- M11: product.py
+- M12: security_hardening.py
+- M13: production.py
+- M14: certification.py
 
-Future modules must be justified by implemented capabilities. FDSE must not add a competing runtime, authorization kernel, sandbox, model gateway, or generic tool authority.
+Every phase preserves explicit tenant/repository/revision scope and deterministic/fail-closed semantics. FDSE must not add a competing runtime, authorization kernel, sandbox, model gateway, or generic tool authority.

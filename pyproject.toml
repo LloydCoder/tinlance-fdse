@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinlance-fdse"
-version = "0.1.0"
+version = "1.0.0"
 description = "Governed, evidence-driven forward-deployed software engineering domain layer."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -37,7 +37,6 @@ pythonpath = ["src"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-exclude = ["src/fdse/domain.py", "src/fdse/evidence.py", "src/fdse/execution.py", "src/fdse/integrity.py", "src/fdse/policy.py", "src/fdse/ports.py", "src/fdse/store.py", "src/fdse/transitions.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "S"]

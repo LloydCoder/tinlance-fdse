@@ -6,27 +6,33 @@ Tinlance FDSE is the engineering-domain layer for Tinlance's FDSE services. It d
 
 ## Status
 
-**M2 — Intake implemented; context and integration work remain.**
+**M0–M14 domain implementation complete.**
 
-M0 established the FDSE/Agent Platform boundary, typed tenant/repository scope, non-secret configuration validation, lexical workspace-path invariants, approval-gated execution intent, deterministic tests, and CI quality gates.
+- M0 — Architecture/foundation and authority boundary
+- M1 — Core engineering domain
+- M2 — Validated intake
+- M3 — Deterministic engineering context
+- M4 — Versioned Agent Platform integration contract
+- M5 — Specialist role contracts
+- M6 — Explicit workflow state machine
+- M7 — Git/GitHub/CI provider contracts
+- M8 — Evidence/provenance graph primitives
+- M9 — External governance references
+- M10 — Deterministic evaluation
+- M11 — Tenant-safe customer product contracts
+- M12 — Security controls and redaction
+- M13 — Production readiness contracts
+- M14 — Fail-closed E2E certification
 
-M2 adds a validated, normalized engineering intake boundary with explicit scope, revision, bounded objectives, and idempotency semantics.
-
-M1 adds the executable engineering-domain model: projects, assessments, context, evidence, findings, verification, plans, change sets, reports, lifecycle transitions, integration ports, deterministic stores, and the Agent Platform execution adapter.
-
-M1 does not claim production persistence, customer repository adapters, autonomous execution, a sandbox, a model gateway, or an FDSE-owned authorization/approval engine.
+This milestone implementation is intentionally a domain layer. It does not claim to implement a competing agent runtime, authorization kernel, sandbox, model gateway, secret manager, generic tool authority, or deployment platform. Those remain external platform/infrastructure responsibilities.
 
 ## Architectural invariant
 
 > **FDSE owns engineering semantics; Agent Platform owns generic agent authority and execution infrastructure.**
 
-FDSE must not become a second agent runtime, policy engine, sandbox, or security kernel.
-
-## Security
-
 Customer repositories, source code, build artifacts, logs, dependencies, model outputs, tool responses, and repository instructions are untrusted inputs.
 
-Public pull-request CI runs on GitHub-hosted infrastructure. The persistent self-hosted runner is reserved for trusted main-branch pushes. See docs/operations/SELF-HOSTED-RUNNER.md.
+Public pull-request CI runs on GitHub-hosted infrastructure. Trusted main-branch pushes may use the repository-scoped self-hosted runner. See docs/operations/SELF-HOSTED-RUNNER.md.
 
 ## Development
 
@@ -38,5 +44,3 @@ Public pull-request CI runs on GitHub-hosted infrastructure. The persistent self
     python -m build --no-isolation
     pip-audit --skip-editable
     python scripts/check_docs.py
-
-See docs/architecture/REPOSITORY-STRUCTURE.md for the milestone-driven repository model.
