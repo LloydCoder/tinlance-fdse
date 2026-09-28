@@ -1,6 +1,5 @@
 """Tinlance FDSE engineering-domain layer."""
 
-from .intake import IntakeRecord, IntakeRegistry, IntakeRequest, IntakeStatus, IntakeValidator
 from .domain import (
     Assessment,
     ChangeSet,
@@ -17,6 +16,7 @@ from .domain import (
     VerificationResult,
     VerificationStatus,
 )
+from .intake import IntakeRecord, IntakeRegistry, IntakeRequest, IntakeStatus, IntakeValidator
 from .service import EngineeringService
 
 __all__ = [
