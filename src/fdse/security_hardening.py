@@ -30,7 +30,7 @@ _AUTHORIZATION = re.compile(
 )
 _SECRET = re.compile(
     r"(?i)(api[_-]?key|token|password|passwd|secret)\s*[:=]\s*"
-    r"(?:"[^"]*"|'[^']*'|[^\s,;}]+)"
+    r'''(?:"[^"]*"|'[^']*'|[^\s,;}]+)'''
 )
 
 
