@@ -9,7 +9,7 @@ class FakeExecutor:
     def __init__(self) -> None:
         self.request = None
 
-    def execute(self, request):
+    def execute(self, request: object) -> AgentExecutionResult:
         self.request = request
         return AgentExecutionResult(uuid4(), "accepted", ())
 
@@ -23,14 +23,12 @@ def test_execution_gateway_is_approval_gated_and_revision_bound() -> None:
         ("inspect", "patch", "verify"),
         "high",
     )
-
     result = gateway.execute_plan(
         uuid4(),
         "abc123",
         plan,
         "remediation-engineer",
     )
-
     assert result.status == "accepted"
     assert executor.request.required_approval is True
     assert executor.request.repository_revision == "abc123"
