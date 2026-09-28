@@ -1,46 +1,19 @@
 """Tinlance FDSE engineering-domain layer."""
-
-from .domain import (
-    Assessment,
-    ChangeSet,
-    ChangeStatus,
-    EngineeringContext,
-    EngineeringPlan,
-    EngineeringReport,
-    Evidence,
-    Finding,
-    FindingStatus,
-    PlanStatus,
-    Project,
-    RepositoryRef,
-    VerificationResult,
-    VerificationStatus,
-)
+from .agents import SpecialistRegistry, SpecialistRole, SpecialistSpec
+from .certification import CertificationBundle, CertificationStatus, CertificationValidator
+from .context import ContextBuilder, ContextItem, ContextKind, ContextQuality, ContextSnapshot, ContextSource, ContextStore
+from .domain import Assessment, ChangeSet, ChangeStatus, EngineeringContext, EngineeringPlan, EngineeringReport, Evidence, Finding, FindingStatus, PlanStatus, Project, RepositoryRef, VerificationResult, VerificationStatus
+from .evaluation import EvaluationCase, EvaluationOutcome, EvaluationResult, EvaluationSuite
+from .governance import ApprovalStatus, GovernanceBoundary, GovernanceReference
 from .intake import IntakeRecord, IntakeRegistry, IntakeRequest, IntakeStatus, IntakeValidator
-from .service import EngineeringService
+from .platform import AgentPlatformAdapter, PlatformCapabilities, PlatformCompatibility, PlatformExecution, PlatformIntent
+from .product import CustomerProject, CustomerRequest, TenantBoundary
+from .production import HealthProbe, HealthStatus, IdempotencyRecord, Readiness
+from .security_hardening import ControlClass, SecurityControl, redact
+from .workflows import WorkflowInstance, WorkflowState, transition
 
 __all__ = [
-    "IntakeRecord",
-    "IntakeRegistry",
-    "IntakeRequest",
-    "IntakeStatus",
-    "IntakeValidator",
-    "Assessment",
-    "ChangeSet",
-    "ChangeStatus",
-    "EngineeringContext",
-    "EngineeringPlan",
-    "EngineeringReport",
-    "Evidence",
-    "Finding",
-    "FindingStatus",
-    "PlanStatus",
-    "Project",
-    "RepositoryRef",
-    "VerificationResult",
-    "VerificationStatus",
-    "EngineeringService",
-    "__version__",
+"Assessment","ChangeSet","ChangeStatus","EngineeringContext","EngineeringPlan","EngineeringReport","Evidence","Finding","FindingStatus","PlanStatus","Project","RepositoryRef","VerificationResult","VerificationStatus",
+"IntakeRecord","IntakeRegistry","IntakeRequest","IntakeStatus","IntakeValidator","SpecialistRegistry","SpecialistRole","SpecialistSpec","CertificationBundle","CertificationStatus","CertificationValidator","ContextBuilder","ContextItem","ContextKind","ContextQuality","ContextSnapshot","ContextSource","ContextStore","EvaluationCase","EvaluationOutcome","EvaluationResult","EvaluationSuite","ApprovalStatus","GovernanceBoundary","GovernanceReference","AgentPlatformAdapter","PlatformCapabilities","PlatformCompatibility","PlatformExecution","PlatformIntent","CustomerProject","CustomerRequest","TenantBoundary","HealthProbe","HealthStatus","IdempotencyRecord","Readiness","ControlClass","SecurityControl","redact","WorkflowInstance","WorkflowState","transition","__version__",
 ]
-
-__version__ = "0.2.0"
+__version__="1.0.0"
