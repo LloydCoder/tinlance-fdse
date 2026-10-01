@@ -7,7 +7,7 @@ execution remain Agent Platform responsibilities.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import datetime
 from enum import StrEnum
 from typing import Protocol
@@ -56,7 +56,9 @@ class IdentityAttestation:
             raise ValueError("identity attestation expiry must be after issuance")
         if not self.nonce.strip():
             raise ValueError("identity attestation nonce is required")
-        if len(self.signature_digest) != 64:
+        if len(self.signature_digest) != 64 or any(
+            char not in "0123456789abcdef" for char in self.signature_digest.lower()
+        ):
             raise ValueError("identity attestation digest must be SHA-256 hex")
 
 
@@ -125,6 +127,7 @@ class DelegationRequest:
     request_id: str
     parent_task_id: str
     child_agent: AgentIdentity
+    child_attestation: IdentityAttestation
     purpose: str
     requested_capabilities: tuple[str, ...]
     context: SharedContextRef
@@ -285,13 +288,7 @@ class MultiAgentRuntime:
     ) -> AgentTask:
         parent = self._task(request.parent_task_id)
         if not self.identity_verifier.verify(
-            IdentityAttestation(
-                request.child_agent,
-                now,
-                now,
-                request.request_id,
-                digest(request.request_id),
-            ),
+            request.child_attestation,
             now=now,
         ):
             raise PermissionError("child identity is not authenticated")
@@ -349,7 +346,15 @@ class MultiAgentRuntime:
         sequence = self.conversation_sequences.get(message.conversation_id, 0) + 1
         if message.sequence != sequence:
             raise ValueError("message sequence is not monotonic")
-        if not self._same_scope(message.sender, message.recipient, message):
+        sender_scope = self._agent_scope(message.sender.agent_id)
+        recipient_scope = self._agent_scope(message.recipient.agent_id)
+        if sender_scope != recipient_scope:
+            raise PermissionError("agent message participants have different scopes")
+        if sender_scope != (
+            message.tenant_id,
+            message.repository_id,
+            message.revision,
+        ):
             raise PermissionError("agent message violates tenant/repository/revision scope")
         self.messages[message.message_id] = message
         self.conversation_sequences[message.conversation_id] = sequence
