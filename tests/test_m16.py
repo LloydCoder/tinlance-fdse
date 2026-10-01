@@ -94,6 +94,7 @@ def test_retry_is_bounded_and_deterministic() -> None:
         "retry_scheduled",
         "node_started",
         "node_completed",
+        "succeeded",
     ]
 
 
