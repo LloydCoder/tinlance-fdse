@@ -21,13 +21,6 @@ from .platform import (
 from .product import CustomerProject, CustomerRequest, TenantBoundary
 from .production import HealthProbe, HealthStatus, IdempotencyRecord, Readiness, ReadinessGate
 from .security_hardening import ControlClass, SecurityControl, redact
-from .trusted_memory import (
-    ContextMemoryEnvelope,
-    MemoryProvenance,
-    MemoryTrust,
-    TrustedMemory,
-    TrustedMemoryStore,
-)
 from .transitions import transition_change, transition_finding, transition_plan
 from .workflows import WorkflowInstance, WorkflowState, transition
 
@@ -45,11 +38,6 @@ __all__ = [
     "PlatformIntent", "CustomerProject", "CustomerRequest", "TenantBoundary", "HealthProbe",
     "HealthStatus", "IdempotencyRecord", "Readiness", "ReadinessGate", "ControlClass",
     "SecurityControl", "redact", "WorkflowInstance", "WorkflowState", "transition",
-    "MemoryProvenance",
-    "MemoryTrust",
-    "TrustedMemory",
-    "TrustedMemoryStore",
-    "ContextMemoryEnvelope",
     "__version__",
 ]
 
