@@ -32,9 +32,7 @@ class AllowCapabilityGrantAuthority:
         return (
             grant.extension_id == manifest.extension_id
             and now < grant.expires_at
-            and set(grant.capabilities).issubset(
-                set(manifest.requested_capabilities)
-            )
+            and set(grant.capabilities).issubset(set(manifest.requested_capabilities))
         )
 
 
