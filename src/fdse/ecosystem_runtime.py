@@ -219,7 +219,10 @@ class EcosystemRuntime:
 
     def register(self, manifest: ExtensionManifest) -> ExtensionRecord:
         current = self.records.get(manifest.extension_id)
-        if current is not None and manifest.version.as_tuple() <= current.manifest.version.as_tuple():
+        if (
+            current is not None
+            and manifest.version.as_tuple() <= current.manifest.version.as_tuple()
+        ):
             raise ValueError("extension version must advance monotonically")
         previous = current.manifest.version if current is not None else None
         self.history[manifest.extension_id] = (
