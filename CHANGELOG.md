@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0 — M17 Multi-Agent Runtime
+
+- Added authenticated agent identity attestations and fail-closed message verification.
+- Added bounded parent/child delegation, read-only shared context, deterministic aggregation, and explicit escalation.
+- Bound inter-agent messaging to registered tenant/repository/revision scope and monotonic conversation sequences.
+- Added M17 adversarial regression tests and architecture documentation.
+
+
 ## 1.2.0 — M16 Real Workflow Runtime
 
 - Added deterministic DAG validation and cycle rejection.
