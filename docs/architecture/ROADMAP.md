@@ -45,7 +45,7 @@ are deployed or healthy.
 | M0–M14 | Implemented at FDSE contract/domain level |
 | M15 | Implemented |
 | M16 | Implemented |
-| M17 | Planned |
+| M17 | Implemented |
 | M18 | Planned |
 
 ## M15 — Context + Trusted Memory
