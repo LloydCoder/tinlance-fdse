@@ -2,7 +2,6 @@ from datetime import UTC, datetime, timedelta
 
 import pytest
 
-from fdse.evidence import digest
 from fdse.multi_agent_runtime import (
     AgentIdentity,
     AgentMessage,
