@@ -372,20 +372,15 @@ class MultiAgentRuntime:
             AgentTaskStatus.CANCELLED,
         }:
             return task
-        updated = _replace_task(
-            task,
-            status=AgentTaskStatus.SUCCEEDED,
-            result_digest=digest(result),
-        )
+        updated = _task_with_result(task, digest(result))
         self.tasks[task_id] = updated
         return updated
 
     def fail(self, task_id: str, result: object | None = None) -> AgentTask:
         task = self._task(task_id)
-        updated = _replace_task(
-            task,
-            status=AgentTaskStatus.FAILED,
-            result_digest=digest(result if result is not None else {}),
+        updated = _task_with_status(
+            _task_with_result(task, digest(result if result is not None else {})),
+            AgentTaskStatus.FAILED,
         )
         self.tasks[task_id] = updated
         return updated
