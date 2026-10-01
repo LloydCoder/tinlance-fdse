@@ -95,13 +95,16 @@ def test_expired_memory_is_not_returned() -> None:
     item = memory(expires_at=created + timedelta(minutes=1))
     store = TrustedMemoryStore()
     store.put(item)
-    assert store.get(
-        "t",
-        "r",
-        "abc",
-        "m1",
-        now=created + timedelta(minutes=2),
-    ) is None
+    assert (
+        store.get(
+            "t",
+            "r",
+            "abc",
+            "m1",
+            now=created + timedelta(minutes=2),
+        )
+        is None
+    )
 
 
 def test_memory_snapshot_is_deterministic_and_scoped() -> None:
