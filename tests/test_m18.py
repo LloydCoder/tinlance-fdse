@@ -32,7 +32,9 @@ class AllowCapabilityGrantAuthority:
         return (
             grant.extension_id == manifest.extension_id
             and now < grant.expires_at
-            and set(grant.capabilities).issubset(set(manifest.requested_capabilities))
+            and set(grant.capabilities).issubset(
+                set(manifest.requested_capabilities)
+            )
         )
 
 
@@ -118,7 +120,9 @@ def test_dependency_constraints_are_enforced() -> None:
     rt.register(
         manifest(
             "consumer",
-            dependencies=(DependencyConstraint("base", Version(1, 1, 0), Version(2, 0, 0)),),
+            dependencies=(
+                DependencyConstraint("base", Version(1, 1, 0), Version(2, 0, 0)),
+            ),
         )
     )
     rt.verify("consumer")
