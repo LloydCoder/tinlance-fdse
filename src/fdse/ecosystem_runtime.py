@@ -319,9 +319,13 @@ class EcosystemRuntime:
         for dependency in manifest.dependencies:
             record = self.records.get(dependency.extension_id)
             if record is None or record.state is not ExtensionState.ENABLED:
-                raise ValueError(f"dependency is not enabled: {dependency.extension_id}")
+                raise ValueError(
+                    f"dependency is not enabled: {dependency.extension_id}"
+                )
             if not dependency.accepts(record.manifest.version):
-                raise ValueError(f"dependency version is incompatible: {dependency.extension_id}")
+                raise ValueError(
+                    f"dependency version is incompatible: {dependency.extension_id}"
+                )
 
     def _record(self, extension_id: str) -> ExtensionRecord:
         try:
@@ -331,4 +335,6 @@ class EcosystemRuntime:
 
 
 def _is_sha256(value: str) -> bool:
-    return len(value) == 64 and all(char in "0123456789abcdef" for char in value.lower())
+    return len(value) == 64 and all(
+        char in "0123456789abcdef" for char in value.lower()
+    )
