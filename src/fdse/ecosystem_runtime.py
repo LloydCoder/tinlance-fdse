@@ -52,6 +52,15 @@ class DependencyConstraint:
     minimum: Version
     maximum_exclusive: Version | None = None
 
+    def __post_init__(self) -> None:
+        if not self.extension_id.strip():
+            raise ValueError("dependency extension identifier is required")
+        if (
+            self.maximum_exclusive is not None
+            and self.maximum_exclusive.as_tuple() <= self.minimum.as_tuple()
+        ):
+            raise ValueError("maximum dependency version must exceed minimum")
+
     def accepts(self, version: Version) -> bool:
         if version.as_tuple() < self.minimum.as_tuple():
             return False
@@ -84,7 +93,7 @@ class ExtensionProvenance:
         ):
             raise ValueError("extension provenance is required")
         for value in (self.build_digest, self.attestation_digest):
-            if len(value) != 64 or any(char not in "0123456789abcdef" for char in value.lower()):
+            if not _is_sha256(value):
                 raise ValueError("extension provenance digests must be SHA-256 hex")
 
 
@@ -112,11 +121,15 @@ class ExtensionManifest:
         ):
             raise ValueError("extension manifest fields are required")
         for value in (self.artifact_digest, self.signature_digest):
-            if len(value) != 64 or any(char not in "0123456789abcdef" for char in value.lower()):
+            if not _is_sha256(value):
                 raise ValueError("extension manifest digests must be SHA-256 hex")
+        if any(not value.strip() for value in self.requested_capabilities):
+            raise ValueError("requested capabilities cannot be blank")
         if len(set(self.requested_capabilities)) != len(self.requested_capabilities):
             raise ValueError("requested capabilities must be unique")
         dependency_ids = [item.extension_id for item in self.dependencies]
+        if self.extension_id in dependency_ids:
+            raise ValueError("extension cannot depend on itself")
         if len(dependency_ids) != len(set(dependency_ids)):
             raise ValueError("dependency identifiers must be unique")
 
@@ -134,8 +147,12 @@ class CapabilityGrant:
             raise ValueError("capability grant fields are required")
         if not self.capabilities:
             raise ValueError("capability grant must contain explicit capabilities")
+        if any(not value.strip() for value in self.capabilities):
+            raise ValueError("capability grant capabilities cannot be blank")
         if len(set(self.capabilities)) != len(self.capabilities):
             raise ValueError("capability grant capabilities must be unique")
+        if self.expires_at.tzinfo is None or self.expires_at.utcoffset() is None:
+            raise ValueError("capability grant expiry must be timezone-aware")
 
 
 class SignatureVerifier(Protocol):
@@ -150,42 +167,6 @@ class CapabilityGrantAuthority(Protocol):
         *,
         now: datetime,
     ) -> bool: ...
-
-
-class AllowSignatureVerifier:
-    def verify(self, manifest: ExtensionManifest) -> bool:
-        return True
-
-
-class DenySignatureVerifier:
-    def verify(self, manifest: ExtensionManifest) -> bool:
-        return False
-
-
-class AllowCapabilityGrantAuthority:
-    def verify(
-        self,
-        manifest: ExtensionManifest,
-        grant: CapabilityGrant,
-        *,
-        now: datetime,
-    ) -> bool:
-        return (
-            grant.extension_id == manifest.extension_id
-            and now < grant.expires_at
-            and set(grant.capabilities).issubset(set(manifest.requested_capabilities))
-        )
-
-
-class DenyCapabilityGrantAuthority:
-    def verify(
-        self,
-        manifest: ExtensionManifest,
-        grant: CapabilityGrant,
-        *,
-        now: datetime,
-    ) -> bool:
-        return False
 
 
 @dataclass(frozen=True, slots=True)
@@ -249,16 +230,14 @@ class EcosystemRuntime:
             raise PermissionError("quarantined extension cannot be enabled")
         if record.state is not ExtensionState.VERIFIED:
             raise PermissionError("extension must be verified before enable")
+        if now.tzinfo is None or now.utcoffset() is None:
+            raise ValueError("current time must be timezone-aware")
         self._check_dependencies(record.manifest)
         requested = set(record.manifest.requested_capabilities)
         if requested:
             if grant is None:
                 raise PermissionError("explicit capability grant is required")
-            if not self.grant_authority.verify(
-                record.manifest,
-                grant,
-                now=now,
-            ):
+            if not self.grant_authority.verify(record.manifest, grant, now=now):
                 raise PermissionError("capability grant was not authorized")
         elif grant is not None and grant.capabilities:
             raise ValueError("grant cannot add undeclared capabilities")
@@ -298,16 +277,14 @@ class EcosystemRuntime:
         record = self._record(extension_id)
         history = self.history.get(extension_id, ())
         candidates = [
-            item for item in history if item.version.as_tuple() < record.manifest.version.as_tuple()
+            item
+            for item in history
+            if item.version.as_tuple() < record.manifest.version.as_tuple()
         ]
         if not candidates:
             raise ValueError("no prior extension version is available for rollback")
         previous = max(candidates, key=lambda item: item.version.as_tuple())
-        updated = ExtensionRecord(
-            previous,
-            ExtensionState.ROLLED_BACK,
-            None,
-        )
+        updated = ExtensionRecord(previous, ExtensionState.ROLLED_BACK, None)
         self.records[extension_id] = updated
         return updated
 
@@ -318,6 +295,7 @@ class EcosystemRuntime:
                 "id": record.manifest.extension_id,
                 "kind": record.manifest.kind.value,
                 "version": record.manifest.version.as_tuple(),
+                "api": record.manifest.api_version,
                 "artifact": record.manifest.artifact_digest,
                 "signature": record.manifest.signature_digest,
                 "provenance": record.manifest.provenance,
@@ -325,10 +303,13 @@ class EcosystemRuntime:
                     (
                         item.extension_id,
                         item.minimum.as_tuple(),
-                        item.maximum_exclusive.as_tuple() if item.maximum_exclusive else None,
+                        item.maximum_exclusive.as_tuple()
+                        if item.maximum_exclusive
+                        else None,
                     )
                     for item in record.manifest.dependencies
                 ],
+                "capabilities": record.manifest.requested_capabilities,
             }
         )
 
@@ -345,3 +326,7 @@ class EcosystemRuntime:
             return self.records[extension_id]
         except KeyError as exc:
             raise KeyError(f"unknown extension: {extension_id}") from exc
+
+
+def _is_sha256(value: str) -> bool:
+    return len(value) == 64 and all(char in "0123456789abcdef" for char in value.lower())
