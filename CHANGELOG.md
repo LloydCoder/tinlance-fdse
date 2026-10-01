@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.0 — M18 Agent Ecosystem Runtime
+
+- Added governed skills, applications, extensions, connectors, and packages with versioned manifests and provenance.
+- Added deterministic dependency constraints, verified-before-enable lifecycle, quarantine, disable, rollback, and manifest integrity digests.
+- Added explicit external capability-grant and signature-verification boundaries; extensions cannot self-acquire authority.
+- Extended final certification requirements from M0–M14 to complete M0–M18 coverage.
+- Added M18 adversarial ecosystem and certification regression tests.
+
+
 ## 1.3.0 — M17 Multi-Agent Runtime
 
 - Added authenticated agent identity attestations and fail-closed message verification.
