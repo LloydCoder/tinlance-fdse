@@ -7,7 +7,7 @@ execution remain Agent Platform responsibilities.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass
 from datetime import datetime
 from enum import StrEnum
 from typing import Protocol
@@ -396,7 +396,10 @@ class MultiAgentRuntime:
             self.tasks[child_id]
             for child_id in sorted(self.children.get(parent.task_id, set()))
         ]
-        if any(task.status not in {AgentTaskStatus.SUCCEEDED, AgentTaskStatus.FAILED} for task in child_tasks):
+        if any(
+            task.status not in {AgentTaskStatus.SUCCEEDED, AgentTaskStatus.FAILED}
+            for task in child_tasks
+        ):
             raise ValueError("cannot aggregate unfinished child tasks")
         if any(
             (task.tenant_id, task.repository_id, task.revision)
@@ -438,13 +441,17 @@ class MultiAgentRuntime:
         except KeyError as exc:
             raise KeyError(f"unknown agent task: {task_id}") from exc
 
-    @staticmethod
-    def _same_scope(
-        sender: AgentIdentity,
-        recipient: AgentIdentity,
-        message: AgentMessage,
-    ) -> bool:
-        return sender != recipient or message.sender == sender
+    def _agent_scope(self, agent_id: str) -> tuple[str, str, str]:
+        scopes = {
+            (task.tenant_id, task.repository_id, task.revision)
+            for task in self.tasks.values()
+            if task.agent.agent_id == agent_id
+        }
+        if not scopes:
+            raise PermissionError("agent is not registered in a task scope")
+        if len(scopes) != 1:
+            raise PermissionError("agent is registered in multiple scopes")
+        return next(iter(scopes))
 
 
 def _replace_task(task: AgentTask, **changes: object) -> AgentTask:
