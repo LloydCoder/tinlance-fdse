@@ -143,9 +143,7 @@ class CapabilityGrant:
     expires_at: datetime
 
     def __post_init__(self) -> None:
-        if not all(
-            value.strip() for value in (self.grant_id, self.extension_id, self.issuer)
-        ):
+        if not all(value.strip() for value in (self.grant_id, self.extension_id, self.issuer)):
             raise ValueError("capability grant fields are required")
         if not self.capabilities:
             raise ValueError("capability grant must contain explicit capabilities")
@@ -279,9 +277,7 @@ class EcosystemRuntime:
         record = self._record(extension_id)
         history = self.history.get(extension_id, ())
         candidates = [
-            item
-            for item in history
-            if item.version.as_tuple() < record.manifest.version.as_tuple()
+            item for item in history if item.version.as_tuple() < record.manifest.version.as_tuple()
         ]
         if not candidates:
             raise ValueError("no prior extension version is available for rollback")
@@ -305,9 +301,7 @@ class EcosystemRuntime:
                     (
                         item.extension_id,
                         item.minimum.as_tuple(),
-                        item.maximum_exclusive.as_tuple()
-                        if item.maximum_exclusive
-                        else None,
+                        item.maximum_exclusive.as_tuple() if item.maximum_exclusive else None,
                     )
                     for item in record.manifest.dependencies
                 ],
@@ -319,13 +313,9 @@ class EcosystemRuntime:
         for dependency in manifest.dependencies:
             record = self.records.get(dependency.extension_id)
             if record is None or record.state is not ExtensionState.ENABLED:
-                raise ValueError(
-                    f"dependency is not enabled: {dependency.extension_id}"
-                )
+                raise ValueError(f"dependency is not enabled: {dependency.extension_id}")
             if not dependency.accepts(record.manifest.version):
-                raise ValueError(
-                    f"dependency version is incompatible: {dependency.extension_id}"
-                )
+                raise ValueError(f"dependency version is incompatible: {dependency.extension_id}")
 
     def _record(self, extension_id: str) -> ExtensionRecord:
         try:
@@ -335,6 +325,4 @@ class EcosystemRuntime:
 
 
 def _is_sha256(value: str) -> bool:
-    return len(value) == 64 and all(
-        char in "0123456789abcdef" for char in value.lower()
-    )
+    return len(value) == 64 and all(char in "0123456789abcdef" for char in value.lower())
