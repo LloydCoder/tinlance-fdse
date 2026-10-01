@@ -242,8 +242,6 @@ def _memory_source(memory: TrustedMemory) -> ContextSource:
         repository_id=memory.repository_id,
         freshness_seconds=0,
         confidence=(
-            ContextQuality.HIGH
-            if memory.trust is MemoryTrust.VERIFIED
-            else ContextQuality.UNKNOWN
+            ContextQuality.HIGH if memory.trust is MemoryTrust.VERIFIED else ContextQuality.UNKNOWN
         ),
     )
