@@ -16,7 +16,6 @@ from fdse.multi_agent_runtime import (
     SharedContextRef,
 )
 
-
 NOW = datetime(2026, 10, 1, tzinfo=UTC)
 
 
