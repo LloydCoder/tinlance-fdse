@@ -1,6 +1,6 @@
-# M14 — E2E Certification
+# M18 — Enterprise E2E Certification
 
-M14 is the FDSE-side **verification contract** for end-to-end certification. It is deliberately not a self-certification mechanism.
+M18 is the final FDSE-side **verification contract** for end-to-end certification. It is deliberately not a self-certification mechanism.
 
 ## Certification requirements
 
@@ -10,7 +10,7 @@ A certification bundle is eligible for CERTIFIED only when the verifier confirms
 - the expected commit SHA, when supplied;
 - required external attestation metadata;
 - unique phase names;
-- complete M0–M14 phase coverage;
+- complete M0–M18 phase coverage;
 - CERTIFIED status for every required phase;
 - a deterministic evidence digest matching the recomputed phase-result digest.
 
@@ -29,7 +29,7 @@ external Agent Platform healthy
     ≠
 production healthy
     ≠
-M14 certified
+M18 certified
 ~~~
 
-M14 certification becomes meaningful only when the external execution and attestation systems have actually produced the required evidence.
+M18 certification becomes meaningful only when the external execution and attestation systems have actually produced the required evidence.
