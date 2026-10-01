@@ -68,9 +68,19 @@ def test_retry_is_bounded_and_deterministic() -> None:
         platform_mapper=Platform(),
         clock=FixedClock(datetime(2026, 10, 1, tzinfo=UTC)),
     )
-    run = runtime.create("r1", "t", "repo", "sha", definition(
-        WorkflowNode("retry", NodeKind.TASK, RetryPolicy(max_attempts=2, backoff_seconds=3))
-    ))
+    run = runtime.create(
+        "r1",
+        "t",
+        "repo",
+        "sha",
+        definition(
+            WorkflowNode(
+                "retry",
+                NodeKind.TASK,
+                RetryPolicy(max_attempts=2, backoff_seconds=3),
+            )
+        ),
+    )
     runtime.start(run)
     runtime.tick(run)
     assert run.status is WorkflowRunStatus.RUNNING
@@ -79,7 +89,11 @@ def test_retry_is_bounded_and_deterministic() -> None:
     assert run.status is WorkflowRunStatus.SUCCEEDED
     assert run.attempts["retry"] == 2
     assert [event.event_type for event in runtime.events["r1"]] == [
-        "started", "node_started", "retry_scheduled", "node_started", "node_completed"
+        "started",
+        "node_started",
+        "retry_scheduled",
+        "node_started",
+        "node_completed",
     ]
 
 
@@ -108,7 +122,10 @@ def test_approval_gate_is_fail_closed() -> None:
         clock=FixedClock(datetime(2026, 10, 1, tzinfo=UTC)),
     )
     run = runtime.create(
-        "r1", "t", "repo", "sha",
+        "r1",
+        "t",
+        "repo",
+        "sha",
         definition(WorkflowNode("approve", NodeKind.APPROVAL)),
     )
     runtime.start(run)
