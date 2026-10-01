@@ -21,7 +21,6 @@ from .platform import (
 from .product import CustomerProject, CustomerRequest, TenantBoundary
 from .production import HealthProbe, HealthStatus, IdempotencyRecord, Readiness, ReadinessGate
 from .security_hardening import ControlClass, SecurityControl, redact
-from .transitions import transition_change, transition_finding, transition_plan
 from .trusted_memory import (
     ContextMemoryEnvelope,
     MemoryProvenance,
@@ -29,6 +28,7 @@ from .trusted_memory import (
     TrustedMemory,
     TrustedMemoryStore,
 )
+from .transitions import transition_change, transition_finding, transition_plan
 from .workflows import WorkflowInstance, WorkflowState, transition
 
 __all__ = [
