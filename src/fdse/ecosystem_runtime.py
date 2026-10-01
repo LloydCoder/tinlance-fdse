@@ -143,7 +143,9 @@ class CapabilityGrant:
     expires_at: datetime
 
     def __post_init__(self) -> None:
-        if not all(value.strip() for value in (self.grant_id, self.extension_id, self.issuer)):
+        if not all(
+            value.strip() for value in (self.grant_id, self.extension_id, self.issuer)
+        ):
             raise ValueError("capability grant fields are required")
         if not self.capabilities:
             raise ValueError("capability grant must contain explicit capabilities")
