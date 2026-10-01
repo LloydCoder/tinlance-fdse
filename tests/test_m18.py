@@ -10,8 +10,8 @@ from fdse.ecosystem_runtime import (
     EcosystemRuntime,
     ExtensionKind,
     ExtensionManifest,
-    ExtensionState,
     ExtensionProvenance,
+    ExtensionState,
     Version,
 )
 
@@ -31,11 +31,12 @@ def provenance() -> ExtensionProvenance:
 
 def manifest(
     extension_id: str,
-    version: Version = Version(1, 0, 0),
+    version: Version | None = None,
     *,
     dependencies: tuple[DependencyConstraint, ...] = (),
     capabilities: tuple[str, ...] = (),
 ) -> ExtensionManifest:
+    version = version or Version(1, 0, 0)
     return ExtensionManifest(
         extension_id,
         ExtensionKind.SKILL,
