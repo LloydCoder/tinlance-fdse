@@ -393,8 +393,7 @@ class MultiAgentRuntime:
     def aggregate(self, parent_task_id: str) -> str:
         parent = self._task(parent_task_id)
         child_tasks = [
-            self.tasks[child_id]
-            for child_id in sorted(self.children.get(parent.task_id, set()))
+            self.tasks[child_id] for child_id in sorted(self.children.get(parent.task_id, set()))
         ]
         if any(
             task.status not in {AgentTaskStatus.SUCCEEDED, AgentTaskStatus.FAILED}
