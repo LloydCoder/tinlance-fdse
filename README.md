@@ -146,7 +146,7 @@ The canonical phase definition is [docs/architecture/ROADMAP.md](docs/architectu
 | M15 | Context + trusted memory semantics | Implemented; durable memory/KMS/access control external |
 | M16 | Real workflow runtime: durable DAG and recovery semantics | Implemented; durable scheduling/store external |
 | M17 | Multi-agent runtime: supervision, delegation, messaging, isolation | Implemented; Agent Platform identity/runtime external |
-| M18 | Agent ecosystem runtime: governed skills, apps, extensions, connectors, packages | Planned |
+| M18 | Agent ecosystem runtime: governed skills, apps, extensions, connectors, packages | Implemented; signature/grant/execution infrastructure external |
 
 **Important:** “Implemented” means the FDSE-side domain semantics, invariants, tests, and documentation exist. It does **not** mean every external production dependency is deployed or healthy.
 
@@ -194,6 +194,7 @@ See [docs/architecture/REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STR
 | [M15-CONTEXT-TRUSTED-MEMORY.md](docs/architecture/M15-CONTEXT-TRUSTED-MEMORY.md) | Context + trusted memory semantics |
 | [M16-WORKFLOW-RUNTIME.md](docs/architecture/M16-WORKFLOW-RUNTIME.md) | Workflow runtime semantics |
 | [M17-MULTI-AGENT-RUNTIME.md](docs/architecture/M17-MULTI-AGENT-RUNTIME.md) | Multi-agent runtime semantics |
+| [M18-AGENT-ECOSYSTEM-RUNTIME.md](docs/architecture/M18-AGENT-ECOSYSTEM-RUNTIME.md) | Agent ecosystem runtime semantics |
 | [BOUNDARY.md](docs/architecture/BOUNDARY.md) | FDSE ↔ Agent Platform authority boundary |
 | [REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STRUCTURE.md) | Current source/documentation map |
 | [AUDIT-2026-09-28.md](docs/architecture/AUDIT-2026-09-28.md) | Latest architecture/reconciliation audit |
@@ -310,7 +311,7 @@ A repository workflow can establish confidence in the FDSE codebase without prov
 
 ## Versioning
 
-The package currently reports version 1.3.0. The changelog records the M15 Context + Trusted Memory capability and the M0–M14 baseline.
+The package currently reports version 1.4.0. The changelog records the M15 Context + Trusted Memory capability and the M0–M14 baseline.
 
 Phase implementation status is governed by docs/architecture/ROADMAP.md; documentation must not claim external production integration unless the relevant integration has actually been deployed and verified.
 
