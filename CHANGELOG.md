@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 — M15 Context + Trusted Memory
+
+- Added tenant/repository/revision-scoped trusted-memory semantics.
+- Added immutable memory identifiers, content digests, provenance, expiry, and deterministic memory snapshots.
+- Added deterministic context-memory envelopes without granting memory execution or authorization authority.
+- Added M15 regression and boundary tests.
+- Reconciled the roadmap from M0–M14 to M0–M18.
+
 ## 1.0.0 — M0–M14 domain capability baseline
 
 - Established the M0–M14 FDSE domain capability sequence.

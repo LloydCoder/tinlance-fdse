@@ -122,7 +122,7 @@ The FDSE approval flag means an operation must enter the platform governance pat
 
 ---
 
-## M0–M14 capability map
+## M0–M18 capability map
 
 The canonical phase definition is [docs/architecture/ROADMAP.md](docs/architecture/ROADMAP.md).
 
@@ -143,6 +143,10 @@ The canonical phase definition is [docs/architecture/ROADMAP.md](docs/architectu
 | M12 | Input, tenant, secret, integrity and authority controls | Implemented; infrastructure controls external |
 | M13 | Health/readiness/idempotency contracts | Implemented; deployment/observability external |
 | M14 | Fail-closed certification-bundle verifier | Implemented; real E2E evidence/attestation external |
+| M15 | Context + trusted memory semantics | Implemented; durable memory/KMS/access control external |
+| M16 | Real workflow runtime: durable DAG and recovery semantics | Planned |
+| M17 | Multi-agent runtime: supervision, delegation, messaging, isolation | Planned |
+| M18 | Agent ecosystem runtime: governed skills, apps, extensions, connectors, packages | Planned |
 
 **Important:** “Implemented” means the FDSE-side domain semantics, invariants, tests, and documentation exist. It does **not** mean every external production dependency is deployed or healthy.
 
@@ -186,7 +190,8 @@ See [docs/architecture/REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STR
 
 | Document | Purpose |
 |---|---|
-| [ROADMAP.md](docs/architecture/ROADMAP.md) | Canonical M0–M14 capability and completion definitions |
+| [ROADMAP.md](docs/architecture/ROADMAP.md) | Canonical M0–M18 capability and completion definitions |
+| [M15-CONTEXT-TRUSTED-MEMORY.md](docs/architecture/M15-CONTEXT-TRUSTED-MEMORY.md) | Context + trusted memory semantics |
 | [BOUNDARY.md](docs/architecture/BOUNDARY.md) | FDSE ↔ Agent Platform authority boundary |
 | [REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STRUCTURE.md) | Current source/documentation map |
 | [AUDIT-2026-09-28.md](docs/architecture/AUDIT-2026-09-28.md) | Latest architecture/reconciliation audit |
@@ -303,7 +308,7 @@ A repository workflow can establish confidence in the FDSE codebase without prov
 
 ## Versioning
 
-The package currently reports version 1.0.0. The changelog records the M0–M14 FDSE domain capability baseline.
+The package currently reports version 1.1.0. The changelog records the M15 Context + Trusted Memory capability and the M0–M14 baseline.
 
 Phase implementation status is governed by docs/architecture/ROADMAP.md; documentation must not claim external production integration unless the relevant integration has actually been deployed and verified.
 
