@@ -3,8 +3,6 @@ from datetime import UTC, datetime, timedelta
 import pytest
 
 from fdse.ecosystem_runtime import (
-    AllowCapabilityGrantAuthority,
-    AllowSignatureVerifier,
     CapabilityGrant,
     DependencyConstraint,
     EcosystemRuntime,
@@ -16,6 +14,26 @@ from fdse.ecosystem_runtime import (
 )
 
 NOW = datetime(2026, 10, 1, tzinfo=UTC)
+
+
+class AllowSignatureVerifier:
+    def verify(self, manifest: ExtensionManifest) -> bool:
+        return True
+
+
+class AllowCapabilityGrantAuthority:
+    def verify(
+        self,
+        manifest: ExtensionManifest,
+        grant: CapabilityGrant,
+        *,
+        now: datetime,
+    ) -> bool:
+        return (
+            grant.extension_id == manifest.extension_id
+            and now < grant.expires_at
+            and set(grant.capabilities).issubset(set(manifest.requested_capabilities))
+        )
 
 
 def provenance() -> ExtensionProvenance:
@@ -137,9 +155,54 @@ def test_invalid_signature_is_fail_closed() -> None:
         rt.verify("bad")
 
 
-def test_manifest_digest_is_deterministic() -> None:
+def test_manifest_digest_is_deterministic_and_complete() -> None:
     rt = runtime()
-    rt.register(manifest("skill"))
+    rt.register(manifest("skill", capabilities=("repository.read",)))
     first = rt.manifest_digest("skill")
     second = rt.manifest_digest("skill")
     assert first == second
+    rt.records["skill"] = rt.records["skill"].__class__(
+        rt.records["skill"].manifest,
+        rt.records["skill"].state,
+        rt.records["skill"].previous_version,
+    )
+    assert rt.manifest_digest("skill") == first
+
+
+def test_expired_and_wrong_extension_grants_fail_closed() -> None:
+    rt = runtime()
+    rt.register(manifest("skill", capabilities=("repository.read",)))
+    rt.verify("skill")
+    expired = CapabilityGrant(
+        "expired",
+        "skill",
+        ("repository.read",),
+        "agent-platform-governance",
+        NOW,
+    )
+    with pytest.raises(PermissionError):
+        rt.enable("skill", grant=expired, now=NOW)
+    wrong = grant("other", ("repository.read",))
+    with pytest.raises(PermissionError):
+        rt.enable("skill", grant=wrong, now=NOW)
+
+
+def test_naive_time_is_rejected() -> None:
+    with pytest.raises(ValueError):
+        CapabilityGrant(
+            "grant",
+            "skill",
+            ("repository.read",),
+            "agent-platform-governance",
+            datetime(2026, 10, 1),
+        )
+
+
+def test_invalid_dependency_range_and_self_dependency_fail_closed() -> None:
+    with pytest.raises(ValueError):
+        DependencyConstraint("base", Version(2, 0, 0), Version(2, 0, 0))
+    with pytest.raises(ValueError):
+        manifest(
+            "self",
+            dependencies=(DependencyConstraint("self", Version(1, 0, 0)),),
+        )
