@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinlance-fdse"
-version = "1.1.0"
+version = "1.2.0"
 description = "Governed, evidence-driven forward-deployed software engineering domain layer."
 readme = "README.md"
 requires-python = ">=3.12"

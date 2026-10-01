@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0 — M16 Real Workflow Runtime
+
+- Added deterministic DAG validation and cycle rejection.
+- Added bounded retry/backoff, deadlines, cancellation, approval gates, checkpoints, recovery/resume, conditions, idempotency, and Agent Platform run mapping.
+- Added M16 regression tests and architecture documentation.
+
+
 ## 1.1.0 — M15 Context + Trusted Memory
 
 - Added tenant/repository/revision-scoped trusted-memory semantics.
