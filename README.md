@@ -291,7 +291,7 @@ The historical persistent self-hosted runner is **not** part of the current FDSE
 
 M14 is a verifier, not a self-certification mechanism.
 
-A certification bundle must satisfy its configured revision/commit constraints, contain exactly the required M0–M14 phase coverage without duplicates, contain certified phase results, match its deterministic evidence digest, and carry the required external attestation metadata.
+A certification bundle must satisfy its configured revision/commit constraints, contain exactly the required M0–M18 phase coverage without duplicates, contain certified phase results, match its deterministic evidence digest, and carry the required external attestation metadata.
 
 This distinction matters:
 
@@ -311,7 +311,7 @@ A repository workflow can establish confidence in the FDSE codebase without prov
 
 ## Versioning
 
-The package currently reports version 1.4.0. The changelog records the M15 Context + Trusted Memory capability and the M0–M14 baseline.
+The package currently reports version 1.4.0. The changelog records the M15–M18 capability evolution and the M0–M14 baseline.
 
 Phase implementation status is governed by docs/architecture/ROADMAP.md; documentation must not claim external production integration unless the relevant integration has actually been deployed and verified.
 
