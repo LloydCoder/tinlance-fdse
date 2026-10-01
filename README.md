@@ -144,7 +144,7 @@ The canonical phase definition is [docs/architecture/ROADMAP.md](docs/architectu
 | M13 | Health/readiness/idempotency contracts | Implemented; deployment/observability external |
 | M14 | Fail-closed certification-bundle verifier | Implemented; real E2E evidence/attestation external |
 | M15 | Context + trusted memory semantics | Implemented; durable memory/KMS/access control external |
-| M16 | Real workflow runtime: durable DAG and recovery semantics | Planned |
+| M16 | Real workflow runtime: durable DAG and recovery semantics | Implemented; durable scheduling/store external |
 | M17 | Multi-agent runtime: supervision, delegation, messaging, isolation | Planned |
 | M18 | Agent ecosystem runtime: governed skills, apps, extensions, connectors, packages | Planned |
 
@@ -308,7 +308,7 @@ A repository workflow can establish confidence in the FDSE codebase without prov
 
 ## Versioning
 
-The package currently reports version 1.1.0. The changelog records the M15 Context + Trusted Memory capability and the M0–M14 baseline.
+The package currently reports version 1.2.0. The changelog records the M15 Context + Trusted Memory capability and the M0–M14 baseline.
 
 Phase implementation status is governed by docs/architecture/ROADMAP.md; documentation must not claim external production integration unless the relevant integration has actually been deployed and verified.
 
