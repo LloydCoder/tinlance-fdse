@@ -4,6 +4,7 @@ import pytest
 
 from fdse.workflow_runtime import (
     FixedClock,
+    InMemoryWorkflowStateStore,
     NodeKind,
     PermanentFailure,
     RetryPolicy,
@@ -13,7 +14,6 @@ from fdse.workflow_runtime import (
     WorkflowNode,
     WorkflowRunStatus,
     WorkflowRuntime,
-    InMemoryWorkflowStateStore,
 )
 
 
