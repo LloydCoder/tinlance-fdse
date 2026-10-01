@@ -53,6 +53,7 @@ def test_delegation_preserves_scope_and_depth() -> None:
             "child",
             root.task_id,
             identity("b"),
+            attestation(identity("b")),
             "inspect",
             ("repository.read",),
             context(),
@@ -73,6 +74,7 @@ def test_delegation_rejects_scope_escape() -> None:
                 "child",
                 root.task_id,
                 identity("b"),
+                attestation(identity("b")),
                 "inspect",
                 (),
                 SharedContextRef("other", "repo", "sha", "b" * 64),
@@ -85,6 +87,19 @@ def test_message_requires_authenticated_sender_and_monotonic_sequence() -> None:
     rt = runtime()
     sender = identity("a")
     recipient = identity("b")
+    rt.register_root("sender", sender, "t", "repo", "sha", context())
+    rt.delegate(
+        DelegationRequest(
+            "recipient",
+            "sender",
+            recipient,
+            attestation(recipient),
+            "receive",
+            (),
+            context(),
+        ),
+        now=NOW,
+    )
     payload = {"result": "ok"}
     message = AgentMessage(
         "m1",
@@ -127,6 +142,19 @@ def test_expired_identity_is_rejected() -> None:
     )
     sender = identity("a")
     recipient = identity("b")
+    rt.register_root("sender", sender, "t", "repo", "sha", context())
+    rt.delegate(
+        DelegationRequest(
+            "recipient",
+            "sender",
+            recipient,
+            attestation(recipient),
+            "receive",
+            (),
+            context(),
+        ),
+        now=NOW,
+    )
     payload = {"x": 1}
     with pytest.raises(PermissionError):
         rt.send(
@@ -158,11 +186,27 @@ def test_aggregation_is_deterministic_and_scope_safe() -> None:
     rt = runtime()
     root = rt.register_root("root", identity("a"), "t", "repo", "sha", context())
     child_a = rt.delegate(
-        DelegationRequest("a-child", "root", identity("b"), "a", (), context()),
+        DelegationRequest(
+            "a-child",
+            "root",
+            identity("b"),
+            attestation(identity("b")),
+            "a",
+            (),
+            context(),
+        ),
         now=NOW,
     )
     child_b = rt.delegate(
-        DelegationRequest("b-child", "root", identity("c"), "b", (), context()),
+        DelegationRequest(
+            "b-child",
+            "root",
+            identity("c"),
+            attestation(identity("c")),
+            "b",
+            (),
+            context(),
+        ),
         now=NOW,
     )
     rt.complete(child_a.task_id, {"a": 1})
