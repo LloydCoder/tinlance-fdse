@@ -431,7 +431,7 @@ class MultiAgentRuntime:
             ),
             target=target,
         )
-        self.tasks[task_id] = _replace_task(task, status=AgentTaskStatus.ESCALATED)
+        self.tasks[task_id] = _task_with_status(task, AgentTaskStatus.ESCALATED)
         return escalation
 
     def _task(self, task_id: str) -> AgentTask:
@@ -453,19 +453,33 @@ class MultiAgentRuntime:
         return next(iter(scopes))
 
 
-def _replace_task(task: AgentTask, **changes: object) -> AgentTask:
-    values = {
-        "task_id": task.task_id,
-        "agent": task.agent,
-        "tenant_id": task.tenant_id,
-        "repository_id": task.repository_id,
-        "revision": task.revision,
-        "parent_task_id": task.parent_task_id,
-        "depth": task.depth,
-        "context": task.context,
-        "requested_capabilities": task.requested_capabilities,
-        "status": task.status,
-        "result_digest": task.result_digest,
-    }
-    values.update(changes)
-    return AgentTask(**values)
+def _task_with_status(task: AgentTask, status: AgentTaskStatus) -> AgentTask:
+    return AgentTask(
+        task_id=task.task_id,
+        agent=task.agent,
+        tenant_id=task.tenant_id,
+        repository_id=task.repository_id,
+        revision=task.revision,
+        parent_task_id=task.parent_task_id,
+        depth=task.depth,
+        context=task.context,
+        requested_capabilities=task.requested_capabilities,
+        status=status,
+        result_digest=task.result_digest,
+    )
+
+
+def _task_with_result(task: AgentTask, result_digest: str) -> AgentTask:
+    return AgentTask(
+        task_id=task.task_id,
+        agent=task.agent,
+        tenant_id=task.tenant_id,
+        repository_id=task.repository_id,
+        revision=task.revision,
+        parent_task_id=task.parent_task_id,
+        depth=task.depth,
+        context=task.context,
+        requested_capabilities=task.requested_capabilities,
+        status=AgentTaskStatus.SUCCEEDED,
+        result_digest=result_digest,
+    )
