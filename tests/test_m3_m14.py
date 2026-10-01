@@ -207,7 +207,7 @@ def test_m13_readiness_contracts() -> None:
 
 
 def test_m14_certification_fail_closed_and_certified() -> None:
-    phases = tuple((f"M{i}", CertificationStatus.CERTIFIED) for i in range(15))
+    phases = tuple((f"M{i}", CertificationStatus.CERTIFIED) for i in range(19))
     evidence = digest(sorted(phases))
     bundle = CertificationBundle("abc", phases, evidence, "att-1", "github", "run-1", "abc")
     assert CertificationValidator().validate(bundle) is CertificationStatus.CERTIFIED

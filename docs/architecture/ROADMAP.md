@@ -46,7 +46,7 @@ are deployed or healthy.
 | M15 | Implemented |
 | M16 | Implemented |
 | M17 | Implemented |
-| M18 | Planned |
+| M18 | Implemented |
 
 ## M15 — Context + Trusted Memory
 

@@ -1,4 +1,4 @@
-"""End-to-end certification bundle and fail-closed validation (M14)."""
+"""Enterprise end-to-end certification bundle and fail-closed validation (M18)."""
 
 from __future__ import annotations
 
@@ -42,7 +42,7 @@ class CertificationBundle:
 
 
 class CertificationValidator:
-    REQUIRED = tuple(f"M{i}" for i in range(15))
+    REQUIRED = tuple(f"M{i}" for i in range(19))
 
     def validate(
         self,
