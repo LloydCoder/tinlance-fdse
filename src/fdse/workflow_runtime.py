@@ -59,7 +59,11 @@ class RetryPolicy:
     def delay_for(self, attempt: int) -> int:
         if attempt < 1:
             raise ValueError("attempt must be positive")
-        delay = self.backoff_seconds * (self.multiplier ** (attempt - 1))
+        delay = self.backoff_seconds
+        for _ in range(attempt - 1):
+            delay *= self.multiplier
+            if delay >= self.max_backoff_seconds:
+                return self.max_backoff_seconds
         return min(delay, self.max_backoff_seconds)
 
 
@@ -294,9 +298,10 @@ class WorkflowRuntime:
         }:
             return run
         run.cancel_requested = True
-        run.status = WorkflowRunStatus.CANCELLING
+        run.status = WorkflowRunStatus.CANCELLED
         self.platform_mapper.cancel(run)
         self._emit(run, "cancel_requested", run.active_node, 0)
+        self._emit(run, "cancelled", run.active_node, 0)
         self._checkpoint(run)
         return run
 
@@ -365,6 +370,9 @@ class WorkflowRuntime:
         run.completed_nodes.add(node.node_id)
         run.active_node = None
         self._emit(run, "node_completed", node.node_id, attempt, {"result": result})
+        if len(run.completed_nodes) == len(run.definition.nodes):
+            run.status = WorkflowRunStatus.SUCCEEDED
+            self._emit(run, "succeeded", None, 0)
         self._checkpoint(run)
         return run
 
