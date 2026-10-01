@@ -271,9 +271,7 @@ class WorkflowRuntime:
         now = self.clock.now()
         run.started_at = run.started_at or now
         if run.definition.deadline_seconds is not None:
-            run.deadline_at = run.started_at + timedelta(
-                seconds=run.definition.deadline_seconds
-            )
+            run.deadline_at = run.started_at + timedelta(seconds=run.definition.deadline_seconds)
         run.platform_run_id = run.platform_run_id or self.platform_mapper.start(run)
         run.status = WorkflowRunStatus.RUNNING
         self._emit(run, "started", None, 0)
