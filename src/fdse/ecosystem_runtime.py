@@ -112,9 +112,7 @@ class ExtensionManifest:
         ):
             raise ValueError("extension manifest fields are required")
         for value in (self.artifact_digest, self.signature_digest):
-            if len(value) != 64 or any(
-                char not in "0123456789abcdef" for char in value.lower()
-            ):
+            if len(value) != 64 or any(char not in "0123456789abcdef" for char in value.lower()):
                 raise ValueError("extension manifest digests must be SHA-256 hex")
         if len(set(self.requested_capabilities)) != len(self.requested_capabilities):
             raise ValueError("requested capabilities must be unique")
