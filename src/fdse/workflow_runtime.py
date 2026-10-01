@@ -8,7 +8,7 @@ ports owned by infrastructure or the Tinlance Agent Platform.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 from enum import StrEnum
 from typing import Protocol
 
