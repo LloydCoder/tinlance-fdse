@@ -15,7 +15,6 @@ from fdse.ecosystem_runtime import (
     Version,
 )
 
-
 NOW = datetime(2026, 10, 1, tzinfo=UTC)
 
 
