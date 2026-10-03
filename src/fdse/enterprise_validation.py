@@ -83,7 +83,9 @@ class EnterpriseValidationPlan:
 
     def __post_init__(self) -> None:
         if set(self.required_phases) != set(ALL_PHASES):
-            raise ValueError("enterprise validation must cover M0-M18 and E1-E6 exactly")
+            raise ValueError(
+                "enterprise validation must cover M0-M18 and E1-E6 exactly"
+            )
         if len(self.required_layers) != len(set(self.required_layers)):
             raise ValueError("validation layers must be unique")
 
@@ -111,7 +113,9 @@ class EnterpriseValidationGraph:
         actual = set(self._evidence)
         if actual != expected:
             raise ValueError("enterprise validation evidence coverage is incomplete")
-        if any(item.status is not ValidationStatus.PASS for item in self._evidence.values()):
+        if any(
+            item.status is not ValidationStatus.PASS for item in self._evidence.values()
+        ):
             raise ValueError("enterprise validation is not fully passing")
 
     def snapshot_digest(self) -> str:
