@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.1 — E1 Baseline Closure
+
+- Reconciled distribution/runtime version to the M18 release line and added a version invariant.
+- Expanded the documented public API through M15–M18 without exporting permissive reference/test doubles.
+- Removed production-side allow-all/no-op workflow helpers and the time-window-only identity verifier; tests now own their explicit doubles.
+- Reconciled repository structure, README source maps, audit references, and the enterprise closure track.
+- Added E1 contract and public-API regression coverage.
+
+
 ## 1.4.0 — M18 Agent Ecosystem Runtime
 
 - Added governed skills, applications, extensions, connectors, and packages with versioned manifests and provenance.
