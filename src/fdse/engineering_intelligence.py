@@ -218,7 +218,7 @@ class EngineeringIntelligenceGraph:
         )
 
     def add_policy_chain(self, chain: PolicyChain) -> None:
-        pairs = (
+        pairs: tuple[tuple[SemanticRef, IntelligenceRelation, SemanticRef], ...] = (
             (chain.policy, IntelligenceRelation.REQUIRES, chain.requirement),
             (chain.requirement, IntelligenceRelation.CONSTRAINS, chain.constraint),
             (chain.constraint, IntelligenceRelation.GUARDS, chain.guardrail),
