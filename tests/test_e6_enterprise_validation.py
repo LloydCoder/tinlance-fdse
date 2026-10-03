@@ -10,7 +10,9 @@ from fdse import (
 )
 
 
-def evidence(phase: str, layer: ValidationLayer, status: ValidationStatus) -> ValidationEvidence:
+def evidence(
+    phase: str, layer: ValidationLayer, status: ValidationStatus
+) -> ValidationEvidence:
     return ValidationEvidence(
         phase,
         layer,
