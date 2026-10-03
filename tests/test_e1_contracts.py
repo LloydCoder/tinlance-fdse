@@ -5,7 +5,7 @@ import fdse
 
 def test_runtime_and_distribution_versions_are_identical() -> None:
     assert fdse.__version__ == metadata.version("tinlance-fdse")
-    assert fdse.__version__ == "1.6.0"
+    assert fdse.__version__ == "1.7.0"
 
 
 def test_m15_to_m18_contracts_are_public() -> None:
