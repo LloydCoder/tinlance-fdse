@@ -8,7 +8,7 @@ version = "1.9.0"
 description = "Governed, evidence-driven forward-deployed software engineering domain layer."
 readme = "README.md"
 requires-python = ">=3.12"
-license = "LicenseRef-Proprietary"
+license = "Apache-2.0"
 license-files = ["LICENSE"]
 authors = [{ name = "Tinlance" }]
 dependencies = []
