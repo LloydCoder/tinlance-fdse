@@ -64,6 +64,15 @@ from .engineering_intelligence import (
     SemanticRef,
     SemanticRelation,
 )
+from .evidence_lineage import (
+    EvidenceSpineChain,
+    EvidenceSpineGraph,
+    IncidentChain,
+    IncidentRelation,
+    LineageRecord,
+    LineageRelation,
+    ResilienceSemantics,
+)
 from .evaluation import (
     EvaluationCase,
     EvaluationOutcome,
@@ -187,6 +196,13 @@ __all__ = [
     "FrameworkMapping",
     "FrameworkDefinition",
     "SupplyChainChain",
+    "LineageRelation",
+    "IncidentRelation",
+    "LineageRecord",
+    "EvidenceSpineChain",
+    "IncidentChain",
+    "ResilienceSemantics",
+    "EvidenceSpineGraph",
     "AssuranceSecurityGraph",
     "ApprovalStatus",
     "GovernanceBoundary",
@@ -253,4 +269,4 @@ __all__ = [
     "__version__",
 ]
 
-__version__ = "1.6.0"
+__version__ = "1.7.0"
