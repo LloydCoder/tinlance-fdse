@@ -51,7 +51,7 @@ class ValidationLayer(StrEnum):
 
 
 class ValidationStatus(StrEnum):
-    PASS = "pass"
+    PASS = "pass"  # noqa: S105
     FAIL = "fail"
     UNKNOWN = "unknown"
 
