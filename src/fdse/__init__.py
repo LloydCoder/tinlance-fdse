@@ -64,6 +64,51 @@ from .production import (
 from .security_hardening import ControlClass, SecurityControl, redact
 from .transitions import transition_change, transition_finding, transition_plan
 from .workflows import WorkflowInstance, WorkflowState, transition
+from .workflow_runtime import (
+    ApprovalGate,
+    Clock,
+    NodeKind,
+    PermanentFailure,
+    PlatformRunMapper,
+    RetryableFailure,
+    RetryPolicy,
+    WorkflowCheckpoint,
+    WorkflowDefinition,
+    WorkflowEdge,
+    WorkflowEvent,
+    WorkflowExecutor,
+    WorkflowNode,
+    WorkflowRun,
+    WorkflowRunStatus,
+    WorkflowRuntime,
+    WorkflowStateStore,
+)
+from .multi_agent_runtime import (
+    AgentIdentity,
+    AgentMessage,
+    AgentTask,
+    AgentTaskStatus,
+    DelegationRequest,
+    Escalation,
+    IdentityAttestation,
+    IdentityVerifier,
+    MessageKind,
+    MultiAgentPolicy,
+    MultiAgentRuntime,
+    SharedContextRef,
+)
+from .ecosystem_runtime import (
+    CapabilityGrant,
+    DependencyConstraint,
+    EcosystemRuntime,
+    ExtensionKind,
+    ExtensionManifest,
+    ExtensionProvenance,
+    ExtensionRecord,
+    ExtensionState,
+    SignatureVerifier,
+    Version,
+)
 
 __all__ = [
     "Assessment",
@@ -128,7 +173,17 @@ __all__ = [
     "WorkflowInstance",
     "WorkflowState",
     "transition",
+    "WorkflowRunStatus", "NodeKind", "RetryableFailure", "PermanentFailure",
+    "RetryPolicy", "WorkflowNode", "WorkflowEdge", "WorkflowDefinition",
+    "WorkflowEvent", "WorkflowCheckpoint", "WorkflowRun", "WorkflowStateStore",
+    "WorkflowExecutor", "ApprovalGate", "PlatformRunMapper", "Clock", "WorkflowRuntime",
+    "AgentTaskStatus", "MessageKind", "AgentIdentity", "IdentityAttestation",
+    "SharedContextRef", "AgentTask", "DelegationRequest", "AgentMessage", "Escalation",
+    "IdentityVerifier", "MultiAgentPolicy", "MultiAgentRuntime",
+    "ExtensionKind", "ExtensionState", "Version", "DependencyConstraint",
+    "ExtensionProvenance", "ExtensionManifest", "CapabilityGrant", "SignatureVerifier",
+    "ExtensionRecord", "EcosystemRuntime",
     "__version__",
 ]
 
-__version__ = "1.1.0"
+__version__ = "1.4.1"
