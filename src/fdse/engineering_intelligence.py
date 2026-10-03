@@ -191,9 +191,7 @@ class EngineeringIntelligenceGraph:
         key = (ref.kind, ref.identifier)
         existing = self._refs.get(key)
         if existing is not None and existing != ref:
-            raise ValueError(
-                "semantic identifier is already bound to another reference"
-            )
+            raise ValueError("semantic identifier is already bound to another reference")
         self._refs[key] = ref
 
     def add_relation(self, relation: SemanticRelation) -> None:
@@ -249,8 +247,7 @@ class EngineeringIntelligenceGraph:
             (chain.change, IntelligenceRelation.RELEASED_AS, chain.release),
         ]
         pairs.extend(
-            (chain.change, IntelligenceRelation.REQUIRES, ref)
-            for ref in chain.required_evidence
+            (chain.change, IntelligenceRelation.REQUIRES, ref) for ref in chain.required_evidence
         )
         pairs.extend(
             (chain.change, IntelligenceRelation.EVALUATED_BY, ref)
