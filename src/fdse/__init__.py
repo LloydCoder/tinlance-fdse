@@ -1,15 +1,5 @@
 """Tinlance FDSE engineering-domain layer."""
 
-from .enterprise_validation import (
-    ALL_PHASES,
-    CORE_PHASES,
-    ENTERPRISE_PHASES,
-    EnterpriseValidationGraph,
-    EnterpriseValidationPlan,
-    ValidationEvidence,
-    ValidationLayer,
-    ValidationStatus,
-)
 from .agents import SpecialistRegistry, SpecialistRole, SpecialistSpec
 from .assurance_security_supply_chain import (
     AgenticAssetKind,
@@ -74,6 +64,16 @@ from .engineering_intelligence import (
     SemanticRef,
     SemanticRelation,
 )
+from .enterprise_validation import (
+    ALL_PHASES,
+    CORE_PHASES,
+    ENTERPRISE_PHASES,
+    EnterpriseValidationGraph,
+    EnterpriseValidationPlan,
+    ValidationEvidence,
+    ValidationLayer,
+    ValidationStatus,
+)
 from .evaluation import (
     EvaluationCase,
     EvaluationOutcome,
@@ -90,6 +90,13 @@ from .evidence_lineage import (
     ResilienceSemantics,
 )
 from .governance import ApprovalStatus, GovernanceBoundary, GovernanceReference
+from .intake import (
+    IntakeRecord,
+    IntakeRegistry,
+    IntakeRequest,
+    IntakeStatus,
+    IntakeValidator,
+)
 from .integration import (
     IntegrationContract,
     IntegrationDirection,
@@ -97,13 +104,6 @@ from .integration import (
     IntegrationStatus,
     IntegrationSystem,
     SystemOfSystemsGraph,
-)
-from .intake import (
-    IntakeRecord,
-    IntakeRegistry,
-    IntakeRequest,
-    IntakeStatus,
-    IntakeValidator,
 )
 from .multi_agent_runtime import (
     AgentIdentity,
