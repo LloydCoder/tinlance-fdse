@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.6.0 — E3 Assurance, Agentic Security & Supply-Chain Intelligence
+
+- Added typed assurance chains and configuration-driven framework mappings.
+- Added canonical agentic-security asset/risk relationships.
+- Added end-to-end software supply-chain semantic lineage.
+- Added fail-closed scope, collision, and self-reference invariants.
+- Preserved external ownership of authentication, authorization, signing, builders, registries, runtime enforcement, and deployment infrastructure.
+
+
 ## 1.5.0 — E2 Engineering Intelligence & Cross-System Semantics
 
 - Added canonical risk, policy, change, and operational semantic chains.
