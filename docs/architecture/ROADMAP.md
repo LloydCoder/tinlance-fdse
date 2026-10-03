@@ -85,12 +85,12 @@ external infrastructure.
 
 The core capability roadmap ends at M18. Enterprise completion is tracked separately so there is deliberately no M19.
 
-| Track | Scope |
-|---|---|
-| E1 | Baseline closure: package/runtime version, public API, helper boundaries, tests, packaging, provenance, and documentation reconciliation |
-| E2 | Engineering intelligence and canonical cross-system risk, policy, change, and operational semantics | Implemented on enterprise branch |
-| E3 | Assurance, agentic-security semantics, framework mappings, and software supply-chain intelligence |
-| E4 | Evidence spine, causal lineage, incident semantics, and resilience intelligence | Implemented on enterprise branch |
+| Track | Scope | Repository status |
+|---|---|---|
+| E1 | Baseline closure: package/runtime version, public API, helper boundaries, tests, packaging, provenance, and documentation reconciliation | Implemented |
+| E2 | Engineering intelligence and canonical cross-system risk, policy, change, and operational semantics | Implemented |
+| E3 | Assurance, agentic-security semantics, framework mappings, and software supply-chain intelligence | Implemented |
+| E4 | Evidence spine, causal lineage, incident semantics, and resilience intelligence | Implemented |
 | E5 | Production integration across FDSE, FDE Mastery, Agent Platform, Tinlance, providers, CI/CD, registries, provenance, deployment, observability, and customer systems | Contract/validation layer implemented; external production evidence remains required |
 | E6 | Cross-repository, security, adversarial, performance, recovery, tenant-isolation, migration, disaster-recovery, documentation, compatibility, CI/CD, and release certification gates | Validation/certification contract implemented; external GA evidence remains required |
 
