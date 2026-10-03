@@ -200,7 +200,7 @@ class EvidenceSpineGraph:
         self._add_expected(
             tuple(
                 (source, LineageRelation.FEEDS.value, target)
-                for source, target in zip(refs, refs[1:], strict=True)
+                for source, target in zip(refs[:-1], refs[1:], strict=True)
             ),
             metadata,
         )
