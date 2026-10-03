@@ -90,11 +90,11 @@ The core capability roadmap ends at M18. Enterprise completion is tracked separa
 | E1 | Baseline closure: package/runtime version, public API, helper boundaries, tests, packaging, provenance, and documentation reconciliation |
 | E2 | Engineering intelligence and canonical cross-system risk, policy, change, and operational semantics | Implemented on enterprise branch |
 | E3 | Assurance, agentic-security semantics, framework mappings, and software supply-chain intelligence |
-| E4 | Evidence spine, causal lineage, incident semantics, and resilience intelligence |
+| E4 | Evidence spine, causal lineage, incident semantics, and resilience intelligence | Implemented on enterprise branch |
 | E5 | Production integration across FDSE, FDE Mastery, Agent Platform, Tinlance, providers, CI/CD, registries, provenance, deployment, observability, and customer systems |
 | E6 | Cross-repository, security, adversarial, performance, recovery, tenant-isolation, migration, disaster-recovery, documentation, compatibility, CI/CD, and release certification gates |
 
-An enterprise track is complete only when its repository changes, contracts, tests, documentation, and applicable external integration evidence satisfy its definition of done. E1 is the current closure gate.
+An enterprise track is complete only when its repository changes, contracts, tests, documentation, and applicable external integration evidence satisfy its definition of done. E1, E2, E3, and E4 are implemented at the FDSE semantic/contract level. E5 is the next production-integration gate.
 
 ## Security references
 
@@ -102,4 +102,6 @@ An enterprise track is complete only when its repository changes, contracts, tes
 - NIST SP 800-218 (SSDF 1.1) as the finalized SSDF baseline.
 - GitHub Actions secure-use guidance for least-privilege permissions and immutable action references.
 - OpenTelemetry semantic conventions for interoperable telemetry naming.
+- OWASP Top 10 for Agentic Applications 2026 for agentic security and trust-boundary risk context.
+- SLSA v1.2 for software supply-chain provenance and verification semantics.
 - A2A for agent interoperability; interoperability does not imply authority.
