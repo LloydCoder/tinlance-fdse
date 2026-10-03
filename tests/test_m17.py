@@ -7,7 +7,6 @@ from fdse.multi_agent_runtime import (
     AgentIdentity,
     AgentMessage,
     AgentTaskStatus,
-    AllowIdentityVerifier,
     DelegationRequest,
     IdentityAttestation,
     MessageKind,
@@ -17,6 +16,11 @@ from fdse.multi_agent_runtime import (
 )
 
 NOW = datetime(2026, 10, 1, tzinfo=UTC)
+
+
+class AllowIdentityVerifier:
+    def verify(self, attestation: IdentityAttestation, *, now: datetime) -> bool:
+        return attestation.issued_at <= now < attestation.expires_at
 
 
 def identity(agent_id: str) -> AgentIdentity:

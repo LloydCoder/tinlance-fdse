@@ -81,6 +81,21 @@ infrastructure. M16–M18 define domain/runtime contracts and deterministic
 reference semantics; production authority remains with the Agent Platform and
 external infrastructure.
 
+## Enterprise closure track E1–E6
+
+The core capability roadmap ends at M18. Enterprise completion is tracked separately so there is deliberately no M19.
+
+| Track | Scope |
+|---|---|
+| E1 | Baseline closure: package/runtime version, public API, helper boundaries, tests, packaging, provenance, and documentation reconciliation |
+| E2 | Engineering intelligence and canonical cross-system risk, policy, change, and operational semantics |
+| E3 | Assurance, agentic-security semantics, framework mappings, and software supply-chain intelligence |
+| E4 | Evidence spine, causal lineage, incident semantics, and resilience intelligence |
+| E5 | Production integration across FDSE, FDE Mastery, Agent Platform, Tinlance, providers, CI/CD, registries, provenance, deployment, observability, and customer systems |
+| E6 | Cross-repository, security, adversarial, performance, recovery, tenant-isolation, migration, disaster-recovery, documentation, compatibility, CI/CD, and release certification gates |
+
+An enterprise track is complete only when its repository changes, contracts, tests, documentation, and applicable external integration evidence satisfy its definition of done. E1 is the current closure gate.
+
 ## Security references
 
 - OWASP ASVS 5.0.0 for application-security verification and positive input validation.

@@ -210,16 +210,6 @@ class IdentityVerifier(Protocol):
     ) -> bool: ...
 
 
-class AllowIdentityVerifier:
-    def verify(
-        self,
-        attestation: IdentityAttestation,
-        *,
-        now: datetime,
-    ) -> bool:
-        return attestation.issued_at <= now < attestation.expires_at
-
-
 class DenyIdentityVerifier:
     def verify(
         self,

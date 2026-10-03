@@ -3,8 +3,6 @@ from datetime import UTC, datetime
 import pytest
 
 from fdse.workflow_runtime import (
-    FixedClock,
-    InMemoryWorkflowStateStore,
     NodeKind,
     PermanentFailure,
     RetryableFailure,
@@ -15,6 +13,27 @@ from fdse.workflow_runtime import (
     WorkflowRunStatus,
     WorkflowRuntime,
 )
+
+
+class InMemoryWorkflowStateStore:
+    def __init__(self):
+        self.runs = {}
+        self.checkpoints = {}
+
+    def save(self, run, checkpoint):
+        self.runs[run.run_id] = run
+        self.checkpoints[run.run_id] = checkpoint
+
+    def load(self, run_id):
+        return self.runs.get(run_id)
+
+
+class FixedClock:
+    def __init__(self, current):
+        self.current = current
+
+    def now(self):
+        return self.current
 
 
 class Executor:
