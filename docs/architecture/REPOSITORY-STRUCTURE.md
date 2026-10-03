@@ -28,8 +28,8 @@ The repository is capability-driven. This map describes the current implementati
 - E5: `src/fdse/integration.py`
 - E6: `src/fdse/enterprise_validation.py`
 
-Enterprise documentation maps E1–E4 to their corresponding architecture, audit, and contract documents; E5–E6 remain integration/validation gates.
-The package public API is defined in `src/fdse/__init__.py` and covers the M0–M18 domain contracts. Reference/test doubles that could be mistaken for authority implementations are kept outside the production package.
+Enterprise documentation maps E1–E6 to their corresponding architecture, audit, and contract documents; E5–E6 remain subject to external production evidence for live integration/GA claims.
+The package public API is defined in `src/fdse/__init__.py` and covers the M0–M18 domain contracts plus the E2–E6 enterprise contracts. Reference/test doubles that could be mistaken for authority implementations are kept outside the production package.
 
 ## Tests
 
