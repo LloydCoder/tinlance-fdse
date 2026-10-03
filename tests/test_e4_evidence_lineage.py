@@ -78,7 +78,7 @@ def test_spine_incident_and_resilience_are_deterministic() -> None:
     )
     spine_pairs = tuple(
         (source, LineageRelation.FEEDS.value, target)
-        for source, target in zip(spine_refs, spine_refs[1:], strict=True)
+        for source, target in zip(spine_refs, spine_refs[1:])
     )
     incident = IncidentChain(
         ref("signal", "signal"),
