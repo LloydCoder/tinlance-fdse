@@ -348,4 +348,3 @@ def _same_scope(refs: tuple[SemanticRef, ...]) -> None:
 
 def _sha256(value: str) -> bool:
     return len(value) == 64 and all(character in "0123456789abcdef" for character in value)
-
