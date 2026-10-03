@@ -228,10 +228,26 @@ class EvidenceSpineGraph:
                 (chain.signal, IncidentRelation.SIGNALS.value, chain.incident),
                 (chain.incident, IncidentRelation.DETECTED_BY.value, chain.detection),
                 (chain.incident, IncidentRelation.TRIAGED_BY.value, chain.triage),
-                (chain.incident, IncidentRelation.CONTAINED_BY.value, chain.containment),
-                (chain.incident, IncidentRelation.INVESTIGATED_BY.value, chain.investigation),
-                (chain.incident, IncidentRelation.REMEDIATED_BY.value, chain.remediation),
-                (chain.incident, IncidentRelation.VERIFIED_BY.value, chain.verification),
+                (
+                    chain.incident,
+                    IncidentRelation.CONTAINED_BY.value,
+                    chain.containment,
+                ),
+                (
+                    chain.incident,
+                    IncidentRelation.INVESTIGATED_BY.value,
+                    chain.investigation,
+                ),
+                (
+                    chain.incident,
+                    IncidentRelation.REMEDIATED_BY.value,
+                    chain.remediation,
+                ),
+                (
+                    chain.incident,
+                    IncidentRelation.VERIFIED_BY.value,
+                    chain.verification,
+                ),
                 (chain.incident, IncidentRelation.CLOSED_BY.value, chain.closure),
             ),
             metadata,
@@ -267,7 +283,9 @@ class EvidenceSpineGraph:
         metadata: tuple[LineageRecord, ...],
     ) -> None:
         expected_relations = set(expected)
-        actual_relations = {(record.source, record.relation, record.target) for record in metadata}
+        actual_relations = {
+            (record.source, record.relation, record.target) for record in metadata
+        }
         if actual_relations != expected_relations:
             raise ValueError("lineage metadata must cover every required relationship")
         for record in metadata:
@@ -327,5 +345,7 @@ def _same_scope(refs: tuple[SemanticRef, ...]) -> None:
 
 
 def _sha256(value: str):
-    return len(value) == 64 and all(character in "0123456789abcdef" for character in value)
+    return len(value) == 64 and all(
+        character in "0123456789abcdef" for character in value
+    )
 
