@@ -1,8 +1,7 @@
 from datetime import UTC, datetime
 
-import pytest
-
 import fdse
+import pytest
 
 
 NOW = datetime(2026, 10, 3, tzinfo=UTC)
