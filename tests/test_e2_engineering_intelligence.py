@@ -70,7 +70,7 @@ def test_all_canonical_chains_are_scope_safe_and_deterministic() -> None:
     reverse.add_policy_chain(policy)
     reverse.add_risk_chain(risk)
     assert reverse.snapshot_digest() == digest_a
-    assert len(graph.relations) == 21
+    assert len(graph.relations) == 23
 
 
 def test_scope_escape_and_reference_collision_fail_closed() -> None:
