@@ -283,10 +283,14 @@ class EvidenceSpineGraph:
         metadata: tuple[LineageRecord, ...],
     ) -> None:
         expected_relations = set(expected)
-        actual_relations = {
+        actual_relations = [
             (record.source, record.relation, record.target) for record in metadata
-        }
-        if actual_relations != expected_relations:
+        ]
+        if len(metadata) != len(expected_relations) or len(actual_relations) != len(
+            set(actual_relations)
+        ):
+            raise ValueError("lineage metadata must contain exactly one record per relationship")
+        if set(actual_relations) != expected_relations:
             raise ValueError("lineage metadata must cover every required relationship")
         for record in metadata:
             self.add_lineage(record)
