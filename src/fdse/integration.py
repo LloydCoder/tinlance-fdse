@@ -78,10 +78,7 @@ class IntegrationEvidence:
     payload_digest: str
 
     def __post_init__(self) -> None:
-        if any(
-            not value.strip()
-            for value in (self.contract_id, self.evidence_id, self.revision)
-        ):
+        if any(not value.strip() for value in (self.contract_id, self.evidence_id, self.revision)):
             raise ValueError("integration evidence identity is required")
         if len(self.payload_digest) != 64 or any(
             character not in "0123456789abcdef" for character in self.payload_digest
@@ -121,9 +118,7 @@ class SystemOfSystemsGraph:
             and evidence.status is IntegrationStatus.VERIFIED
         ]
         if len(candidates) != 1:
-            raise ValueError(
-                "integration contract requires exactly one verified evidence record"
-            )
+            raise ValueError("integration contract requires exactly one verified evidence record")
         return candidates[0]
 
     def snapshot_digest(self) -> str:
