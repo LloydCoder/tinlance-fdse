@@ -1,8 +1,15 @@
-from datetime import UTC, datetime
+from unittest import TestCase
 
-import fdse
-import pytest
-
+from fdse import (
+    EvidenceSpineChain,
+    EvidenceSpineGraph,
+    IncidentChain,
+    IncidentRelation,
+    LineageRecord,
+    LineageRelation,
+    ResilienceSemantics,
+    SemanticRef,
+)
 
 NOW = datetime(2026, 10, 3, tzinfo=UTC)
 
@@ -120,7 +127,7 @@ def test_spine_incident_and_resilience_are_deterministic() -> None:
 
 
 def test_lineage_metadata_and_scope_fail_closed() -> None:
-    with pytest.raises(ValueError):
+    with TestCase().assertRaises(ValueError):
         fdse.LineageRecord(
             ref("a", "a"),
             "caused_by",
