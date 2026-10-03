@@ -2,30 +2,21 @@ from datetime import UTC, datetime
 
 import pytest
 
-from fdse import (
-    EvidenceSpineChain,
-    EvidenceSpineGraph,
-    IncidentChain,
-    IncidentRelation,
-    LineageRecord,
-    LineageRelation,
-    ResilienceSemantics,
-    SemanticRef,
-)
+import fdse
 
 
 NOW = datetime(2026, 10, 3, tzinfo=UTC)
 
 
-def ref(kind: str, identifier: str) -> SemanticRef:
-    return SemanticRef(kind, identifier, "t", "repo", "sha")
+def ref(kind: str, identifier: str) -> fdse.SemanticRef:
+    return fdse.SemanticRef(kind, identifier, "t", "repo", "sha")
 
 
 def metadata(
-    pairs: tuple[tuple[SemanticRef, str, SemanticRef], ...],
-) -> tuple[LineageRecord, ...]:
+    pairs: tuple[tuple[fdse.SemanticRef, str, fdse.SemanticRef], ...],
+) -> tuple[fdse.LineageRecord, ...]:
     return tuple(
-        LineageRecord(
+        fdse.LineageRecord(
             source,
             relation,
             target,
@@ -40,7 +31,7 @@ def metadata(
 
 
 def test_spine_incident_and_resilience_are_deterministic() -> None:
-    chain = EvidenceSpineChain(
+    chain = fdse.EvidenceSpineChain(
         ref("customer-request", "request"),
         ref("context", "context"),
         ref("plan", "plan"),
@@ -77,10 +68,10 @@ def test_spine_incident_and_resilience_are_deterministic() -> None:
         chain.incident_or_feedback,
     )
     spine_pairs = tuple(
-        (source, LineageRelation.FEEDS.value, target)
+        (source, fdse.LineageRelation.FEEDS.value, target)
         for source, target in zip(spine_refs[:-1], spine_refs[1:], strict=True)
     )
-    incident = IncidentChain(
+    incident = fdse.IncidentChain(
         ref("signal", "signal"),
         ref("incident", "incident"),
         ref("detection", "detection"),
@@ -92,16 +83,16 @@ def test_spine_incident_and_resilience_are_deterministic() -> None:
         ref("closure", "closure"),
     )
     incident_pairs = (
-        (incident.signal, IncidentRelation.SIGNALS.value, incident.incident),
-        (incident.incident, IncidentRelation.DETECTED_BY.value, incident.detection),
-        (incident.incident, IncidentRelation.TRIAGED_BY.value, incident.triage),
-        (incident.incident, IncidentRelation.CONTAINED_BY.value, incident.containment),
-        (incident.incident, IncidentRelation.INVESTIGATED_BY.value, incident.investigation),
-        (incident.incident, IncidentRelation.REMEDIATED_BY.value, incident.remediation),
-        (incident.incident, IncidentRelation.VERIFIED_BY.value, incident.verification),
-        (incident.incident, IncidentRelation.CLOSED_BY.value, incident.closure),
+        (incident.signal, fdse.IncidentRelation.SIGNALS.value, incident.incident),
+        (incident.incident, fdse.IncidentRelation.DETECTED_BY.value, incident.detection),
+        (incident.incident, fdse.IncidentRelation.TRIAGED_BY.value, incident.triage),
+        (incident.incident, fdse.IncidentRelation.CONTAINED_BY.value, incident.containment),
+        (incident.incident, fdse.IncidentRelation.INVESTIGATED_BY.value, incident.investigation),
+        (incident.incident, fdse.IncidentRelation.REMEDIATED_BY.value, incident.remediation),
+        (incident.incident, fdse.IncidentRelation.VERIFIED_BY.value, incident.verification),
+        (incident.incident, fdse.IncidentRelation.CLOSED_BY.value, incident.closure),
     )
-    resilience = ResilienceSemantics(
+    resilience = fdse.ResilienceSemantics(
         ref("objective", "objective"),
         ref("dependency", "dependency"),
         ref("failure-mode", "failure"),
@@ -115,13 +106,13 @@ def test_spine_incident_and_resilience_are_deterministic() -> None:
         (resilience.recovery_objective, "validated_by", resilience.validation),
     )
 
-    graph = EvidenceSpineGraph()
+    graph = fdse.EvidenceSpineGraph()
     graph.add_spine(chain, metadata(spine_pairs))
     graph.add_incident(incident, metadata(incident_pairs))
     graph.add_resilience(resilience, metadata(resilience_pairs))
     first = graph.snapshot_digest()
 
-    reverse = EvidenceSpineGraph()
+    reverse = fdse.EvidenceSpineGraph()
     reverse.add_resilience(resilience, metadata(resilience_pairs))
     reverse.add_incident(incident, metadata(incident_pairs))
     reverse.add_spine(chain, metadata(spine_pairs))
@@ -131,7 +122,7 @@ def test_spine_incident_and_resilience_are_deterministic() -> None:
 
 def test_lineage_metadata_and_scope_fail_closed() -> None:
     with pytest.raises(ValueError):
-        LineageRecord(
+        fdse.LineageRecord(
             ref("a", "a"),
             "caused_by",
             ref("b", "b"),
@@ -142,10 +133,10 @@ def test_lineage_metadata_and_scope_fail_closed() -> None:
             ref("authority", "auth"),
         )
     with pytest.raises(ValueError):
-        LineageRecord(
+        fdse.LineageRecord(
             ref("a", "a"),
             "caused_by",
-            SemanticRef("b", "b", "other", "repo", "sha"),
+            fdse.SemanticRef("b", "b", "other", "repo", "sha"),
             ref("actor", "actor"),
             NOW,
             "a" * 64,
@@ -153,7 +144,7 @@ def test_lineage_metadata_and_scope_fail_closed() -> None:
             ref("authority", "auth"),
         )
     with pytest.raises(ValueError):
-        LineageRecord(
+        fdse.LineageRecord(
             ref("a", "a"),
             "caused_by",
             ref("b", "b"),
