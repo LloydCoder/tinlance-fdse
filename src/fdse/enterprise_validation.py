@@ -11,7 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum
 
-from .evidence import digest
+from .evidence import digest  # noqa: I001
 
 
 CORE_PHASES = tuple(f"M{index}" for index in range(19))
