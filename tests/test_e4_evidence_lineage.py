@@ -2,6 +2,7 @@ from datetime import UTC, datetime
 
 import pytest
 
+from fdse.engineering_intelligence import SemanticRef
 from fdse.evidence_lineage import (
     EvidenceSpineChain,
     EvidenceSpineGraph,
