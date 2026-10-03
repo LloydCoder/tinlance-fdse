@@ -89,7 +89,6 @@ from .production import (
 )
 from .security_hardening import ControlClass, SecurityControl, redact
 from .transitions import transition_change, transition_finding, transition_plan
-from .workflows import WorkflowInstance, WorkflowState, transition
 from .workflow_runtime import (
     ApprovalGate,
     Clock,
@@ -109,6 +108,7 @@ from .workflow_runtime import (
     WorkflowRuntime,
     WorkflowStateStore,
 )
+from .workflows import WorkflowInstance, WorkflowState, transition
 
 __all__ = [
     "Assessment",
