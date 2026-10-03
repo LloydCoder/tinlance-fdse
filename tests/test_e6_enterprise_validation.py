@@ -10,9 +10,7 @@ from fdse import (
 )
 
 
-def evidence(
-    phase: str, layer: ValidationLayer, status: ValidationStatus
-) -> ValidationEvidence:
+def evidence(phase: str, layer: ValidationLayer, status: ValidationStatus) -> ValidationEvidence:
     return ValidationEvidence(
         phase,
         layer,
@@ -42,9 +40,7 @@ def test_enterprise_validation_fails_closed_on_missing_or_failed_evidence() -> N
     with pytest.raises(ValueError):
         graph.gate()
 
-    graph.add_evidence(
-        evidence("E6", ValidationLayer.PRODUCTION_READINESS, ValidationStatus.FAIL)
-    )
+    graph.add_evidence(evidence("E6", ValidationLayer.PRODUCTION_READINESS, ValidationStatus.FAIL))
     with pytest.raises(ValueError):
         graph.gate()
 
