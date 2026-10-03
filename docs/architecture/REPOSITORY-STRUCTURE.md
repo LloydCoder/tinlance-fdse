@@ -24,6 +24,7 @@ The repository is capability-driven. This map describes the current implementati
 - M18: `src/fdse/ecosystem_runtime.py`
 - E2: `src/fdse/engineering_intelligence.py`
 - E3: `src/fdse/assurance_security_supply_chain.py`
+- E4: `src/fdse/evidence_lineage.py`
 
 The package public API is defined in `src/fdse/__init__.py` and covers the M0–M18 domain contracts. Reference/test doubles that could be mistaken for authority implementations are kept outside the production package.
 
