@@ -199,6 +199,7 @@ See [docs/architecture/REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STR
 | [M16-WORKFLOW-RUNTIME.md](docs/architecture/M16-WORKFLOW-RUNTIME.md) | Workflow runtime semantics |
 | [M17-MULTI-AGENT-RUNTIME.md](docs/architecture/M17-MULTI-AGENT-RUNTIME.md) | Multi-agent runtime semantics |
 | [M18-AGENT-ECOSYSTEM-RUNTIME.md](docs/architecture/M18-AGENT-ECOSYSTEM-RUNTIME.md) | Agent ecosystem runtime semantics |
+| [E2-ENGINEERING-INTELLIGENCE.md](docs/architecture/E2-ENGINEERING-INTELLIGENCE.md) | Canonical engineering intelligence semantics |
 | [BOUNDARY.md](docs/architecture/BOUNDARY.md) | FDSE ↔ Agent Platform authority boundary |
 | [REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STRUCTURE.md) | Current source/documentation map |
 | [AUDIT-2026-10-03.md](docs/architecture/AUDIT-2026-10-03.md) | Latest architecture/reconciliation audit |
@@ -227,7 +228,7 @@ The M0–M18 capability roadmap is complete. Enterprise completion is tracked se
 | Track | Purpose | Status |
 |---|---|---|
 | E1 | Baseline closure and contract integrity | In progress |
-| E2 | Engineering intelligence and cross-system semantics | Planned |
+| E2 | Engineering intelligence and cross-system semantics | Implemented on enterprise branch |
 | E3 | Assurance, agentic security and supply-chain intelligence | Planned |
 | E4 | Evidence spine, lineage, incident and resilience intelligence | Planned |
 | E5 | Production integration and system-of-systems validation | Planned |
@@ -330,7 +331,7 @@ A repository workflow can establish confidence in the FDSE codebase without prov
 
 ## Versioning
 
-The package currently reports version 1.4.1. The changelog records the M15–M18 capability evolution and the M0–M14 baseline.
+The package currently reports version 1.5.0. The changelog records the M15–M18 capability evolution and the M0–M14 baseline.
 
 Phase implementation status is governed by docs/architecture/ROADMAP.md; documentation must not claim external production integration unless the relevant integration has actually been deployed and verified.
 
