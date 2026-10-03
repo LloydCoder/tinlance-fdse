@@ -139,7 +139,7 @@ def test_lineage_metadata_and_scope_fail_closed() -> None:
             ref("provenance", "p"),
             ref("authority", "auth"),
         )
-    with pytest.raises(ValueError):
+    with TestCase().assertRaises(ValueError):
         LineageRecord(
             ref("a", "a"),
             "caused_by",
@@ -150,7 +150,7 @@ def test_lineage_metadata_and_scope_fail_closed() -> None:
             ref("provenance", "p"),
             ref("authority", "auth"),
         )
-    with pytest.raises(ValueError):
+    with TestCase().assertRaises(ValueError):
         LineageRecord(
             ref("a", "a"),
             "caused_by",
