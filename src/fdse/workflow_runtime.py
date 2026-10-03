@@ -194,40 +194,6 @@ class Clock(Protocol):
     def now(self) -> datetime: ...
 
 
-class InMemoryWorkflowStateStore:
-    def __init__(self) -> None:
-        self.runs: dict[str, WorkflowRun] = {}
-        self.checkpoints: dict[str, WorkflowCheckpoint] = {}
-
-    def save(self, run: WorkflowRun, checkpoint: WorkflowCheckpoint) -> None:
-        self.runs[run.run_id] = run
-        self.checkpoints[run.run_id] = checkpoint
-
-    def load(self, run_id: str) -> WorkflowRun | None:
-        return self.runs.get(run_id)
-
-
-class FixedClock:
-    def __init__(self, current: datetime) -> None:
-        self.current = current
-
-    def now(self) -> datetime:
-        return self.current
-
-
-class AllowAllApprovalGate:
-    def allowed(self, run: WorkflowRun, node: WorkflowNode) -> bool:
-        return False if node.kind is NodeKind.APPROVAL else True
-
-
-class NoopPlatformRunMapper:
-    def start(self, run: WorkflowRun) -> str:
-        return f"platform:{run.run_id}"
-
-    def cancel(self, run: WorkflowRun) -> None:
-        return None
-
-
 class WorkflowRuntime:
     """Fail-closed reference runtime with checkpoints after every state mutation."""
 
