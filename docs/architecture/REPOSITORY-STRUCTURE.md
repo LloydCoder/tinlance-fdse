@@ -22,6 +22,7 @@ The repository is capability-driven. This map describes the current implementati
 - M16: `src/fdse/workflow_runtime.py`
 - M17: `src/fdse/multi_agent_runtime.py`
 - M18: `src/fdse/ecosystem_runtime.py`
+- E2: `src/fdse/engineering_intelligence.py`
 
 The package public API is defined in `src/fdse/__init__.py` and covers the M0–M18 domain contracts. Reference/test doubles that could be mistaken for authority implementations are kept outside the production package.
 
