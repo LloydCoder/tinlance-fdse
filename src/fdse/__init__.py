@@ -64,12 +64,6 @@ from .engineering_intelligence import (
     SemanticRef,
     SemanticRelation,
 )
-from .evaluation import (
-    EvaluationCase,
-    EvaluationOutcome,
-    EvaluationResult,
-    EvaluationSuite,
-)
 from .enterprise_validation import (
     ALL_PHASES,
     CORE_PHASES,
@@ -79,6 +73,12 @@ from .enterprise_validation import (
     ValidationEvidence,
     ValidationLayer,
     ValidationStatus,
+)
+from .evaluation import (
+    EvaluationCase,
+    EvaluationOutcome,
+    EvaluationResult,
+    EvaluationSuite,
 )
 from .evidence_lineage import (
     EvidenceSpineChain,
