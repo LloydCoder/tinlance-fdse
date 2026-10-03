@@ -70,16 +70,6 @@ from .evaluation import (
     EvaluationResult,
     EvaluationSuite,
 )
-from .evidence_lineage import (
-    EvidenceSpineChain,
-    EvidenceSpineGraph,
-    IncidentChain,
-    IncidentRelation,
-    LineageRecord,
-    LineageRelation,
-    ResilienceSemantics,
-)
-from .governance import ApprovalStatus, GovernanceBoundary, GovernanceReference
 from .enterprise_validation import (
     ALL_PHASES,
     CORE_PHASES,
@@ -90,6 +80,16 @@ from .enterprise_validation import (
     ValidationLayer,
     ValidationStatus,
 )
+from .evidence_lineage import (
+    EvidenceSpineChain,
+    EvidenceSpineGraph,
+    IncidentChain,
+    IncidentRelation,
+    LineageRecord,
+    LineageRelation,
+    ResilienceSemantics,
+)
+from .governance import ApprovalStatus, GovernanceBoundary, GovernanceReference
 from .integration import (
     IntegrationContract,
     IntegrationDirection,
