@@ -177,7 +177,11 @@ src/fdse/
 ├── product.py              # M11 customer contracts
 ├── security_hardening.py   # M12 hardening/redaction
 ├── production.py           # M13 readiness/idempotency
-└── certification.py        # M14 certification verification
+├── certification.py        # M14 certification verification
+├── trusted_memory.py       # M15 trusted context/memory semantics
+├── workflow_runtime.py     # M16 workflow runtime semantics
+├── multi_agent_runtime.py  # M17 multi-agent runtime semantics
+└── ecosystem_runtime.py    # M18 agent ecosystem semantics
 ~~~
 
 The package public API is exported from [src/fdse/__init__.py](src/fdse/__init__.py).
