@@ -283,9 +283,7 @@ class EvidenceSpineGraph:
         metadata: tuple[LineageRecord, ...],
     ) -> None:
         expected_relations = set(expected)
-        actual_relations = [
-            (record.source, record.relation, record.target) for record in metadata
-        ]
+        actual_relations = [(record.source, record.relation, record.target) for record in metadata]
         if len(metadata) != len(expected_relations) or len(actual_relations) != len(
             set(actual_relations)
         ):
@@ -348,8 +346,6 @@ def _same_scope(refs: tuple[SemanticRef, ...]) -> None:
         raise ValueError("E4 semantics cross engineering scope")
 
 
-def _sha256(value: str):
-    return len(value) == 64 and all(
-        character in "0123456789abcdef" for character in value
-    )
+def _sha256(value: str) -> bool:
+    return len(value) == 64 and all(character in "0123456789abcdef" for character in value)
 
