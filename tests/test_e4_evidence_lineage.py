@@ -2,7 +2,7 @@ from datetime import UTC, datetime
 
 import pytest
 
-from fdse.evidence_lineage import (
+from fdse import (
     EvidenceSpineChain,
     EvidenceSpineGraph,
     IncidentChain,
@@ -10,8 +10,8 @@ from fdse.evidence_lineage import (
     LineageRecord,
     LineageRelation,
     ResilienceSemantics,
+    SemanticRef,
 )
-from fdse.engineering_intelligence import SemanticRef
 
 
 NOW = datetime(2026, 10, 3, tzinfo=UTC)
