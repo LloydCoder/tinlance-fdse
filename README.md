@@ -202,6 +202,7 @@ See [docs/architecture/REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STR
 | [E2-ENGINEERING-INTELLIGENCE.md](docs/architecture/E2-ENGINEERING-INTELLIGENCE.md) | Canonical engineering intelligence semantics |
 | [E3-ASSURANCE-SECURITY-SUPPLY-CHAIN.md](docs/architecture/E3-ASSURANCE-SECURITY-SUPPLY-CHAIN.md) | Assurance, agentic security, and supply-chain semantics |
 | [E4-EVIDENCE-LINEAGE-INCIDENT-RESILIENCE.md](docs/architecture/E4-EVIDENCE-LINEAGE-INCIDENT-RESILIENCE.md) | Evidence spine, causal lineage, incident, and resilience semantics |
+| [E5-PRODUCTION-INTEGRATION.md](docs/architecture/E5-PRODUCTION-INTEGRATION.md) | Versioned production-integration and system-of-systems validation contracts |
 | [BOUNDARY.md](docs/architecture/BOUNDARY.md) | FDSE ↔ Agent Platform authority boundary |
 | [REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STRUCTURE.md) | Current source/documentation map |
 | [AUDIT-2026-10-03.md](docs/architecture/AUDIT-2026-10-03.md) | Latest architecture/reconciliation audit |
@@ -233,7 +234,7 @@ The M0–M18 capability roadmap is complete. Enterprise completion is tracked se
 | E2 | Engineering intelligence and cross-system semantics | Implemented |
 | E3 | Assurance, agentic security and supply-chain intelligence | Implemented |
 | E4 | Evidence spine, lineage, incident and resilience intelligence | Implemented |
-| E5 | Production integration and system-of-systems validation | Planned |
+| E5 | Production integration and system-of-systems validation | Contract/validation layer implemented; external production evidence required |
 | E6 | Enterprise validation, certification and GA | Planned |
 
 These tracks extend verification and integration; they do not authorize FDSE to absorb Agent Platform authority or external infrastructure responsibilities.
@@ -333,7 +334,7 @@ A repository workflow can establish confidence in the FDSE codebase without prov
 
 ## Versioning
 
-The package currently reports version 1.7.0. The changelog records the M15–M18 capability evolution and the M0–M14 baseline.
+The package currently reports version 1.8.0. The changelog records the M15–M18 capability evolution and the M0–M14 baseline.
 
 Phase implementation status is governed by docs/architecture/ROADMAP.md; documentation must not claim external production integration unless the relevant integration has actually been deployed and verified.
 
