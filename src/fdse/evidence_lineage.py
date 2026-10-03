@@ -197,33 +197,78 @@ class EvidenceSpineGraph:
         )
         for ref in refs:
             self.add_ref(ref)
-        if metadata:
-            if any(record.source not in refs or record.target not in refs for record in metadata):
-                raise ValueError("spine lineage record references an unknown spine node")
-            for record in metadata:
-                self.add_lineage(record)
+        self._add_expected(
+            tuple(zip(refs, refs[1:], strict=True)),
+            metadata,
+        )
 
-    def add_incident(self, chain: IncidentChain) -> None:
-        for source, relation, target in (
-            (chain.signal, IncidentRelation.SIGNALS, chain.incident),
-            (chain.incident, IncidentRelation.DETECTED_BY, chain.detection),
-            (chain.incident, IncidentRelation.TRIAGED_BY, chain.triage),
-            (chain.incident, IncidentRelation.CONTAINED_BY, chain.containment),
-            (chain.incident, IncidentRelation.INVESTIGATED_BY, chain.investigation),
-            (chain.incident, IncidentRelation.REMEDIATED_BY, chain.remediation),
-            (chain.incident, IncidentRelation.VERIFIED_BY, chain.verification),
-            (chain.incident, IncidentRelation.CLOSED_BY, chain.closure),
-        ):
-            self._add_simple(source, relation.value, target)
+    def add_incident(
+        self,
+        chain: IncidentChain,
+        metadata: tuple[LineageRecord, ...],
+    ) -> None:
+        refs = (
+            chain.signal,
+            chain.incident,
+            chain.detection,
+            chain.triage,
+            chain.containment,
+            chain.investigation,
+            chain.remediation,
+            chain.verification,
+            chain.closure,
+        )
+        for ref in refs:
+            self.add_ref(ref)
+        self._add_expected(
+            (
+                (chain.signal, chain.incident),
+                (chain.incident, chain.detection),
+                (chain.incident, chain.triage),
+                (chain.incident, chain.containment),
+                (chain.incident, chain.investigation),
+                (chain.incident, chain.remediation),
+                (chain.incident, chain.verification),
+                (chain.incident, chain.closure),
+            ),
+            metadata,
+        )
 
-    def add_resilience(self, semantics: ResilienceSemantics) -> None:
-        for source, relation, target in (
-            (semantics.objective, "depends_on", semantics.dependency),
-            (semantics.objective, "fails_as", semantics.failure_mode),
-            (semantics.objective, "recovers_by", semantics.recovery_objective),
-            (semantics.recovery_objective, "validated_by", semantics.validation),
-        ):
-            self._add_simple(source, relation, target)
+    def add_resilience(
+        self,
+        semantics: ResilienceSemantics,
+        metadata: tuple[LineageRecord, ...],
+    ) -> None:
+        refs = (
+            semantics.objective,
+            semantics.dependency,
+            semantics.failure_mode,
+            semantics.recovery_objective,
+            semantics.validation,
+        )
+        for ref in refs:
+            self.add_ref(ref)
+        self._add_expected(
+            (
+                (semantics.objective, semantics.dependency),
+                (semantics.objective, semantics.failure_mode),
+                (semantics.objective, semantics.recovery_objective),
+                (semantics.recovery_objective, semantics.validation),
+            ),
+            metadata,
+        )
+
+    def _add_expected(
+        self,
+        expected: tuple[tuple[SemanticRef, SemanticRef], ...],
+        metadata: tuple[LineageRecord, ...],
+    ) -> None:
+        expected_pairs = {(source, target) for source, target in expected}
+        actual_pairs = {(record.source, record.target) for record in metadata}
+        if actual_pairs != expected_pairs:
+            raise ValueError("lineage metadata must cover every required relationship")
+        for record in metadata:
+            self.add_lineage(record)
 
     def snapshot_digest(self) -> str:
         refs = sorted(
@@ -269,49 +314,6 @@ class EvidenceSpineGraph:
             )
         )
 
-    def _add_simple(
-        self,
-        source: SemanticRef,
-        relation: str,
-        target: SemanticRef,
-    ) -> None:
-        _same_scope((source, target))
-        self.add_ref(source)
-        self.add_ref(target)
-        actor = SemanticRef(
-            "system-actor",
-            "semantic-runtime",
-            source.tenant_id,
-            source.repository_id,
-            source.revision,
-        )
-        provenance = SemanticRef(
-            "semantic-provenance",
-            f"{source.identifier}:{target.identifier}",
-            source.tenant_id,
-            source.repository_id,
-            source.revision,
-        )
-        authority = SemanticRef(
-            "authority-reference",
-            "external-authority",
-            source.tenant_id,
-            source.repository_id,
-            source.revision,
-        )
-        self.add_lineage(
-            LineageRecord(
-                source,
-                relation,
-                target,
-                actor,
-                _epoch(),
-                "0" * 64,
-                provenance,
-                authority,
-            )
-        )
-
 
 def _same_scope(refs: tuple[SemanticRef, ...]) -> None:
     if not refs:
@@ -321,11 +323,6 @@ def _same_scope(refs: tuple[SemanticRef, ...]) -> None:
         raise ValueError("E4 semantics cross engineering scope")
 
 
-def _sha256(value: str) -> bool:
+def _sha256(value: str):
     return len(value) == 64 and all(character in "0123456789abcdef" for character in value)
 
-
-def _epoch() -> datetime:
-    from datetime import UTC
-
-    return datetime.now(UTC)
