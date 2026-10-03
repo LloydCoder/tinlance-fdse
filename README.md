@@ -197,7 +197,7 @@ See [docs/architecture/REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STR
 | [M18-AGENT-ECOSYSTEM-RUNTIME.md](docs/architecture/M18-AGENT-ECOSYSTEM-RUNTIME.md) | Agent ecosystem runtime semantics |
 | [BOUNDARY.md](docs/architecture/BOUNDARY.md) | FDSE ↔ Agent Platform authority boundary |
 | [REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STRUCTURE.md) | Current source/documentation map |
-| [AUDIT-2026-09-28.md](docs/architecture/AUDIT-2026-09-28.md) | Latest architecture/reconciliation audit |
+| [AUDIT-2026-10-03.md](docs/architecture/AUDIT-2026-10-03.md) | Latest architecture/reconciliation audit |
 | [M1-CORE-DOMAIN.md](docs/architecture/M1-CORE-DOMAIN.md) | Core engineering domain |
 | [M2-INTAKE.md](docs/architecture/M2-INTAKE.md) | Trusted intake boundary |
 | [M3-CONTEXT.md](docs/architecture/M3-CONTEXT.md) | Deterministic engineering context |
@@ -215,6 +215,21 @@ See [docs/architecture/REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STR
 | [SELF-HOSTED-RUNNER.md](docs/operations/SELF-HOSTED-RUNNER.md) | Historical runner decommissioning guidance |
 
 ---
+
+## Enterprise closure track
+
+The M0–M18 capability roadmap is complete. Enterprise completion is tracked separately as E1–E6 so that the domain roadmap is not extended with an M19:
+
+| Track | Purpose | Status |
+|---|---|---|
+| E1 | Baseline closure and contract integrity | In progress |
+| E2 | Engineering intelligence and cross-system semantics | Planned |
+| E3 | Assurance, agentic security and supply-chain intelligence | Planned |
+| E4 | Evidence spine, lineage, incident and resilience intelligence | Planned |
+| E5 | Production integration and system-of-systems validation | Planned |
+| E6 | Enterprise validation, certification and GA | Planned |
+
+These tracks extend verification and integration; they do not authorize FDSE to absorb Agent Platform authority or external infrastructure responsibilities.
 
 ## Security posture
 
@@ -311,7 +326,7 @@ A repository workflow can establish confidence in the FDSE codebase without prov
 
 ## Versioning
 
-The package currently reports version 1.4.0. The changelog records the M15–M18 capability evolution and the M0–M14 baseline.
+The package currently reports version 1.4.1. The changelog records the M15–M18 capability evolution and the M0–M14 baseline.
 
 Phase implementation status is governed by docs/architecture/ROADMAP.md; documentation must not claim external production integration unless the relevant integration has actually been deployed and verified.
 
