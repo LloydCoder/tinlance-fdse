@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.7.0 — E4 Evidence Spine, Lineage, Incident & Resilience
+
+- Added an end-to-end evidence spine semantic chain.
+- Added mandatory lineage metadata for actor/agent, timestamp, payload digest, provenance, authority, and causal relationship.
+- Added typed incident and resilience semantics.
+- Added fail-closed lineage coverage, scope, timestamp, digest, and self-reference invariants.
+- Preserved external ownership of incident execution, evidence storage, approvals, certification authority, and operational recovery.
+
+
 ## 1.6.0 — E3 Assurance, Agentic Security & Supply-Chain Intelligence
 
 - Added typed assurance chains and configuration-driven framework mappings.
