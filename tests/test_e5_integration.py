@@ -23,7 +23,9 @@ def contract(identifier: str = "fdse-agent-platform") -> IntegrationContract:
     )
 
 
-def evidence(status: IntegrationStatus = IntegrationStatus.VERIFIED) -> IntegrationEvidence:
+def evidence(
+    status: IntegrationStatus = IntegrationStatus.VERIFIED,
+) -> IntegrationEvidence:
     return IntegrationEvidence(
         "fdse-agent-platform",
         status,
