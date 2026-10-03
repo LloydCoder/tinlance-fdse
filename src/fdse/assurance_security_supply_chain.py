@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum
 
-from .engineering_intelligence import IntelligenceRelation, SemanticRef
+from .engineering_intelligence import SemanticRef
 from .evidence import digest
 
 
