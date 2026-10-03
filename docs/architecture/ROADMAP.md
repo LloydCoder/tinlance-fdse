@@ -88,7 +88,7 @@ The core capability roadmap ends at M18. Enterprise completion is tracked separa
 | Track | Scope |
 |---|---|
 | E1 | Baseline closure: package/runtime version, public API, helper boundaries, tests, packaging, provenance, and documentation reconciliation |
-| E2 | Engineering intelligence and canonical cross-system risk, policy, change, and operational semantics |
+| E2 | Engineering intelligence and canonical cross-system risk, policy, change, and operational semantics | Implemented on enterprise branch |
 | E3 | Assurance, agentic-security semantics, framework mappings, and software supply-chain intelligence |
 | E4 | Evidence spine, causal lineage, incident semantics, and resilience intelligence |
 | E5 | Production integration across FDSE, FDE Mastery, Agent Platform, Tinlance, providers, CI/CD, registries, provenance, deployment, observability, and customer systems |
