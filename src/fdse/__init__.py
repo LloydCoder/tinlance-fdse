@@ -15,18 +15,6 @@ from .context import (
     ContextSource,
     ContextStore,
 )
-from .ecosystem_runtime import (
-    CapabilityGrant,
-    DependencyConstraint,
-    EcosystemRuntime,
-    ExtensionKind,
-    ExtensionManifest,
-    ExtensionProvenance,
-    ExtensionRecord,
-    ExtensionState,
-    SignatureVerifier,
-    Version,
-)
 from .domain import (
     Assessment,
     ChangeSet,
@@ -42,6 +30,18 @@ from .domain import (
     RepositoryRef,
     VerificationResult,
     VerificationStatus,
+)
+from .ecosystem_runtime import (
+    CapabilityGrant,
+    DependencyConstraint,
+    EcosystemRuntime,
+    ExtensionKind,
+    ExtensionManifest,
+    ExtensionProvenance,
+    ExtensionRecord,
+    ExtensionState,
+    SignatureVerifier,
+    Version,
 )
 from .evaluation import (
     EvaluationCase,
