@@ -70,6 +70,15 @@ from .evaluation import (
     EvaluationResult,
     EvaluationSuite,
 )
+from .evidence_lineage import (
+    EvidenceSpineChain,
+    EvidenceSpineGraph,
+    IncidentChain,
+    IncidentRelation,
+    LineageRecord,
+    LineageRelation,
+    ResilienceSemantics,
+)
 from .governance import ApprovalStatus, GovernanceBoundary, GovernanceReference
 from .intake import (
     IntakeRecord,
@@ -187,6 +196,13 @@ __all__ = [
     "FrameworkMapping",
     "FrameworkDefinition",
     "SupplyChainChain",
+    "LineageRelation",
+    "IncidentRelation",
+    "LineageRecord",
+    "EvidenceSpineChain",
+    "IncidentChain",
+    "ResilienceSemantics",
+    "EvidenceSpineGraph",
     "AssuranceSecurityGraph",
     "ApprovalStatus",
     "GovernanceBoundary",
@@ -253,4 +269,4 @@ __all__ = [
     "__version__",
 ]
 
-__version__ = "1.6.0"
+__version__ = "1.7.0"
