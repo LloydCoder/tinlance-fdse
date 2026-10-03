@@ -64,6 +64,12 @@ from .engineering_intelligence import (
     SemanticRef,
     SemanticRelation,
 )
+from .evaluation import (
+    EvaluationCase,
+    EvaluationOutcome,
+    EvaluationResult,
+    EvaluationSuite,
+)
 from .evidence_lineage import (
     EvidenceSpineChain,
     EvidenceSpineGraph,
@@ -72,12 +78,6 @@ from .evidence_lineage import (
     LineageRecord,
     LineageRelation,
     ResilienceSemantics,
-)
-from .evaluation import (
-    EvaluationCase,
-    EvaluationOutcome,
-    EvaluationResult,
-    EvaluationSuite,
 )
 from .governance import ApprovalStatus, GovernanceBoundary, GovernanceReference
 from .intake import (
