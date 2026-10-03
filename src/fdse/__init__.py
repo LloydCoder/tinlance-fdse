@@ -43,6 +43,16 @@ from .ecosystem_runtime import (
     SignatureVerifier,
     Version,
 )
+from .engineering_intelligence import (
+    ChangeChain,
+    EngineeringIntelligenceGraph,
+    IntelligenceRelation,
+    OperationalSemantics,
+    PolicyChain,
+    RiskChain,
+    SemanticRef,
+    SemanticRelation,
+)
 from .evaluation import (
     EvaluationCase,
     EvaluationOutcome,
@@ -150,6 +160,14 @@ __all__ = [
     "EvaluationOutcome",
     "EvaluationResult",
     "EvaluationSuite",
+    "IntelligenceRelation",
+    "SemanticRef",
+    "SemanticRelation",
+    "RiskChain",
+    "PolicyChain",
+    "ChangeChain",
+    "OperationalSemantics",
+    "EngineeringIntelligenceGraph",
     "ApprovalStatus",
     "GovernanceBoundary",
     "GovernanceReference",
