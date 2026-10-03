@@ -92,9 +92,9 @@ The core capability roadmap ends at M18. Enterprise completion is tracked separa
 | E3 | Assurance, agentic-security semantics, framework mappings, and software supply-chain intelligence |
 | E4 | Evidence spine, causal lineage, incident semantics, and resilience intelligence | Implemented on enterprise branch |
 | E5 | Production integration across FDSE, FDE Mastery, Agent Platform, Tinlance, providers, CI/CD, registries, provenance, deployment, observability, and customer systems | Contract/validation layer implemented; external production evidence remains required |
-| E6 | Cross-repository, security, adversarial, performance, recovery, tenant-isolation, migration, disaster-recovery, documentation, compatibility, CI/CD, and release certification gates |
+| E6 | Cross-repository, security, adversarial, performance, recovery, tenant-isolation, migration, disaster-recovery, documentation, compatibility, CI/CD, and release certification gates | Validation/certification contract implemented; external GA evidence remains required |
 
-An enterprise track is complete only when its repository changes, contracts, tests, documentation, and applicable external integration evidence satisfy its definition of done. E1–E4 are implemented at the FDSE semantic/contract level. E5 provides the versioned system-of-systems contract and validation substrate; actual production evidence remains an external gate.
+An enterprise track is complete only when its repository changes, contracts, tests, documentation, and applicable external integration evidence satisfy its definition of done. E1–E4 are implemented at the FDSE semantic/contract level. E5 provides the versioned system-of-systems contract and validation substrate; actual production evidence remains an external gate. E6 provides the deterministic enterprise validation/certification matrix; GA remains fail-closed until external production evidence is supplied.
 
 ## Security references
 

@@ -80,6 +80,16 @@ from .evidence_lineage import (
     ResilienceSemantics,
 )
 from .governance import ApprovalStatus, GovernanceBoundary, GovernanceReference
+from .enterprise_validation import (
+    ALL_PHASES,
+    CORE_PHASES,
+    ENTERPRISE_PHASES,
+    EnterpriseValidationGraph,
+    EnterpriseValidationPlan,
+    ValidationEvidence,
+    ValidationLayer,
+    ValidationStatus,
+)
 from .integration import (
     IntegrationContract,
     IntegrationDirection,
@@ -211,6 +221,14 @@ __all__ = [
     "IncidentChain",
     "ResilienceSemantics",
     "EvidenceSpineGraph",
+    "ALL_PHASES",
+    "CORE_PHASES",
+    "ENTERPRISE_PHASES",
+    "EnterpriseValidationGraph",
+    "EnterpriseValidationPlan",
+    "ValidationEvidence",
+    "ValidationLayer",
+    "ValidationStatus",
     "IntegrationContract",
     "IntegrationDirection",
     "IntegrationEvidence",
@@ -283,4 +301,4 @@ __all__ = [
     "__version__",
 ]
 
-__version__ = "1.8.0"
+__version__ = "1.9.0"

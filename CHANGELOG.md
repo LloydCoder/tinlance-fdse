@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.0 — E6 Enterprise Validation, Certification & GA
+
+- Added the complete 28-layer enterprise validation taxonomy.
+- Added exact M0–M18 and E1–E6 phase coverage requirements.
+- Added fail-closed validation evidence, deterministic certification digests, and GA gate semantics.
+- Kept external production health, customer readiness, and deployment authority outside FDSE.
+
+# Changelog
+
 ## 1.8.0 — E5 Production Integration & System-of-Systems Validation
 
 - Added versioned cross-system integration contracts covering FDSE, FDE Mastery, Agent Platform, Tinlance, providers, CI/CD, provenance, deployment, observability, and customer environments.
@@ -97,4 +106,5 @@
 ## 0.1.0 — M0
 
 - Established the FDSE domain package, configuration/path validation, approval-gated service boundary, documentation checks, and CI foundation.
+
 
