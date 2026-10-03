@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.0 — E2 Engineering Intelligence & Cross-System Semantics
+
+- Added canonical risk, policy, change, and operational semantic chains.
+- Added tenant/repository/revision-scoped semantic references and deterministic graph serialization.
+- Added fail-closed semantic collision, scope, and self-reference invariants.
+- Added a cross-system engineering-intelligence contract without duplicating FDE Mastery execution or Agent Platform authority.
+
+
 ## 1.4.1 — E1 Baseline Closure
 
 - Reconciled distribution/runtime version to the M18 release line and added a version invariant.
