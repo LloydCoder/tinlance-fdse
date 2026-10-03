@@ -181,13 +181,17 @@ src/fdse/
 ├── trusted_memory.py       # M15 trusted context/memory semantics
 ├── workflow_runtime.py     # M16 workflow runtime semantics
 ├── multi_agent_runtime.py  # M17 multi-agent runtime semantics
-└── ecosystem_runtime.py    # M18 agent ecosystem semantics
+├── ecosystem_runtime.py    # M18 agent ecosystem semantics
+├── engineering_intelligence.py # E2 engineering intelligence
+├── assurance_security_supply_chain.py # E3 assurance/security/supply chain
+├── evidence_lineage.py     # E4 evidence/lineage/incident/resilience
+├── integration.py          # E5 production integration contracts
+└── enterprise_validation.py # E6 validation/certification/GA gates
 ~~~
 
-The package public API is exported from [src/fdse/__init__.py](src/fdse/__init__.py), including the E2–E4 enterprise semantic contracts.
+The package public API is exported from [src/fdse/__init__.py](src/fdse/__init__.py), including the M15–M18 and E2–E6 enterprise contracts.
 
 See [docs/architecture/REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STRUCTURE.md) for the authoritative structure map.
-
 ---
 
 ## Documentation
