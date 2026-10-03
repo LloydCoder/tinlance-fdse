@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from unittest import TestCase
 
 from fdse import (
