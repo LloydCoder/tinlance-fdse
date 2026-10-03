@@ -198,7 +198,10 @@ class EvidenceSpineGraph:
         for ref in refs:
             self.add_ref(ref)
         self._add_expected(
-            tuple(zip(refs, refs[1:], strict=True)),
+            tuple(
+                (source, LineageRelation.FEEDS.value, target)
+                for source, target in zip(refs, refs[1:], strict=True)
+            ),
             metadata,
         )
 
@@ -222,14 +225,14 @@ class EvidenceSpineGraph:
             self.add_ref(ref)
         self._add_expected(
             (
-                (chain.signal, chain.incident),
-                (chain.incident, chain.detection),
-                (chain.incident, chain.triage),
-                (chain.incident, chain.containment),
-                (chain.incident, chain.investigation),
-                (chain.incident, chain.remediation),
-                (chain.incident, chain.verification),
-                (chain.incident, chain.closure),
+                (chain.signal, IncidentRelation.SIGNALS.value, chain.incident),
+                (chain.incident, IncidentRelation.DETECTED_BY.value, chain.detection),
+                (chain.incident, IncidentRelation.TRIAGED_BY.value, chain.triage),
+                (chain.incident, IncidentRelation.CONTAINED_BY.value, chain.containment),
+                (chain.incident, IncidentRelation.INVESTIGATED_BY.value, chain.investigation),
+                (chain.incident, IncidentRelation.REMEDIATED_BY.value, chain.remediation),
+                (chain.incident, IncidentRelation.VERIFIED_BY.value, chain.verification),
+                (chain.incident, IncidentRelation.CLOSED_BY.value, chain.closure),
             ),
             metadata,
         )
@@ -250,22 +253,22 @@ class EvidenceSpineGraph:
             self.add_ref(ref)
         self._add_expected(
             (
-                (semantics.objective, semantics.dependency),
-                (semantics.objective, semantics.failure_mode),
-                (semantics.objective, semantics.recovery_objective),
-                (semantics.recovery_objective, semantics.validation),
+                (semantics.objective, "depends_on", semantics.dependency),
+                (semantics.objective, "fails_as", semantics.failure_mode),
+                (semantics.objective, "recovers_by", semantics.recovery_objective),
+                (semantics.recovery_objective, "validated_by", semantics.validation),
             ),
             metadata,
         )
 
     def _add_expected(
         self,
-        expected: tuple[tuple[SemanticRef, SemanticRef], ...],
+        expected: tuple[tuple[SemanticRef, str, SemanticRef], ...],
         metadata: tuple[LineageRecord, ...],
     ) -> None:
-        expected_pairs = {(source, target) for source, target in expected}
-        actual_pairs = {(record.source, record.target) for record in metadata}
-        if actual_pairs != expected_pairs:
+        expected_relations = set(expected)
+        actual_relations = {(record.source, record.relation, record.target) for record in metadata}
+        if actual_relations != expected_relations:
             raise ValueError("lineage metadata must cover every required relationship")
         for record in metadata:
             self.add_lineage(record)
