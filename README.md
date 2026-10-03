@@ -184,7 +184,7 @@ src/fdse/
 └── ecosystem_runtime.py    # M18 agent ecosystem semantics
 ~~~
 
-The package public API is exported from [src/fdse/__init__.py](src/fdse/__init__.py).
+The package public API is exported from [src/fdse/__init__.py](src/fdse/__init__.py), including the E2–E4 enterprise semantic contracts.
 
 See [docs/architecture/REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STRUCTURE.md) for the authoritative structure map.
 
@@ -200,6 +200,8 @@ See [docs/architecture/REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STR
 | [M17-MULTI-AGENT-RUNTIME.md](docs/architecture/M17-MULTI-AGENT-RUNTIME.md) | Multi-agent runtime semantics |
 | [M18-AGENT-ECOSYSTEM-RUNTIME.md](docs/architecture/M18-AGENT-ECOSYSTEM-RUNTIME.md) | Agent ecosystem runtime semantics |
 | [E2-ENGINEERING-INTELLIGENCE.md](docs/architecture/E2-ENGINEERING-INTELLIGENCE.md) | Canonical engineering intelligence semantics |
+| [E3-ASSURANCE-SECURITY-SUPPLY-CHAIN.md](docs/architecture/E3-ASSURANCE-SECURITY-SUPPLY-CHAIN.md) | Assurance, agentic security, and supply-chain semantics |
+| [E4-EVIDENCE-LINEAGE-INCIDENT-RESILIENCE.md](docs/architecture/E4-EVIDENCE-LINEAGE-INCIDENT-RESILIENCE.md) | Evidence spine, causal lineage, incident, and resilience semantics |
 | [BOUNDARY.md](docs/architecture/BOUNDARY.md) | FDSE ↔ Agent Platform authority boundary |
 | [REPOSITORY-STRUCTURE.md](docs/architecture/REPOSITORY-STRUCTURE.md) | Current source/documentation map |
 | [AUDIT-2026-10-03.md](docs/architecture/AUDIT-2026-10-03.md) | Latest architecture/reconciliation audit |
@@ -227,10 +229,10 @@ The M0–M18 capability roadmap is complete. Enterprise completion is tracked se
 
 | Track | Purpose | Status |
 |---|---|---|
-| E1 | Baseline closure and contract integrity | In progress |
-| E2 | Engineering intelligence and cross-system semantics | Implemented on enterprise branch |
-| E3 | Assurance, agentic security and supply-chain intelligence | Implemented on enterprise branch |
-| E4 | Evidence spine, lineage, incident and resilience intelligence | Implemented on enterprise branch |
+| E1 | Baseline closure and contract integrity | Implemented |
+| E2 | Engineering intelligence and cross-system semantics | Implemented |
+| E3 | Assurance, agentic security and supply-chain intelligence | Implemented |
+| E4 | Evidence spine, lineage, incident and resilience intelligence | Implemented |
 | E5 | Production integration and system-of-systems validation | Planned |
 | E6 | Enterprise validation, certification and GA | Planned |
 
@@ -253,7 +255,7 @@ FDSE uses:
 
 GitHub documents least-privilege workflow permissions and full-SHA action pinning as security practices for GitHub Actions. Artifact attestations provide signed build provenance that can be independently verified; an attestation is provenance evidence, not a guarantee that an artifact is secure.
 
-The repository's application-security framing references OWASP ASVS 5.0.0 and NIST SP 800-218 (SSDF 1.1). NIST's published SSDF 1.1 is the finalized baseline used here.
+The repository's application-security framing references OWASP ASVS 5.0.0, NIST SP 800-218 (SSDF 1.1), OWASP Top 10 for Agentic Applications 2026, and SLSA v1.2. These references inform FDSE semantics; they do not constitute external certification or deployment evidence.
 
 ---
 
