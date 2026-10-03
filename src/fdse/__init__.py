@@ -1,6 +1,17 @@
 """Tinlance FDSE engineering-domain layer."""
 
 from .agents import SpecialistRegistry, SpecialistRole, SpecialistSpec
+from .assurance_security_supply_chain import (
+    AgenticAssetKind,
+    AgenticSecurityRelation,
+    AgenticSecurityRisk,
+    AssuranceChain,
+    AssuranceRelation,
+    AssuranceSecurityGraph,
+    FrameworkDefinition,
+    FrameworkMapping,
+    SupplyChainChain,
+)
 from .certification import (
     CertificationBundle,
     CertificationStatus,
@@ -42,17 +53,6 @@ from .ecosystem_runtime import (
     ExtensionState,
     SignatureVerifier,
     Version,
-)
-from .assurance_security_supply_chain import (
-    AgenticAssetKind,
-    AgenticSecurityRelation,
-    AgenticSecurityRisk,
-    AssuranceChain,
-    AssuranceRelation,
-    AssuranceSecurityGraph,
-    FrameworkDefinition,
-    FrameworkMapping,
-    SupplyChainChain,
 )
 from .engineering_intelligence import (
     ChangeChain,
