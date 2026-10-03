@@ -80,6 +80,14 @@ from .evidence_lineage import (
     ResilienceSemantics,
 )
 from .governance import ApprovalStatus, GovernanceBoundary, GovernanceReference
+from .integration import (
+    IntegrationContract,
+    IntegrationDirection,
+    IntegrationEvidence,
+    IntegrationStatus,
+    IntegrationSystem,
+    SystemOfSystemsGraph,
+)
 from .intake import (
     IntakeRecord,
     IntakeRegistry,
@@ -203,6 +211,12 @@ __all__ = [
     "IncidentChain",
     "ResilienceSemantics",
     "EvidenceSpineGraph",
+    "IntegrationContract",
+    "IntegrationDirection",
+    "IntegrationEvidence",
+    "IntegrationStatus",
+    "IntegrationSystem",
+    "SystemOfSystemsGraph",
     "AssuranceSecurityGraph",
     "ApprovalStatus",
     "GovernanceBoundary",
@@ -269,4 +283,4 @@ __all__ = [
     "__version__",
 ]
 
-__version__ = "1.7.0"
+__version__ = "1.8.0"

@@ -25,6 +25,7 @@ The repository is capability-driven. This map describes the current implementati
 - E2: `src/fdse/engineering_intelligence.py`
 - E3: `src/fdse/assurance_security_supply_chain.py`
 - E4: `src/fdse/evidence_lineage.py`
+- E5: `src/fdse/integration.py`
 
 Enterprise documentation maps E1–E4 to their corresponding architecture, audit, and contract documents; E5–E6 remain integration/validation gates.
 The package public API is defined in `src/fdse/__init__.py` and covers the M0–M18 domain contracts. Reference/test doubles that could be mistaken for authority implementations are kept outside the production package.

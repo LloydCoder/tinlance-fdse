@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.8.0 — E5 Production Integration & System-of-Systems Validation
+
+- Added versioned cross-system integration contracts covering FDSE, FDE Mastery, Agent Platform, Tinlance, providers, CI/CD, provenance, deployment, observability, and customer environments.
+- Added deterministic integration/evidence graph semantics and fail-closed verification requirements.
+- Kept external execution, authentication, approval, deployment, storage, and observability authority outside FDSE.
+- Added E5 contract and verification regression coverage.
+
+# Changelog
+
 ## 1.7.0 — E4 Evidence Spine, Lineage, Incident & Resilience
 
 - Added an end-to-end evidence spine semantic chain.
@@ -88,3 +97,4 @@
 ## 0.1.0 — M0
 
 - Established the FDSE domain package, configuration/path validation, approval-gated service boundary, documentation checks, and CI foundation.
+
