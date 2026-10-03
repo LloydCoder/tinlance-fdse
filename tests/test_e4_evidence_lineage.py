@@ -161,3 +161,32 @@ def test_lineage_metadata_and_scope_fail_closed() -> None:
             ref("provenance", "p"),
             ref("authority", "auth"),
         )
+
+
+def test_duplicate_lineage_metadata_fails_closed() -> None:
+    source = ref("source", "source")
+    target = ref("target", "target")
+    pair = ((source, LineageRelation.FEEDS.value, target),)
+    graph = EvidenceSpineGraph()
+    with TestCase().assertRaises(ValueError):
+        graph.add_spine(
+            EvidenceSpineChain(
+                source,
+                target,
+                ref("plan", "plan"),
+                ref("risk", "risk"),
+                ref("policy", "policy"),
+                ref("agent-workflow", "agent"),
+                ref("change", "change"),
+                ref("execution", "execution"),
+                ref("observation", "observation"),
+                ref("evidence", "evidence"),
+                ref("finding", "finding"),
+                ref("evaluation", "evaluation"),
+                ref("assurance", "assurance"),
+                ref("certification", "certification"),
+                ref("release", "release"),
+                ref("incident-feedback", "feedback"),
+            ),
+            metadata(pair + pair),
+        )
