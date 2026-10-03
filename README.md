@@ -229,7 +229,7 @@ The M0–M18 capability roadmap is complete. Enterprise completion is tracked se
 |---|---|---|
 | E1 | Baseline closure and contract integrity | In progress |
 | E2 | Engineering intelligence and cross-system semantics | Implemented on enterprise branch |
-| E3 | Assurance, agentic security and supply-chain intelligence | Planned |
+| E3 | Assurance, agentic security and supply-chain intelligence | Implemented on enterprise branch |
 | E4 | Evidence spine, lineage, incident and resilience intelligence | Planned |
 | E5 | Production integration and system-of-systems validation | Planned |
 | E6 | Enterprise validation, certification and GA | Planned |
@@ -331,7 +331,7 @@ A repository workflow can establish confidence in the FDSE codebase without prov
 
 ## Versioning
 
-The package currently reports version 1.5.0. The changelog records the M15–M18 capability evolution and the M0–M14 baseline.
+The package currently reports version 1.6.0. The changelog records the M15–M18 capability evolution and the M0–M14 baseline.
 
 Phase implementation status is governed by docs/architecture/ROADMAP.md; documentation must not claim external production integration unless the relevant integration has actually been deployed and verified.
 
