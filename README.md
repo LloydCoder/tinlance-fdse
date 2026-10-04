@@ -347,7 +347,7 @@ Phase implementation status is governed by docs/architecture/ROADMAP.md; documen
 
 ## License
 
-Tinlance FDSE is proprietary software owned by Tinlance Limited. See [LICENSE](LICENSE) for the governing terms.
+Tinlance FDSE is released under the Apache License 2.0. See [LICENSE](LICENSE) for the governing terms.
 
 ---
 
