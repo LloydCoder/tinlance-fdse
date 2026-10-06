@@ -2,7 +2,22 @@
 
 **A Python domain layer for governed, evidence-driven forward-deployed software engineering.**
 
-[![CI](https://github.com/LloydCoder/tinlance-fdse/actions/workflows/ci.yml/badge.svg)](https://github.com/LloydCoder/tinlance-fdse/actions/workflows/ci.yml) [![Python](https://img.shields.io/badge/python-%3E%3D3.12-blue)](https://www.python.org/) [![License](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE) [![Version](https://img.shields.io/badge/version-1.9.0-informational)](CHANGELOG.md)
+[![CI](https://github.com/LloydCoder/tinlance-fdse/actions/workflows/ci.yml/badge.svg)](https://github.com/LloydCoder/tinlance-fdse/actions/workflows/ci.yml) [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
+
+~~~mermaid
+flowchart TD
+    A[Customer engineering work] --> B[Tinlance FDSE]
+    B --> B1[Intake + scope]
+    B --> B2[Context + planning]
+    B --> B3[Evidence + evaluation]
+    B --> B4[Workflow + certification]
+    B --> C[Versioned governed intent]
+    C --> D[Tinlance Agent Platform]
+    D --> D1[Identity + authorization]
+    D --> D2[Approvals + policy]
+    D --> D3[Runtime + sandbox]
+    D --> D4[Tools + budgets + audit]
+~~~
 
 > [!NOTE]
 > FDSE is the engineering-domain layer, not the generic agent authority layer. Identity, authorization, approvals, sandboxing, model access, budgets, and runtime authority belong to the Tinlance Agent Platform.
