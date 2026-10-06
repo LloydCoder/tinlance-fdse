@@ -2,57 +2,81 @@
 
 ## Scope
 
-FDSE is security-sensitive infrastructure. Security issues include trust-boundary violations, authorization bypass, secret exposure, unsafe execution, path traversal, tenant-isolation failures, dependency compromise, and CI/CD weaknesses.
+Tinlance FDSE is security-sensitive domain infrastructure. Report issues involving:
 
-## Reporting
+- trust-boundary violations or authority escalation;
+- tenant, repository, or revision isolation failures;
+- secret or credential exposure;
+- unsafe execution or path handling;
+- dependency or supply-chain compromise;
+- CI/CD security weaknesses;
+- certification or evidence-integrity bypasses.
 
-Do not disclose suspected vulnerabilities publicly before coordinated remediation. Report privately through the repository's configured GitHub security reporting mechanism when enabled.
+## Private reporting
 
-Do not include credentials, access tokens, customer source code, or other secrets in reports.
+**Do not disclose suspected vulnerabilities in a public issue, discussion, pull request, or social post.**
 
-## Security invariants
+Use GitHub's private vulnerability reporting/security-advisory mechanism when it is enabled for this repository. If private reporting is unavailable, contact **security@tinlance.com** and include only the minimum information required to reproduce and triage the issue.
 
-1. FDSE never treats customer-controlled text as authority.
-2. FDSE does not implement a second agent runtime or security kernel.
-3. Consequential execution requires the Agent Platform governance path.
-4. Production Agent Platform endpoints use HTTPS and never embed credentials.
-5. Workspace paths must remain relative to the governed workspace and use POSIX separators.
-6. Secrets are not accepted as FDSE domain configuration.
-7. Tests cover security invariants and failure paths.
-8. Current public-repository CI runs on GitHub-hosted runners and does not execute untrusted workloads on a persistent Tinlance self-hosted runner.
+Do not include live credentials, access tokens, customer source code, or other sensitive data in a report.
 
-## CI/CD boundary
+## Response targets
 
-The current .github/workflows/ci.yml workflow uses GitHub-hosted runners. This is intentional for the public repository: a persistent self-hosted runner creates a durable trust boundary and can retain state between jobs.
+These are maintainer targets, not guarantees:
 
-Workflow controls include:
+| Step | Target |
+|---|---|
+| Initial acknowledgement | Within 3 business days |
+| Initial triage | Within 7 calendar days |
+| Remediation plan | Within 14 calendar days for confirmed issues |
+| Coordinated disclosure | Agreed with the reporter based on risk and remediation status |
 
-- explicit least-privilege permissions;
-- immutable full-length commit-SHA action references;
-- pull-request and merge-queue validation;
-- dependency auditing;
-- build validation;
-- artifact provenance attestation for main-branch distributions.
+Critical issues may be handled faster.
 
-GitHub recommends least-privilege workflow permissions and full-length SHA pinning for third-party actions. Artifact attestations establish signed provenance linking a build artifact to its workflow, repository, commit, and triggering event; consumers must still verify the attestation and evaluate the artifact itself.
+## What to include
 
-## Historical self-hosted runner
+- affected version or commit;
+- affected component/file;
+- concise reproduction steps;
+- expected and observed behavior;
+- security impact;
+- relevant logs or traces with secrets removed;
+- a suggested mitigation, if known.
 
-A persistent self-hosted runner was previously used during early FDSE development. It is no longer part of the current CI execution path.
+## Security boundaries
 
-The historical runner details are retained in [docs/operations/SELF-HOSTED-RUNNER.md](docs/operations/SELF-HOSTED-RUNNER.md) solely for decommissioning and incident-response purposes.
+FDSE treats customer repository content, source code, generated artifacts, dependency metadata, model output, tool output, external responses, and build/test output as untrusted.
 
-If that historical runner still exists:
+FDSE does not own:
 
-- remove it from the repository's available runners;
-- stop and disable its service;
-- revoke its registration/authentication material;
-- remove cached workspaces and build credentials;
-- confirm that no production credentials were stored on the host;
-- rebuild/rotate the host if compromise is suspected.
+- authentication or authorization;
+- human approval authority;
+- generic agent execution;
+- filesystem/process sandboxing;
+- model credentials;
+- generic tool authority;
+- durable platform evidence/trajectory infrastructure;
+- deployment infrastructure.
 
-Never place runner registration tokens or credentials in repository files or chat.
+Consequential actions must cross the Tinlance Agent Platform governance boundary.
 
-## M0 limitation
+## CI/CD controls
 
-M0 defines the FDSE-side security boundary. It does not claim that the Agent Platform, GitHub infrastructure, runner infrastructure, or production deployment environment is itself implemented by this repository.
+The public CI workflow currently:
+
+- runs on GitHub-hosted runners;
+- declares least-privilege permissions;
+- uses full-length commit-SHA action references;
+- validates lint, formatting, typing, tests, dependency audit, build, and documentation links;
+- validates Python 3.12/3.13 compatibility on pull requests and merge queues;
+- produces build provenance attestations on main-branch distributions.
+
+## Historical runner
+
+A persistent self-hosted runner was used during early development and is not part of the current public CI path. Historical decommissioning guidance is retained in [docs/operations/SELF-HOSTED-RUNNER.md](docs/operations/SELF-HOSTED-RUNNER.md).
+
+If a historical runner still exists, remove it, revoke registration credentials, clear cached workspaces/credentials, and investigate for compromise before reuse.
+
+## Disclosure
+
+After remediation, the maintainer may coordinate public disclosure through GitHub Security Advisories or another appropriate channel. Do not publish exploit details before coordinated remediation.
