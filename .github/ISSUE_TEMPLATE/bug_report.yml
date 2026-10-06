@@ -1,0 +1,56 @@
+name: Bug Report
+description: Report a reproducible defect in Tinlance FDSE.
+title: "[Bug]: "
+body:
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight
+      options:
+        - label: I searched existing issues.
+          required: true
+        - label: This is not a security vulnerability.
+          required: true
+  - type: input
+    id: version
+    attributes:
+      label: FDSE version or commit
+      placeholder: "1.9.0 or commit SHA"
+    validations:
+      required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "3.12.8"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the observed behavior and the expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Provide the smallest reproducible example or exact commands.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or traceback
+      description: Remove secrets, credentials, tokens, and customer data.
+    validations:
+      required: false
+  - type: textarea
+    id: security
+    attributes:
+      label: Security impact
+      description: If this may be a security issue, stop and use SECURITY.md instead.
+    validations:
+      required: true

@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+title: "Tinlance FDSE"
+message: "If you use Tinlance FDSE in research or published technical work, please cite this software."
+type: software
+authors:
+  - family-names: "Tinlance"
+    given-names: "Limited"
+version: "1.9.0"
+date-released: "2026-10-04"
+license: "Apache-2.0"
+repository-code: "https://github.com/LloydCoder/tinlance-fdse"
+url: "https://github.com/LloydCoder/tinlance-fdse"
+abstract: "Governed, evidence-driven forward-deployed software engineering domain layer."
+keywords:
+  - forward-deployed software engineering
+  - software engineering
+  - agentic systems
+  - evidence
+  - provenance
+  - security
+  - Python
