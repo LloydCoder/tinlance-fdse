@@ -1,0 +1,40 @@
+name: Feature Request
+description: Propose a focused improvement to Tinlance FDSE.
+title: "[Feature]: "
+body:
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight
+      options:
+        - label: I searched existing issues and documentation.
+          required: true
+        - label: This request does not require bypassing the FDSE/Agent Platform boundary.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What concrete engineering problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the smallest useful change.
+    validations:
+      required: true
+  - type: textarea
+    id: invariants
+    attributes:
+      label: Contracts and invariants
+      description: Explain affected scope, evidence, authority, security, or lifecycle invariants.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false
