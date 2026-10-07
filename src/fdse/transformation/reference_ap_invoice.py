@@ -303,7 +303,7 @@ def build_reference_ap_invoice_transformation() -> ReferenceAPInvoiceTransformat
         (("cycle_time", 14.0),),
         (("cycle_time", -6.0),),
         OutcomeAcceptance.INCONCLUSIVE,
-        (_evidence("ev-outcome"),)
+        (_evidence("ev-outcome"),),
         limitations=("synthetic fixture; not a customer result",),
     )
 
