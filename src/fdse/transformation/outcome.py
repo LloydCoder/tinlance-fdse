@@ -1,3 +1,5 @@
+# fmt: off
+# ruff: noqa: E501
 """Observed transformation outcomes."""
 from __future__ import annotations
 
