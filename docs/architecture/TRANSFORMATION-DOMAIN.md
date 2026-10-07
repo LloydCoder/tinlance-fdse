@@ -67,6 +67,29 @@ The target state remains linked to the classified process revision. Every proces
 
 Phase 4 is complete when target-state semantics are explicit, acceptance and human decision rights are mandatory, process/classification scope remains fail-closed, regression coverage is green, and documentation is reconciled.
 
+## Phase 5 — Agent-System Binding
+
+Phase 5 introduces an authority-neutral correlation contract between the FDSE operational Transformation Domain and the Tinlance Agent System's `transformation/v1` execution contract.
+
+`AgentSystemBinding` carries references for the FDSE transformation/version, Agent-System transformation/version, tenant, agent identity/version, workspace/task, requested capability references, execution correlation, evidence, measurement, and outcome. It is deliberately a reference object rather than an execution object.
+
+### Boundary invariant
+
+The binding MUST NOT:
+- authorize or approve execution;
+- grant capabilities;
+- select or route models;
+- execute tools or agents;
+- access secrets or sandbox resources;
+- replace Agent OS lifecycle controls;
+- replace Agent Platform identity, authorization, policy, budget, approval, sandbox, secret, tool, audit, or runtime authority.
+
+The Agent Platform remains authoritative for consequential execution. The binding exists so a measured business transformation can be traced into and back out of governed Agent-System execution without duplicating authority.
+
+### Phase 5 acceptance gate
+
+Phase 5 is complete when a transformation can be deterministically correlated to the Agent-System transformation contract, agent/workspace/task references, execution/evidence/measurement/outcome references, invalid scope/version inputs fail closed, the public API is stable, and all CI gates are green.
+
 ## Status
 Phase 1 architectural contract. This document defines the bounded Transformation Domain inside FDSE. It does not claim external production capability, customer outcomes, or replication success.
 
