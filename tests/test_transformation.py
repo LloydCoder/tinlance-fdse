@@ -6,6 +6,7 @@ from fdse.contracts import EvidenceRef, ProvenanceRef
 from fdse.transformation import (
     AgentSystemBinding,
     EngineeringRealization,
+    ExecutionReceiptState, GovernedExecutionReceipt,
     Action, Baseline, Classification, DecisionBasis, DecisionConfidence, Handoff,
     Measurement, MeasurementMethod, MeasurementStage, MetricObservation, Outcome,
     OwnershipTransferStatus, Process, ProcessStep, ReplicationProfile, Reversibility,
@@ -242,4 +243,33 @@ def test_engineering_realization_requires_requirements_and_acceptance() -> None:
             "proc-1",
             "fdse-engineer",
             ("requirement",),
+        )
+
+
+def test_governed_execution_receipt_requires_policy_and_terminal_evidence() -> None:
+    receipt = GovernedExecutionReceipt(
+        "receipt-1",
+        "tr-1",
+        "bind-1",
+        "tenant-1",
+        "run-1",
+        ExecutionReceiptState.SUCCEEDED,
+        ("policy-agent-execution",),
+        approval_refs=("approval-1",),
+        evidence_refs=("ev-run-1",),
+        output_refs=("artifact-1",),
+    )
+    assert receipt.state is ExecutionReceiptState.SUCCEEDED
+
+
+def test_governed_execution_receipt_rejects_unevidenced_terminal_state() -> None:
+    with pytest.raises(ValueError):
+        GovernedExecutionReceipt(
+            "receipt-1",
+            "tr-1",
+            "bind-1",
+            "tenant-1",
+            "run-1",
+            ExecutionReceiptState.SUCCEEDED,
+            ("policy-agent-execution",),
         )
