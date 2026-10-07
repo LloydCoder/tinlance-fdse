@@ -56,8 +56,14 @@ def test_scope_revision_and_classification_rejection() -> None:
     with pytest.raises(ValueError): Transformation("tr","tenant-2","rev-1","v1",p,target())
     bad=TargetState("proc-1",("x",),(Classification("c","tenant-1","rev-2","s1",Action.CODE,"x","owner",expected_effect="code",evidence=(evidence(),)),Classification("c2","tenant-1","rev-1","s2",Action.HUMAN,"x","owner",expected_effect="human",evidence=(evidence("ev-2"),))),("human",),("system",))
     with pytest.raises(ValueError): Transformation("tr","tenant-1","rev-1","v1",p,bad)
-    duplicate=TargetState("proc-1",("x",),(classifications()[0],classifications()[0]),("human",),("system",))
-    with pytest.raises(ValueError): Transformation("tr","tenant-1","rev-1","v1",p,duplicate)
+    with pytest.raises(ValueError):
+        TargetState(
+            "proc-1",
+            ("x",),
+            (classifications()[0], classifications()[0]),
+            ("human",),
+            ("system",),
+        )
 
 def test_deterministic_serialization_and_digest() -> None:
     p=process()
