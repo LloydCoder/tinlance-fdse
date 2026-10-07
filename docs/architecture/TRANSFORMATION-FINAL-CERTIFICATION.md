@@ -17,10 +17,10 @@ This record certifies the FDSE Transformation implementation at the repository/d
 ## Final forensic controls
 
 - Contract/type integrity: malformed required values, enums, numeric values, evidence references, and state values fail closed.
-- Referential integrity: lifecycle measurement, outcome, evidence, execution, handoff, and replication references are resolved within the defined contract graph.
+- Referential integrity: lifecycle measurement, outcome, evidence, execution, handoff, and replication references are resolved within the defined contract graph; qualified replication target transformation/outcome references are explicitly bound to the target tenant and transformation version.
 - Tenant/revision/version integrity: cross-scope relationships are rejected.
-- State integrity: terminal execution/replication and transferred handoff states require supporting evidence or references.
-- Measurement integrity: baseline/target/post-deployment semantics, finite values, units, windows, methods, and outcome references are checked.
+- State integrity: duplicate run references and contradictory terminal execution receipts are rejected; terminal replication and transferred handoff states require supporting evidence or references.
+- Measurement integrity: baseline/target/post-deployment semantics, finite values, units, windows, methods, outcome metric identity, observed values, and variance are cross-checked rather than trusted independently.
 - Determinism: canonical serialization rejects non-finite values, unsupported values, and non-string mapping keys; digest derives from canonical representation.
 - Replication integrity: source/target tenants differ; qualified stages require target lineage and evidence; success is not self-certified.
 - Authority integrity: FDSE remains a transformation/delivery domain and does not acquire generic Agent Platform execution or authorization authority.
@@ -53,3 +53,7 @@ Those claims require independent evidence outside this repository.
 ## Certification rule
 
 The final state is considered repository/domain-green only when the final PR CI is fully green, the merged-main CI for the final commit is fully green, the repository has no open blocker PR/issues, and the final forensic review finds no accepted invalid state within the defined Transformation contract boundary.
+
+## Security assurance basis
+
+The hardening approach is aligned to current OWASP ASVS 5.0 validation/business-logic guidance, NIST SP 800-218 SSDF 1.1 secure-development practices, and SLSA v1.2 provenance/verification principles. These references inform the repository controls; they do not constitute third-party certification.
