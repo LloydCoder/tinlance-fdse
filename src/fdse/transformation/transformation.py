@@ -1,3 +1,5 @@
+# ruff: noqa: E501
+# fmt: off
 """Transformation aggregate and target-state contract."""
 from __future__ import annotations
 from dataclasses import dataclass
