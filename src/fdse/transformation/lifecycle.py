@@ -82,7 +82,10 @@ class TransformationLifecycle:
             if measurement.revision != transformation.revision:
                 raise ValueError("measurement revision does not match")
 
-        evidence_ids = set(self.baseline.evidence_ids)
+        evidence_ids = {
+            observation.evidence.evidence_id
+            for observation in self.baseline.observations
+        }
         evidence_ids.update(
             evidence_ref
             for receipt in self.execution_receipts
