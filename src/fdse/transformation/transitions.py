@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+from ._common import enum_required
 from .execution import ExecutionReceiptState
 from .handoff import OwnershipTransferStatus
 from .replication import ReplicationStage
@@ -58,6 +59,8 @@ def transition_execution(
     current: ExecutionReceiptState, target: ExecutionReceiptState
 ) -> ExecutionReceiptState:
     """Validate an execution receipt state transition."""
+    current = enum_required(current, ExecutionReceiptState, "current execution state")
+    target = enum_required(target, ExecutionReceiptState, "target execution state")
     if target not in _EXECUTION[current]:
         raise ValueError(f"invalid execution transition: {current} -> {target}")
     return target
@@ -67,6 +70,8 @@ def transition_replication(
     current: ReplicationStage, target: ReplicationStage
 ) -> ReplicationStage:
     """Validate a replication lifecycle transition."""
+    current = enum_required(current, ReplicationStage, "current replication stage")
+    target = enum_required(target, ReplicationStage, "target replication stage")
     if target not in _REPLICATION[current]:
         raise ValueError(f"invalid replication transition: {current} -> {target}")
     return target
@@ -76,6 +81,8 @@ def transition_handoff(
     current: OwnershipTransferStatus, target: OwnershipTransferStatus
 ) -> OwnershipTransferStatus:
     """Validate a customer-ownership handoff transition."""
+    current = enum_required(current, OwnershipTransferStatus, "current handoff status")
+    target = enum_required(target, OwnershipTransferStatus, "target handoff status")
     if target not in _HANDOFF[current]:
         raise ValueError(f"invalid handoff transition: {current} -> {target}")
     return target
