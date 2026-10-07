@@ -1,4 +1,4 @@
-# ruff: noqa: E501
+# ruff: noqa: E501, I001
 """Bounded operational Transformation domain contracts."""
 from ._common import digest_value, serialize
 from .baseline import Baseline, MeasurementMethod, MetricObservation
