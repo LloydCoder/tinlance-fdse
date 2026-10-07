@@ -8,13 +8,6 @@ from .classification import Classification
 from .process import Process
 
 # fmt: off
-"""Transformation aggregate and target-state contract."""
-from __future__ import annotations
-from dataclasses import dataclass
-from ._common import required, unique_ids
-from .classification import Classification
-from .process import Process
-
 @dataclass(frozen=True, slots=True)
 class TargetState:
     process_id: str
