@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from ._common import enum_required, required, unique_ids
+from ._common import required, unique_ids
 
 
 @dataclass(frozen=True, slots=True)
