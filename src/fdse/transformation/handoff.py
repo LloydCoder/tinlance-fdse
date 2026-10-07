@@ -1,3 +1,4 @@
+# ruff: noqa: E501
 """Customer ownership handoff semantics."""
 from __future__ import annotations
 
