@@ -9,14 +9,6 @@ from uuid import UUID
 from fdse.evidence import canonical_json, digest
 
 # fmt: off
-"""Private validation and deterministic serialization helpers."""
-from __future__ import annotations
-from dataclasses import asdict, is_dataclass
-from enum import StrEnum
-from typing import Any
-from uuid import UUID
-from fdse.evidence import canonical_json, digest
-
 def required(value: str, field_name: str) -> str:
     if not isinstance(value, str):
         raise TypeError(f"{field_name} must be a string")
