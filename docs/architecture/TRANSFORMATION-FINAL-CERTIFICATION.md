@@ -19,7 +19,7 @@ This record certifies the FDSE Transformation implementation at the repository/d
 - Contract/type integrity: malformed required values, enums, numeric values, evidence references, and state values fail closed.
 - Referential integrity: lifecycle measurement, outcome, evidence, execution, handoff, and replication references are resolved within the defined contract graph; qualified replication target transformation/outcome references are explicitly bound to the target tenant and transformation version.
 - Tenant/revision/version integrity: cross-scope relationships are rejected.
-- State integrity: duplicate run references and contradictory terminal execution receipts are rejected; terminal replication and transferred handoff states require supporting evidence or references.
+- State integrity: duplicate run references and contradictory terminal execution receipts are rejected; terminal replication and transferred handoff states require supporting evidence or references; authoritative transition validators reject skipped, backward, and terminal-state transitions.
 - Measurement integrity: baseline/target/post-deployment semantics, finite values, units, windows, methods, outcome metric identity, observed values, and variance are cross-checked rather than trusted independently.
 - Determinism: canonical serialization rejects non-finite values, unsupported values, and non-string mapping keys; digest derives from canonical representation.
 - Replication integrity: source/target tenants differ; qualified stages require target lineage and evidence; success is not self-certified.
