@@ -1,5 +1,35 @@
 # Transformation Domain Contract
 
+## Phase 2 — Classification Taxonomy
+
+Phase 2 closes the classification taxonomy around the existing `Classification` contract. The canonical action set remains exactly DELETE, CODE, AGENT, and HUMAN. Each classification records decision basis, risk level, reversibility, confidence, transition conditions, rationale, decision ownership, constraints, expected effect, risk considerations, and supporting evidence.
+
+The taxonomy is descriptive and evidence-backed. It does not grant execution authority, approval authority, tool capability, model access, sandbox access, or policy authority.
+
+### Canonical taxonomy
+
+- **Action:** DELETE, CODE, AGENT, HUMAN only.
+- **Decision basis:** OBSERVED, DOCUMENTED, INTERVIEW, ANALYSIS, POLICY.
+- **Risk:** LOW, MEDIUM, HIGH, CRITICAL.
+- **Reversibility:** REVERSIBLE, PARTIAL, IRREVERSIBLE.
+- **Confidence:** LOW, MEDIUM, HIGH.
+- **Transition conditions:** explicit conditions under which a classification should be reconsidered.
+- **Evidence:** at least one supporting FDSE evidence reference.
+
+### Phase 2 invariants
+
+- No fifth action category may be introduced.
+- A classification without supporting evidence is invalid.
+- Non-canonical action values are rejected.
+- Invalid decision-basis values are rejected.
+- Taxonomy metadata cannot grant execution capability.
+- Risk, reversibility, confidence, and transition conditions describe a decision; they do not authorize it.
+- Agent Platform remains the authoritative authorization, approval, sandbox, secret, budget, tool, runtime, and audit boundary.
+
+### Phase 2 acceptance gate
+
+The taxonomy is complete when canonical action exclusivity, decision metadata, evidence requirements, fail-closed validation, deterministic serialization, public API stability, documentation, and all FDSE CI gates are green.
+
 ## Status
 Phase 1 architectural contract. This document defines the bounded Transformation Domain inside FDSE. It does not claim external production capability, customer outcomes, or replication success.
 
