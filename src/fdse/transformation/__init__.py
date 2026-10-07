@@ -13,6 +13,7 @@ from .classification import (
 )
 from .execution import ExecutionReceiptState, GovernedExecutionReceipt
 from .handoff import Handoff, OwnershipTransferStatus
+from .lifecycle import TransformationLifecycle
 from .measurement import Measurement, MeasurementDirection, MeasurementStage
 from .outcome import Outcome, OutcomeAcceptance
 from .process import Process, ProcessStep
@@ -32,6 +33,7 @@ __all__ = [
     "GovernedExecutionReceipt",
     "Handoff",
     "Measurement",
+    "TransformationLifecycle",
     "MeasurementDirection",
     "MeasurementMethod",
     "MeasurementStage",
