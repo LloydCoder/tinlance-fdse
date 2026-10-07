@@ -9,6 +9,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ### Added
 - P1–P10 Transformation capability: process/baseline semantics, DELETE/CODE/AGENT/HUMAN classification, target-state design, Agent-System binding, engineering realization, governed execution receipts, measurement/outcome qualification, handoff, replication qualification, and lifecycle GA consistency.
 - Final Transformation forensic audit and explicit repository-level GA non-certification boundary.
+- P11–P15 enterprise hardening, AP/invoice reference, replication kit, Agent Platform integration proof, final certification, and authoritative lifecycle transition validation.
 
 ### Changed
 - Reconciled README, roadmap, architecture, and public Transformation API documentation.
