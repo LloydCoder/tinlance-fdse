@@ -1,23 +1,20 @@
-# fmt: off
-# ruff: noqa: E501, I001
-# ruff: noqa: E501, I001
 """Transformation measurement contracts."""
 from __future__ import annotations
 
 from dataclasses import dataclass
-import math
 from enum import StrEnum
 
 from fdse.contracts import EvidenceRef
 
-from ._common import required
+from ._common import enum_required, finite_number, required, validate_evidence_ref
 
-# fmt: off
+
 class MeasurementStage(StrEnum):
     BASELINE = "BASELINE"
     TARGET = "TARGET"
     POST_DEPLOYMENT = "POST_DEPLOYMENT"
     FOLLOW_UP = "FOLLOW_UP"
+
 
 class MeasurementDirection(StrEnum):
     UNSPECIFIED = "UNSPECIFIED"
@@ -25,6 +22,7 @@ class MeasurementDirection(StrEnum):
     HIGHER_IS_BETTER = "HIGHER_IS_BETTER"
     TARGET_BAND = "TARGET_BAND"
     EQUALS = "EQUALS"
+
 
 @dataclass(frozen=True, slots=True)
 class Measurement:
@@ -45,22 +43,31 @@ class Measurement:
     result_status: str | None = None
     direction: MeasurementDirection = MeasurementDirection.UNSPECIFIED
     acceptance_threshold: float | None = None
+
     def __post_init__(self) -> None:
-        for value, name in ((self.measurement_id, "measurement_id"), (self.transformation_id, "transformation_id"), (self.tenant_id, "tenant_id"), (self.revision, "revision"), (self.metric_id, "metric_id"), (self.unit, "unit"), (self.window, "window"), (self.method, "method")):
+        for value, name in (
+            (self.measurement_id, "measurement_id"), (self.transformation_id, "transformation_id"),
+            (self.tenant_id, "tenant_id"), (self.revision, "revision"), (self.metric_id, "metric_id"),
+            (self.unit, "unit"), (self.window, "window"), (self.method, "method"),
+        ):
             required(value, name)
-        object.__setattr__(self, "measurement_id", required(self.measurement_id, "measurement_id"))
-        object.__setattr__(self, "transformation_id", required(self.transformation_id, "transformation_id"))
-        object.__setattr__(self, "tenant_id", required(self.tenant_id, "tenant_id"))
-        object.__setattr__(self, "revision", required(self.revision, "revision"))
-        object.__setattr__(self, "metric_id", required(self.metric_id, "metric_id"))
-        object.__setattr__(self, "unit", required(self.unit, "unit"))
-        object.__setattr__(self, "window", required(self.window, "window"))
-        object.__setattr__(self, "method", required(self.method, "method"))
-        if not math.isfinite(self.value):
-            raise ValueError("measurement value must be finite")
-        for candidate, name in ((self.baseline_value, "baseline_value"), (self.target_value, "target_value"), (self.acceptance_threshold, "acceptance_threshold")):
-            if candidate is not None and not math.isfinite(candidate):
-                raise ValueError(f"{name} must be finite")
+        for name in (
+            "measurement_id", "transformation_id", "tenant_id", "revision",
+            "metric_id", "unit", "window", "method",
+        ):
+            object.__setattr__(self, name, required(getattr(self, name), name))
+        object.__setattr__(self, "stage", enum_required(self.stage, MeasurementStage, "stage"))
+        object.__setattr__(self, "direction", enum_required(self.direction, MeasurementDirection, "direction"))
+        object.__setattr__(self, "value", finite_number(self.value, "measurement value"))
+        for candidate, name in (
+            (self.baseline_value, "baseline_value"),
+            (self.target_value, "target_value"),
+            (self.acceptance_threshold, "acceptance_threshold"),
+        ):
+            if candidate is not None:
+                object.__setattr__(self, name, finite_number(candidate, name))
+        if self.evidence is not None:
+            object.__setattr__(self, "evidence", validate_evidence_ref(self.evidence))
         if self.stage != MeasurementStage.TARGET and self.evidence is None:
             raise ValueError("non-target measurement requires evidence")
         if self.stage == MeasurementStage.BASELINE and self.baseline_value is None:
