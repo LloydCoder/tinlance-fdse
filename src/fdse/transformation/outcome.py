@@ -8,11 +8,6 @@ from fdse.contracts import EvidenceRef
 from ._common import required
 
 # fmt: off
-"""Observed transformation outcomes."""
-from __future__ import annotations
-from dataclasses import dataclass
-from fdse.contracts import EvidenceRef
-from ._common import required
 @dataclass(frozen=True, slots=True)
 class Outcome:
     outcome_id: str
