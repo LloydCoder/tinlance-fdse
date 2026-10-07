@@ -120,6 +120,24 @@ Terminal states (SUCCEEDED, FAILED, CANCELLED, PARTIAL) require evidence referen
 
 Phase 7 is complete when governed execution can be correlated to the transformation and binding, terminal execution states require evidence, authority remains entirely in Agent Platform, and all CI gates are green.
 
+## Phase 8 — Measurement and Outcome Certification
+
+Phase 8 makes business-result measurement more explicit. Measurements now distinguish directionality (lower-is-better, higher-is-better, target-band, equals, or unspecified), validate finite values, and require baseline/target/comparison/result status for post-deployment and follow-up observations.
+
+Outcomes now use a canonical acceptance state and require the variance metric identifiers to match observed metric identifiers. All observed and variance values must be finite. Evidence remains mandatory. These contracts do not manufacture ROI or declare customer success automatically.
+
+### Phase 8 invariants
+
+- Technical execution success is distinct from business outcome acceptance.
+- Post-deployment and follow-up measurements require explicit baseline and target values plus comparison/result semantics.
+- Outcome observed metrics and variance metrics must correspond one-to-one.
+- Outcome acceptance remains evidence-backed and qualified.
+- No universal ROI or improvement percentage is assumed.
+
+### Phase 8 acceptance gate
+
+Phase 8 is complete when measurement semantics can distinguish baseline, target, deployment observation, and follow-up results; outcomes are internally consistent and evidence-backed; and all CI gates are green.
+
 ## Status
 Phase 1 architectural contract. This document defines the bounded Transformation Domain inside FDSE. It does not claim external production capability, customer outcomes, or replication success.
 
