@@ -17,7 +17,7 @@ from .measurement import Measurement, MeasurementDirection, MeasurementStage
 from .outcome import Outcome, OutcomeAcceptance
 from .process import Process, ProcessStep
 from .realization import EngineeringRealization
-from .replication import ReplicationProfile
+from .replication import ReplicationProfile, ReplicationStage
 from .transformation import TargetState, Transformation
 
 __all__ = [
@@ -42,6 +42,7 @@ __all__ = [
     "Process",
     "ProcessStep",
     "ReplicationProfile",
+    "ReplicationStage",
     "Reversibility",
     "RiskLevel",
     "TargetState",
