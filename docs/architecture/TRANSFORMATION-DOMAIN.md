@@ -30,6 +30,25 @@ The taxonomy is descriptive and evidence-backed. It does not grant execution aut
 
 The taxonomy is complete when canonical action exclusivity, decision metadata, evidence requirements, fail-closed validation, deterministic serialization, public API stability, documentation, and all FDSE CI gates are green.
 
+## Phase 3 — Process Discovery and Baseline
+
+Phase 3 strengthens the evidence-backed starting state. Process dependencies are now fail-closed: internal dependencies MUST reference another process step, while external dependencies MUST use the explicit `external:` namespace. This prevents silently accepting malformed process graphs without turning the domain into a workflow runtime.
+
+Baseline metric observations now require finite numeric values. Economic observations may explicitly carry currency, period, assumptions, and derivation; when currency is supplied, period and derivation are mandatory. This records an auditable economic basis without making automatic ROI claims.
+
+### Phase 3 invariants
+
+- Process topology cannot contain an unknown internal dependency.
+- External dependencies are explicit and non-authoritative.
+- Metric values must be finite.
+- Economic interpretation requires explicit currency, period, assumptions where applicable, and derivation.
+- Baseline evidence remains mandatory.
+- Baseline objects remain descriptive and do not execute or authorize work.
+
+### Phase 3 acceptance gate
+
+Phase 3 is complete when process topology validation, baseline economic semantics, finite-value validation, deterministic serialization, regression coverage, documentation reconciliation, and all FDSE CI gates are green.
+
 ## Status
 Phase 1 architectural contract. This document defines the bounded Transformation Domain inside FDSE. It does not claim external production capability, customer outcomes, or replication success.
 
