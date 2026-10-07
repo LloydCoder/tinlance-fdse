@@ -1,4 +1,4 @@
-# Transformation P1–P10 Final Forensic Audit
+# Transformation P1–P10 Final Forensic Audit (Historical Gate)
 
 ## Audit scope
 
@@ -79,6 +79,10 @@ Those require independent external evidence.
 ## GA decision rule
 
 P1–P10 are repository-level complete only when the Phase 10 lifecycle contract, tests, documentation, packaging, compatibility, and artifact-provenance CI gates are green on the merged main commit.
+
+## Relationship to P11–P15
+
+This document records the historical P1–P10 gate. The subsequent enterprise closure and final certification are recorded in TRANSFORMATION-ENTERPRISE-CLOSURE.md and TRANSFORMATION-FINAL-CERTIFICATION.md. Those records supersede this document for the final Transformation certification state.
 
 ## Maintenance rule
 
