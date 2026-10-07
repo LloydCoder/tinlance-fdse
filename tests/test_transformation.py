@@ -65,4 +65,25 @@ def test_outcome_and_replication_qualification() -> None:
     with pytest.raises(ValueError): ReplicationProfile("r","tr","source","target",("method",),("mapping",),("lesson",),success_claimed=True)
 def test_handoff_acceptance_invariants() -> None:
     with pytest.raises(ValueError): Handoff("h","tr","t","tech","ops",(),("training",),("runbook",),("support",),("rollback",),"accepted",OwnershipTransferStatus.ACCEPTED)
-\n\ndef test_classification_taxonomy_is_canonical_and_evidence_backed() -> None:\n    assert tuple(Action) == (Action.DELETE, Action.CODE, Action.AGENT, Action.HUMAN)\n    decision = ClassificationDecision(\n        Action.AGENT,\n        RiskLevel.HIGH,\n        Reversibility.REVERSIBLE,\n        DecisionBasis.OBSERVED,\n        "high",\n        "bounded invoice extraction",\n        "finance",\n        constraints=("least privilege",),\n        evidence=(evidence("ev-taxonomy"),),\n    )\n    assert decision.action is Action.AGENT\n    assert default_policy(Action.AGENT).requires_rollback is True\n\n\ndef test_classification_taxonomy_rejects_unsupported_evidence_free_policy() -> None:\n    with pytest.raises(ValueError):\n        ClassificationPolicy(Action.CODE, RiskLevel.MEDIUM, True, True, requires_evidence=False)\n
+
+
+def test_classification_taxonomy_is_canonical_and_evidence_backed() -> None:
+    assert tuple(Action) == (Action.DELETE, Action.CODE, Action.AGENT, Action.HUMAN)
+    decision = ClassificationDecision(
+        Action.AGENT,
+        RiskLevel.HIGH,
+        Reversibility.REVERSIBLE,
+        DecisionBasis.OBSERVED,
+        "high",
+        "bounded invoice extraction",
+        "finance",
+        constraints=("least privilege",),
+        evidence=(evidence("ev-taxonomy"),),
+    )
+    assert decision.action is Action.AGENT
+    assert default_policy(Action.AGENT).requires_rollback is True
+
+
+def test_classification_taxonomy_rejects_unsupported_evidence_free_policy() -> None:
+    with pytest.raises(ValueError):
+        ClassificationPolicy(Action.CODE, RiskLevel.MEDIUM, True, True, requires_evidence=False)
