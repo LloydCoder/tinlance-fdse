@@ -37,9 +37,14 @@ def unique_ids(values: tuple[str, ...], field_name: str) -> tuple[str, ...]:
 
 
 def enum_required(value: Any, enum_type: type[Enum], field_name: str) -> Any:
-    if not isinstance(value, enum_type):
-        raise TypeError(f"{field_name} must be {enum_type.__name__}")
-    return value
+    if isinstance(value, enum_type):
+        return value
+    if isinstance(value, str):
+        try:
+            return enum_type(value)
+        except ValueError as exc:
+            raise ValueError(f"{field_name} is not a valid {enum_type.__name__}") from exc
+    raise TypeError(f"{field_name} must be {enum_type.__name__} or its canonical string value")
 
 
 def finite_number(value: Any, field_name: str) -> float:
