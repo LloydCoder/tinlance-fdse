@@ -772,3 +772,16 @@ def test_enterprise_objects_remain_immutable() -> None:
     p = process()
     with pytest.raises((AttributeError, TypeError)):
         p.process_id = "changed"  # type: ignore[misc]
+
+
+def test_reference_ap_invoice_transformation_is_deterministic_and_synthetic() -> None:
+    from fdse.transformation import build_reference_ap_invoice_transformation
+
+    first = build_reference_ap_invoice_transformation()
+    second = build_reference_ap_invoice_transformation()
+    assert first.synthetic is True
+    assert serialize(first.lifecycle.transformation) == serialize(second.lifecycle.transformation)
+    assert digest_value(first.lifecycle.transformation) == digest_value(second.lifecycle.transformation)
+    assert first.lifecycle.outcome is not None
+    assert first.lifecycle.outcome.acceptance_state is OutcomeAcceptance.INCONCLUSIVE
+    first.validate()
