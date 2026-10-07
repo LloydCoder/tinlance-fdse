@@ -150,8 +150,34 @@ Replication success cannot be self-certified. The source outcome, target transfo
 
 Phase 9 is complete when ownership transfer and replication states are evidence-qualified, target outcomes are explicitly linked, self-certification is impossible, and all CI gates are green.
 
+## Phase 10 — GA and Continuous Assurance
+
+Phase 10 closes the repository-level Transformation capability with a cross-object lifecycle consistency contract. `TransformationLifecycle` verifies scope, identity, version, binding, execution receipt, measurement, outcome, handoff, and replication relationships without executing any operation.
+
+`require_ga_contract()` requires the repository-level contract objects to exist and be internally consistent. It does not certify an external customer outcome, production deployment, successful replication, or ROI claim.
+
+### Final forensic closure
+
+The final audit checks:
+- all Phase 1–10 contracts are present;
+- public exports remain bounded;
+- cross-object tenant/revision/version identities fail closed;
+- process topology rejects unknown dependencies, cycles, and non-finite volume;
+- classification remains exactly DELETE/CODE/AGENT/HUMAN and evidence-backed;
+- target state has acceptance criteria and human decision rights;
+- Agent-System binding remains authority-neutral;
+- terminal execution receipts require evidence;
+- measurements and outcomes are finite, internally consistent, and evidence-backed;
+- ownership transfer and qualified replication require evidence;
+- no second runtime, authorization, policy, sandbox, secret, or evidence authority has been introduced;
+- CI, compatibility, packaging, documentation, and provenance gates are green.
+
+### Final boundary
+
+The Transformation Domain is a business/engineering semantic layer. Agent OS manages agent work; Platform SDK transports the contract; Agent Platform remains the authoritative trust and execution boundary.
+
 ## Status
-Phase 1 architectural contract. This document defines the bounded Transformation Domain inside FDSE. It does not claim external production capability, customer outcomes, or replication success.
+Phase 10 repository-level GA contract. Phases 1–10 are implemented and tested in FDSE. This status certifies the repository/domain contract and cross-object consistency only; it does not claim external production capability, customer outcomes, or successful real-world replication.
 
 ## Purpose
 The Transformation Domain models operational transformation as a versioned, tenant-scoped, evidence-linked, auditable, machine-readable, reproducible domain.
@@ -200,6 +226,10 @@ Initial bounded modules:
 - outcome.py — measured transformation results and acceptance state.
 - replication.py — adaptation and reuse parameters.
 - handoff.py — ownership-transfer and operational handoff semantics.
+- binding.py — authority-neutral FDSE-to-Agent-System correlation.
+- execution.py — governed execution receipt references.
+- realization.py — target-state engineering realization.
+- lifecycle.py — end-to-end cross-object consistency and repository-level GA contract.
 - __init__.py — intentionally narrow public API.
 
 No Transformation type SHALL be added to fdse.domain merely for convenience.
