@@ -995,3 +995,22 @@ def test_transformation_lifecycle_transitions_fail_closed() -> None:
         transition_replication(ReplicationStage.PLANNED, ReplicationStage.ACCEPTED)
     with pytest.raises(ValueError):
         transition_handoff(OwnershipTransferStatus.PENDING, OwnershipTransferStatus.TRANSFERRED)
+
+
+def test_enterprise_lifecycle_rejects_malformed_container_and_object_types() -> None:
+    reference = __import__("fdse.transformation", fromlist=["build_reference_ap_invoice_transformation"]).build_reference_ap_invoice_transformation()
+    with pytest.raises(TypeError):
+        TransformationLifecycle(
+            reference.lifecycle.transformation,
+            reference.lifecycle.baseline,
+            reference.lifecycle.realization,
+            reference.lifecycle.binding,
+            execution_receipts=[reference.lifecycle.execution_receipts[0]],  # type: ignore[arg-type]
+        ).validate_internal_consistency()
+    with pytest.raises(TypeError):
+        TransformationLifecycle(
+            reference.lifecycle.transformation,
+            reference.lifecycle.baseline,
+            reference.lifecycle.realization,
+            binding="not-a-binding",  # type: ignore[arg-type]
+        ).validate_internal_consistency()
