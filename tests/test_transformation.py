@@ -501,6 +501,31 @@ def test_transformation_lifecycle_ga_contract_is_cross_scope_consistent() -> Non
         ("policy-agent-execution",),
         evidence_refs=("ev-run-ga",),
     )
+    baseline_measurement = Measurement(
+        "m-base",
+        "tr-ga",
+        "tenant-1",
+        "rev-1",
+        "cycle_time",
+        MeasurementStage.BASELINE,
+        12.0,
+        "minutes",
+        "2026-Q3",
+        "ERP",
+        evidence("ev-measure-base-ga"),
+    )
+    target_measurement = Measurement(
+        "m-target",
+        "tr-ga",
+        "tenant-1",
+        "rev-1",
+        "cycle_time",
+        MeasurementStage.TARGET,
+        10.0,
+        "minutes",
+        "design",
+        "target-state",
+    )
     measurement = Measurement(
         "m-ga",
         "tr-ga",
@@ -552,7 +577,7 @@ def test_transformation_lifecycle_ga_contract_is_cross_scope_consistent() -> Non
         realization,
         binding,
         (receipt,),
-        (measurement,),
+        (baseline_measurement, target_measurement, measurement),
         outcome,
         handoff,
     )
