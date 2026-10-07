@@ -9,13 +9,6 @@ from fdse.contracts import EvidenceRef
 from ._common import required
 
 # fmt: off
-"""Transformation measurement contracts."""
-from __future__ import annotations
-from dataclasses import dataclass
-from enum import StrEnum
-from fdse.contracts import EvidenceRef
-from ._common import required
-
 class MeasurementStage(StrEnum):
     BASELINE = "BASELINE"
     TARGET = "TARGET"
