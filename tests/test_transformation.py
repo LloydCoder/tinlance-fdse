@@ -25,11 +25,6 @@ from fdse.transformation import (
 )
 
 # fmt: off
-from __future__ import annotations
-import pytest
-from fdse.contracts import EvidenceRef, ProvenanceRef
-from fdse.transformation import Action, Baseline, Classification, Handoff, Measurement, MeasurementMethod, MeasurementStage, MetricObservation, Outcome, OwnershipTransferStatus, Process, ProcessStep, ReplicationProfile, TargetState, Transformation, digest_value, serialize
-
 def evidence(eid: str = "ev-1") -> EvidenceRef:
     return EvidenceRef(eid, "observation", ProvenanceRef("source-1", "rev-1"), "digest-1")
 
