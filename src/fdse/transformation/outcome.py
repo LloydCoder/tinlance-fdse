@@ -44,6 +44,8 @@ class Outcome:
         object.__setattr__(self, "acceptance_state", OutcomeAcceptance(required(self.acceptance_state, "acceptance_state")))
         if not self.baseline_refs or not self.target_refs:
             raise ValueError("outcome requires baseline and target references")
+        unique_ids(self.baseline_refs, "baseline_ref")
+        unique_ids(self.target_refs, "target_ref")
         if not self.observed_values:
             raise ValueError("outcome requires observed values")
         observed_ids = unique_ids(tuple(metric_id for metric_id, _ in self.observed_values), "observed metric_id")
