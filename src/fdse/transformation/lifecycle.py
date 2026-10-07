@@ -13,7 +13,7 @@ from .outcome import Outcome
 from .realization import EngineeringRealization
 from .replication import ReplicationProfile
 from .transformation import Transformation
-from ._common import required, unique_ids
+from ._common import unique_ids
 
 
 @dataclass(frozen=True, slots=True)
