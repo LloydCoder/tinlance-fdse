@@ -7,33 +7,41 @@
 ~~~mermaid
 flowchart TD
     A[Customer engineering work] --> B[Tinlance FDSE]
-    B --> B1[Intake + scope]
-    B1 --> B2[Context + planning]
-    B2 --> T
+    B --> I[Intake + scope]
+    I --> J[Context + planning]
 
-    subgraph T[Transformation domain]
-        T1[Baseline current state] --> T2[Classify target intent]
-        T2 --> T3[Define target state]
-        T3 --> T4[Transformation plan + realization]
-        T4 --> T5[Governed execution binding]
-        T5 --> T6[Measure baseline vs target]
-        T6 --> T7[Outcome + evidence]
-        T7 --> T8[Handoff + acceptance]
-        T8 --> T9[Replication kit]
+    J --> E
+    J --> T
+
+    subgraph E[Engineering path]
+        E1[Engineering discovery + context] --> E2[Engineering design + planning]
+        E2 --> E3[Implementation / remediation]
+        E3 --> E4[Evidence + evaluation]
+        E4 --> E5[Workflow + certification]
     end
 
-    T --> B3[Evidence + evaluation]
-    B3 --> B4[Workflow + certification]
-    B4 --> C[Versioned governed intent]
-    C --> D[Tinlance Agent Platform]
-    D --> D1[Identity + authorization]
-    D --> D2[Approvals + policy]
-    D --> D3[Runtime + sandbox]
-    D --> D4[Tools + budgets + audit]
+    subgraph T[Transformation path]
+        T1[Process discovery + baseline] --> T2[Classification]
+        T2 --> T3[Target-state design]
+        T3 --> T4[Transformation realization]
+        T4 --> T5[Governed execution + evidence]
+        T5 --> T6[Measurement + outcome]
+        T6 --> T7[Handoff + acceptance]
+        T7 --> T8[Replication]
+    end
 
-    T5 -. execution authority .-> D
-    D --> T6
-    D --> T7
+    E --> G[Versioned governed intent]
+    T --> G
+    G --> P[Tinlance Agent Platform]
+    P --> P1[Identity + authorization]
+    P --> P2[Approvals + policy]
+    P --> P3[Runtime + sandbox]
+    P --> P4[Tools + budgets + audit]
+
+    E3 -. governed execution .-> P
+    T4 -. governed execution .-> P
+    P --> E4
+    P --> T5
 ~~~
 
 > [!NOTE]
