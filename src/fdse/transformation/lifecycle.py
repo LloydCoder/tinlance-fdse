@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from ._common import unique_ids
 from .baseline import Baseline
 from .binding import AgentSystemBinding
 from .execution import GovernedExecutionReceipt
@@ -13,7 +14,6 @@ from .outcome import Outcome
 from .realization import EngineeringRealization
 from .replication import ReplicationProfile
 from .transformation import Transformation
-from ._common import unique_ids
 
 
 @dataclass(frozen=True, slots=True)
@@ -55,7 +55,10 @@ class TransformationLifecycle:
                 raise ValueError("binding tenant does not match")
 
         if self.execution_receipts:
-            unique_ids(tuple(receipt.receipt_id for receipt in self.execution_receipts), "receipt_id")
+            unique_ids(
+                tuple(receipt.receipt_id for receipt in self.execution_receipts),
+                "receipt_id",
+            )
         for receipt in self.execution_receipts:
             if receipt.transformation_id != transformation.transformation_id:
                 raise ValueError("execution receipt transformation does not match")
@@ -65,7 +68,10 @@ class TransformationLifecycle:
                 raise ValueError("execution receipt binding does not match")
 
         if self.measurements:
-            unique_ids(tuple(measurement.measurement_id for measurement in self.measurements), "measurement_id")
+            unique_ids(
+                tuple(measurement.measurement_id for measurement in self.measurements),
+                "measurement_id",
+            )
         for measurement in self.measurements:
             if measurement.transformation_id != transformation.transformation_id:
                 raise ValueError("measurement transformation does not match")
