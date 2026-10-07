@@ -158,7 +158,7 @@ FDSE objects are contracts and domain semantics. Consequential actions must cros
 | E4 evidence lineage/incident/resilience semantics | Implemented |
 | E5 production-integration contracts | Implemented; external production evidence required |
 | E6 validation/certification contracts | Implemented; external GA evidence required |
-| Transformation P1–P10 domain capability | Implemented at repository/domain level; external production and customer outcome evidence required |
+| Transformation P1–P15 enterprise capability | Implemented at repository/domain level; external production, customer outcome, and replication evidence remain required |
 
 > [!WARNING]
 > “Implemented” means the FDSE-side contracts, invariants, tests, and documentation exist. It does not mean external production infrastructure, customer integrations, or the Agent Platform are deployed or healthy.
