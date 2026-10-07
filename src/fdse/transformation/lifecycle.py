@@ -231,7 +231,6 @@ class TransformationLifecycle:
                     raise ValueError("qualified replication target transformation version is required")
                 if replication.target_outcome_tenant_id != replication.target_tenant_id:
                     raise ValueError("replication target outcome tenant does not match target")
-                raise ValueError("replication target tenant must differ from source")
             if (
                 replication.stage
                 in {
@@ -245,6 +244,16 @@ class TransformationLifecycle:
                 raise ValueError(
                     "deployed or terminal replication requires target transformation reference"
                 )
+            if replication.stage in {
+                ReplicationStage.DEPLOYED,
+                ReplicationStage.MEASURED,
+                ReplicationStage.ACCEPTED,
+                ReplicationStage.FAILED,
+            }:
+                if replication.target_transformation_tenant_id != replication.target_tenant_id:
+                    raise ValueError("replication target transformation tenant does not match target")
+                if replication.target_transformation_version is None:
+                    raise ValueError("deployed or terminal replication requires target transformation version")
             if (
                 replication.stage
                 in {
