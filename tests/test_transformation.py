@@ -912,7 +912,45 @@ def test_enterprise_lifecycle_rejects_dangling_handoff_and_replication_evidence(
         source_outcome_ref="outcome-ap-invoice",
         target_transformation_id="target-tr",
         target_outcome_ref="target-outcome",
+        target_transformation_tenant_id="target-tenant",
+        target_transformation_version="1.0",
+        target_outcome_tenant_id="target-tenant",
         evidence_refs=("missing-replication-evidence",),
     )
     with pytest.raises(ValueError):
         replace(reference.lifecycle, replications=(bad_replication,)).validate_internal_consistency()
+
+    good_replication = ReplicationProfile(
+        "rep-good",
+        "tr-ap-invoice",
+        "reference-tenant",
+        "target-tenant",
+        ("methodology",),
+        ("adaptation",),
+        ("lesson",),
+        stage=ReplicationStage.MEASURED,
+        source_outcome_ref="outcome-ap-invoice",
+        target_transformation_id="target-tr",
+        target_outcome_ref="target-outcome",
+        target_transformation_tenant_id="target-tenant",
+        target_transformation_version="1.0",
+        target_outcome_tenant_id="target-tenant",
+        evidence_refs=("ev-outcome",),
+    )
+    replace(reference.lifecycle, replications=(good_replication,)).validate_internal_consistency()
+
+    with pytest.raises(ValueError):
+        replace(
+            reference.lifecycle,
+            outcome=replace(
+                reference.lifecycle.outcome,
+                observed_values=(("cycle_time", 13.0),),
+            ),
+        ).validate_internal_consistency()
+
+    duplicate_run = replace(reference.lifecycle.execution_receipts[0], receipt_id="receipt-duplicate")
+    with pytest.raises(ValueError):
+        replace(
+            reference.lifecycle,
+            execution_receipts=(reference.lifecycle.execution_receipts[0], duplicate_run),
+        ).validate_internal_consistency()
