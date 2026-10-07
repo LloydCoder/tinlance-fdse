@@ -1,3 +1,4 @@
+# ruff: noqa: E501
 """Private validation and deterministic serialization helpers."""
 from __future__ import annotations
 
