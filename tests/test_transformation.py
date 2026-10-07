@@ -970,9 +970,24 @@ def test_transformation_lifecycle_transitions_fail_closed() -> None:
         transition_replication,
     )
 
-    assert transition_execution(ExecutionReceiptState.PLANNED, ExecutionReceiptState.RUNNING) is ExecutionReceiptState.RUNNING
-    assert transition_replication(ReplicationStage.MEASURED, ReplicationStage.ACCEPTED) is ReplicationStage.ACCEPTED
-    assert transition_handoff(OwnershipTransferStatus.ACCEPTED, OwnershipTransferStatus.TRANSFERRED) is OwnershipTransferStatus.TRANSFERRED
+    assert (
+        transition_execution(
+            ExecutionReceiptState.PLANNED, ExecutionReceiptState.RUNNING
+        )
+        is ExecutionReceiptState.RUNNING
+    )
+    assert (
+        transition_replication(
+            ReplicationStage.MEASURED, ReplicationStage.ACCEPTED
+        )
+        is ReplicationStage.ACCEPTED
+    )
+    assert (
+        transition_handoff(
+            OwnershipTransferStatus.ACCEPTED, OwnershipTransferStatus.TRANSFERRED
+        )
+        is OwnershipTransferStatus.TRANSFERRED
+    )
 
     with pytest.raises(ValueError):
         transition_execution(ExecutionReceiptState.PLANNED, ExecutionReceiptState.SUCCEEDED)
