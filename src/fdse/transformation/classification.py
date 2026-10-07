@@ -1,4 +1,5 @@
 # fmt: off
+# ruff: noqa: E501, I001
 """Canonical DELETE/CODE/AGENT/HUMAN classification semantics and taxonomy."""
 from __future__ import annotations
 from dataclasses import dataclass
