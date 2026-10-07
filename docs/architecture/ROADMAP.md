@@ -81,6 +81,27 @@ infrastructure. M16–M18 define domain/runtime contracts and deterministic
 reference semantics; production authority remains with the Agent Platform and
 external infrastructure.
 
+## Transformation capability track P1–P10
+
+Transformation is a bounded capability track inside FDSE, not a new M19 and not a fifth Agent System repository.
+
+| Phase | Scope | Status |
+|---|---|---|
+| P1 | Transformation Domain foundation | Implemented |
+| P2 | Classification taxonomy | Implemented |
+| P3 | Process discovery and baseline semantics | Implemented |
+| P4 | Target-state operating design | Implemented |
+| P5 | FDSE ↔ Agent System authority-neutral binding | Implemented |
+| P6 | Engineering realization | Implemented |
+| P7 | Governed execution receipt and evidence correlation | Implemented |
+| P8 | Measurement and outcome qualification | Implemented |
+| P9 | Handoff and replication qualification | Implemented |
+| P10 | GA lifecycle consistency and continuous assurance | Implemented |
+
+**Repository-level closure:** P1–P10 contracts, invariants, tests, documentation, packaging, and CI are implemented. This does not certify external production, customer outcomes, or successful real-world replication.
+
+**Architectural rule:** P5 binds FDSE semantics to the existing four-repository Agent System. It does not move authorization, runtime, policy, approvals, budgets, sandboxing, secrets, tool authority, or audit authority into FDSE.
+
 ## Enterprise closure track E1–E6
 
 The core capability roadmap ends at M18. Enterprise completion is tracked separately so there is deliberately no M19.
