@@ -1,6 +1,6 @@
 """Bounded Transformation Domain public API."""
 
-from fdse.transitions import transition_execution, transition_handoff, transition_replication
+from .transitions import transition_execution, transition_handoff, transition_replication
 
 from ._common import digest_value, serialize
 from .baseline import Baseline, MeasurementMethod, MetricObservation
