@@ -4,6 +4,7 @@ from __future__ import annotations
 import pytest
 from fdse.contracts import EvidenceRef, ProvenanceRef
 from fdse.transformation import (
+    AgentSystemBinding,
     Action, Baseline, Classification, DecisionBasis, DecisionConfidence, Handoff,
     Measurement, MeasurementMethod, MeasurementStage, MetricObservation, Outcome,
     OwnershipTransferStatus, Process, ProcessStep, ReplicationProfile, Reversibility,
@@ -162,3 +163,42 @@ def test_target_state_requires_acceptance_and_human_decision_rights() -> None:
         observability_requirements=("record extraction confidence",),
     )
     assert target_state.human_decision_rights == ("manager approves exceptions",)
+
+
+def test_agent_system_binding_is_authority_neutral_and_traceable() -> None:
+    binding = AgentSystemBinding(
+        "bind-1",
+        "tr-1",
+        "v1",
+        "agent-tr-1",
+        1,
+        "tenant-1",
+        "invoice-agent",
+        "2026.10",
+        "workspace-1",
+        "task-1",
+        ("invoice.extract",),
+        execution_ref="run-1",
+        evidence_refs=("ev-1",),
+        measurement_refs=("m-1",),
+        outcome_ref="out-1",
+    )
+    assert binding.execution_ref == "run-1"
+    assert binding.capability_refs == ("invoice.extract",)
+
+
+def test_agent_system_binding_requires_capability_and_valid_version() -> None:
+    with pytest.raises(ValueError):
+        AgentSystemBinding(
+            "bind-1",
+            "tr-1",
+            "v1",
+            "agent-tr-1",
+            0,
+            "tenant-1",
+            "invoice-agent",
+            "2026.10",
+            "workspace-1",
+            "task-1",
+            (),
+        )
