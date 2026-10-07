@@ -1,3 +1,5 @@
+# fmt: off
+# ruff: noqa: E501
 """Canonical AP/invoice Transformation reference fixture.
 
 The fixture is deterministic and explicitly synthetic. It is a contract-level
