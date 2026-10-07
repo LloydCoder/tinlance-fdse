@@ -1,4 +1,4 @@
-# ruff: noqa: E501, E701
+# ruff: noqa: E501, E701, I001
 from __future__ import annotations
 
 import pytest
@@ -32,7 +32,7 @@ def process() -> Process:
     return Process("proc-1","tenant-1","rev-1","v1","invoice processing",(ProcessStep("s1","receive","AP clerk","ERP"),ProcessStep("s2","approve","manager","ERP")),actors=("AP clerk","manager"),systems=("ERP",))
 
 def classifications() -> tuple[Classification, ...]:
-    return (Classification("c1","tenant-1","rev-1","s1",Action.CODE,"parse invoice","finance",evidence=(evidence("ev-1"),)),Classification("c2","tenant-1","rev-1","s2",Action.HUMAN,"approve exceptions","finance",evidence=(evidence("ev-2"),)))
+    return (Classification("c1","tenant-1","rev-1","s1",Action.CODE,"parse invoice","finance",expected_effect="extract invoice",evidence=(evidence("ev-1"),)),Classification("c2","tenant-1","rev-1","s2",Action.HUMAN,"approve exceptions","finance",expected_effect="approve exception",evidence=(evidence("ev-2"),)))
 
 def target() -> TargetState:
     return TargetState("proc-1",("receive -> approve",),classifications(),("manager approval",),("invoice extraction",))
@@ -54,7 +54,7 @@ def test_blank_and_nul_rejection() -> None:
 def test_scope_revision_and_classification_rejection() -> None:
     p=process()
     with pytest.raises(ValueError): Transformation("tr","tenant-2","rev-1","v1",p,target())
-    bad=TargetState("proc-1",("x",),(Classification("c","tenant-1","rev-2","s1",Action.CODE,"x","owner",evidence=(evidence(),)),Classification("c2","tenant-1","rev-1","s2",Action.HUMAN,"x","owner",evidence=(evidence("ev-2"),))),("human",),("system",))
+    bad=TargetState("proc-1",("x",),(Classification("c","tenant-1","rev-2","s1",Action.CODE,"x","owner",expected_effect="code",evidence=(evidence(),)),Classification("c2","tenant-1","rev-1","s2",Action.HUMAN,"x","owner",expected_effect="human",evidence=(evidence("ev-2"),))),("human",),("system",))
     with pytest.raises(ValueError): Transformation("tr","tenant-1","rev-1","v1",p,bad)
     duplicate=TargetState("proc-1",("x",),(classifications()[0],classifications()[0]),("human",),("system",))
     with pytest.raises(ValueError): Transformation("tr","tenant-1","rev-1","v1",p,duplicate)
