@@ -3,7 +3,6 @@
 from ._common import digest_value, serialize
 from .baseline import Baseline, MeasurementMethod, MetricObservation
 from .binding import AgentSystemBinding
-from .execution import ExecutionReceiptState, GovernedExecutionReceipt
 from .classification import (
     Action,
     Classification,
@@ -12,6 +11,7 @@ from .classification import (
     Reversibility,
     RiskLevel,
 )
+from .execution import ExecutionReceiptState, GovernedExecutionReceipt
 from .handoff import Handoff, OwnershipTransferStatus
 from .measurement import Measurement, MeasurementStage
 from .outcome import Outcome
