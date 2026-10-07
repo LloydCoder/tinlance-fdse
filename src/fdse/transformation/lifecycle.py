@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from ._common import unique_ids
+from ._common import enum_required, unique_ids
 from .baseline import Baseline
 from .binding import AgentSystemBinding
 from .execution import GovernedExecutionReceipt
@@ -32,6 +32,30 @@ class TransformationLifecycle:
 
     def validate_internal_consistency(self) -> None:
         """Fail closed on cross-object scope, identity, and reference mismatches."""
+        if not isinstance(self.transformation, Transformation):
+            raise TypeError("lifecycle transformation must be Transformation")
+        if not isinstance(self.baseline, Baseline):
+            raise TypeError("lifecycle baseline must be Baseline")
+        if not isinstance(self.realization, EngineeringRealization):
+            raise TypeError("lifecycle realization must be EngineeringRealization")
+        if not isinstance(self.execution_receipts, tuple):
+            raise TypeError("execution_receipts must be a tuple")
+        if not all(isinstance(receipt, GovernedExecutionReceipt) for receipt in self.execution_receipts):
+            raise TypeError("execution_receipts must contain GovernedExecutionReceipt objects")
+        if not isinstance(self.measurements, tuple):
+            raise TypeError("measurements must be a tuple")
+        if not all(isinstance(measurement, Measurement) for measurement in self.measurements):
+            raise TypeError("measurements must contain Measurement objects")
+        if not isinstance(self.replications, tuple):
+            raise TypeError("replications must be a tuple")
+        if not all(isinstance(replication, ReplicationProfile) for replication in self.replications):
+            raise TypeError("replications must contain ReplicationProfile objects")
+        if self.binding is not None and not isinstance(self.binding, AgentSystemBinding):
+            raise TypeError("lifecycle binding must be AgentSystemBinding or None")
+        if self.outcome is not None and not isinstance(self.outcome, Outcome):
+            raise TypeError("lifecycle outcome must be Outcome or None")
+        if self.handoff is not None and not isinstance(self.handoff, Handoff):
+            raise TypeError("lifecycle handoff must be Handoff or None")
         transformation = self.transformation
         if self.baseline.tenant_id != transformation.tenant_id:
             raise ValueError("baseline tenant does not match transformation")
@@ -56,6 +80,8 @@ class TransformationLifecycle:
             if self.binding.tenant_id != transformation.tenant_id:
                 raise ValueError("binding tenant does not match")
 
+        for receipt in self.execution_receipts:
+            enum_required(receipt.state, type(receipt.state), "execution receipt state")
         unique_ids(
             tuple(receipt.receipt_id for receipt in self.execution_receipts),
             "receipt_id",
