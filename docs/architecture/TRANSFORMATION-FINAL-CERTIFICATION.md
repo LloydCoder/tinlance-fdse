@@ -54,6 +54,12 @@ Those claims require independent evidence outside this repository.
 
 The final state is considered repository/domain-green only when the final PR CI is fully green, the merged-main CI for the final commit is fully green, the repository has no open blocker PR/issues, and the final forensic review finds no accepted invalid state within the defined Transformation contract boundary.
 
+## Post-P15 forensic remediation
+
+After the final P15 gate, an independent repository review identified two residual runtime-contract hardening gaps: aggregate/container type validation in TransformationLifecycle, and malformed transition inputs leaking mapping-level errors. PR #49 closed both gaps and added regression coverage. The remediation PR CI passed Python 3.12/3.13 compatibility and quality checks, and merged-main CI passed on commit 59dd039fa4b07602a4e679b82c01bff2f3ddb816.
+
+This remediation remains inside the P15 certification boundary; it does not create a new phase or change the Agent Platform authority boundary.
+
 ## Security assurance basis
 
 The hardening approach is aligned to current OWASP ASVS 5.0 validation/business-logic guidance, NIST SP 800-218 SSDF 1.1 secure-development practices, and SLSA v1.2 provenance/verification principles. These references inform the repository controls; they do not constitute third-party certification.
