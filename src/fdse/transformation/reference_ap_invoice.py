@@ -153,7 +153,10 @@ def build_reference_ap_invoice_transformation() -> ReferenceAPInvoiceTransformat
         ("validate invoices", "propose accounting codes"),
         integration_requirements=("ERP invoice API",),
         governance_requirements=("approval policy", "exception threshold"),
-        acceptance_criteria=("all four process steps are represented", "exception path is explicit"),
+        acceptance_criteria=(
+            "all four process steps are represented",
+            "exception path is explicit",
+        ),
         exception_handling=("route validation failures to AP analyst",),
         human_decision_rights=("finance manager approves posting",),
         recovery_requirements=("restore prior coding mapping",),
