@@ -1,3 +1,5 @@
+# ruff: noqa: E501
+# fmt: off
 """Private validation and deterministic serialization helpers."""
 from __future__ import annotations
 from dataclasses import asdict, is_dataclass
