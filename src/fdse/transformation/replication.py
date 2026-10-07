@@ -1,3 +1,5 @@
+# fmt: off
+# ruff: noqa: E501
 """Replication and adaptation contracts."""
 from __future__ import annotations
 
