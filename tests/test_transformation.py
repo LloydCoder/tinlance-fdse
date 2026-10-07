@@ -834,3 +834,48 @@ def test_enterprise_replication_kit_requires_lineage_and_projects_to_profile() -
             ("handoff",),
             ("training",),
         )
+
+
+def test_agent_platform_integration_proof_is_authority_neutral() -> None:
+    from fdse.transformation import AgentPlatformIntegrationProof
+
+    proof = AgentPlatformIntegrationProof(
+        "proof-1",
+        "tr-ap-invoice",
+        "1.0",
+        "agent-transformation-ap-invoice",
+        1,
+        "workspace-1",
+        "task-1",
+        "sdk-v1",
+        "platform-run-1",
+        ("policy-1",),
+        ("approval-1",),
+        "receipt-1",
+        ("evidence-1",),
+        ("measurement-1",),
+        "outcome-1",
+    )
+    proof.validate()
+    assert proof.authority_owner == "agent-platform"
+    assert proof.production_verified is False
+
+    with pytest.raises(ValueError):
+        AgentPlatformIntegrationProof(
+            "proof-bad",
+            "tr",
+            "1",
+            "agent-tr",
+            1,
+            "ws",
+            "task",
+            "sdk",
+            "run",
+            ("policy",),
+            ("approval",),
+            "receipt",
+            ("evidence",),
+            ("measurement",),
+            "outcome",
+            authority_owner="fdse",
+        )
