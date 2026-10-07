@@ -1,3 +1,5 @@
+# fmt: off
+# ruff: noqa: E501
 """Canonical DELETE/CODE/AGENT/HUMAN classification semantics and taxonomy."""
 from __future__ import annotations
 
