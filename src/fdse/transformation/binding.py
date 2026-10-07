@@ -1,4 +1,4 @@
-"""Authority-neutral binding between FDSE transformations and the Tinlance Agent System."""
+"""Authority-neutral FDSE-to-Agent System transformation binding."""
 from __future__ import annotations
 
 from dataclasses import dataclass
