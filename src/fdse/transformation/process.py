@@ -6,11 +6,6 @@ from dataclasses import dataclass
 from ._common import required, unique_ids
 
 # fmt: off
-"""Operational process semantics."""
-from __future__ import annotations
-from dataclasses import dataclass
-from ._common import required, unique_ids
-
 @dataclass(frozen=True, slots=True)
 class ProcessStep:
     step_id: str
