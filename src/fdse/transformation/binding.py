@@ -1,3 +1,4 @@
+# fmt: off
 """Authority-neutral FDSE-to-Agent System transformation binding."""
 from __future__ import annotations
 
