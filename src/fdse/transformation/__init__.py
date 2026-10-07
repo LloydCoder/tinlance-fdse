@@ -19,6 +19,10 @@ from .outcome import Outcome, OutcomeAcceptance
 from .process import Process, ProcessStep
 from .realization import EngineeringRealization
 from .replication import ReplicationProfile, ReplicationStage
+from .reference_ap_invoice import (
+    ReferenceAPInvoiceTransformation,
+    build_reference_ap_invoice_transformation,
+)
 from .transformation import TargetState, Transformation
 
 __all__ = [
@@ -46,9 +50,11 @@ __all__ = [
     "ReplicationProfile",
     "ReplicationStage",
     "Reversibility",
+    "ReferenceAPInvoiceTransformation",
     "RiskLevel",
     "TargetState",
     "Transformation",
+    "build_reference_ap_invoice_transformation",
     "digest_value",
     "serialize",
 ]
