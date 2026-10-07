@@ -1,3 +1,4 @@
+# ruff: noqa: E501
 """Measured starting-state contracts."""
 from __future__ import annotations
 
