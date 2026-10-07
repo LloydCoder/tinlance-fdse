@@ -55,10 +55,11 @@ flowchart TB
     O -. governed execution .-> A
     subgraph AGENT["TINLANCE AGENT SYSTEM"]
         direction TB
+        AD[Agent Developer<br/>Agent construction • development • composition]
         OS[Agent OS<br/>Workspace • Lifecycle • Fleet]
         SDK[Agent Platform SDK<br/>Developer Interface]
         A[Agent Platform<br/>Execution Authority]
-        OS --> SDK --> A
+        AD --> OS --> SDK --> A
 
         subgraph AUTH["PLATFORM AUTHORITY"]
             direction LR
