@@ -371,6 +371,7 @@ def test_replication_requires_evidence_and_target_outcome_when_qualified() -> No
         ("ERP mapping",),
         ("lesson",),
         stage=ReplicationStage.ACCEPTED,
+        source_outcome_ref="out-1",
         target_transformation_id="tr-2",
         target_outcome_ref="out-2",
         evidence_refs=("ev-rep",),
@@ -393,4 +394,54 @@ def test_transferred_handoff_requires_acceptance_evidence() -> None:
             ("recovery",),
             "accepted",
             OwnershipTransferStatus.TRANSFERRED,
+        )
+
+
+def test_process_rejects_dependency_cycles_and_non_finite_volume() -> None:
+    with pytest.raises(ValueError):
+        Process(
+            "cycle",
+            "tenant",
+            "rev",
+            "v1",
+            "cyclic process",
+            (
+                ProcessStep("a", "a", "actor", "system", dependencies=("b",)),
+                ProcessStep("b", "b", "actor", "system", dependencies=("a",)),
+            ),
+        )
+    with pytest.raises(ValueError):
+        Process(
+            "nan-volume",
+            "tenant",
+            "rev",
+            "v1",
+            "bad volume",
+            (ProcessStep("a", "a", "actor", "system"),),
+            volume=float("nan"),
+        )
+
+
+def test_target_state_rejects_duplicate_classification_ids() -> None:
+    c1, c2 = classifications()
+    duplicate = Classification(
+        c1.classification_id,
+        c2.tenant_id,
+        c2.revision,
+        c2.step_id,
+        c2.action,
+        c2.rationale,
+        c2.decision_owner,
+        expected_effect=c2.expected_effect,
+        evidence=c2.evidence,
+    )
+    with pytest.raises(ValueError):
+        TargetState(
+            "proc-1",
+            ("receive -> approve",),
+            (c1, duplicate),
+            ("manager approval",),
+            ("invoice extraction",),
+            acceptance_criteria=("accepted",),
+            human_decision_rights=("manager",),
         )
