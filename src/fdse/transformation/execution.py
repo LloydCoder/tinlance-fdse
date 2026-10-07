@@ -1,3 +1,5 @@
+# fmt: off
+# ruff: noqa: E501
 """Authority-neutral receipt for governed Agent-System execution."""
 from __future__ import annotations
 
