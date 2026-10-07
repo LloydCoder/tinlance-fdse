@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from ._common import enum_required, unique_ids
+from ._common import unique_ids
 from .baseline import Baseline
 from .binding import AgentSystemBinding
 from .execution import GovernedExecutionReceipt
@@ -40,7 +40,10 @@ class TransformationLifecycle:
             raise TypeError("lifecycle realization must be EngineeringRealization")
         if not isinstance(self.execution_receipts, tuple):
             raise TypeError("execution_receipts must be a tuple")
-        if not all(isinstance(receipt, GovernedExecutionReceipt) for receipt in self.execution_receipts):
+        if not all(
+            isinstance(receipt, GovernedExecutionReceipt)
+            for receipt in self.execution_receipts
+        ):
             raise TypeError("execution_receipts must contain GovernedExecutionReceipt objects")
         if not isinstance(self.measurements, tuple):
             raise TypeError("measurements must be a tuple")
@@ -48,7 +51,10 @@ class TransformationLifecycle:
             raise TypeError("measurements must contain Measurement objects")
         if not isinstance(self.replications, tuple):
             raise TypeError("replications must be a tuple")
-        if not all(isinstance(replication, ReplicationProfile) for replication in self.replications):
+        if not all(
+            isinstance(replication, ReplicationProfile)
+            for replication in self.replications
+        ):
             raise TypeError("replications must contain ReplicationProfile objects")
         if self.binding is not None and not isinstance(self.binding, AgentSystemBinding):
             raise TypeError("lifecycle binding must be AgentSystemBinding or None")
@@ -80,8 +86,6 @@ class TransformationLifecycle:
             if self.binding.tenant_id != transformation.tenant_id:
                 raise ValueError("binding tenant does not match")
 
-        for receipt in self.execution_receipts:
-            enum_required(receipt.state, type(receipt.state), "execution receipt state")
         unique_ids(
             tuple(receipt.receipt_id for receipt in self.execution_receipts),
             "receipt_id",
