@@ -160,8 +160,12 @@ class TransformationLifecycle:
             referenced_measurements = list(
                 baseline_measurements.values()
             ) + list(target_measurements.values())
-            referenced_metric_ids = {measurement.metric_id for measurement in referenced_measurements}
-            observed_metric_ids = {metric_id for metric_id, _ in self.outcome.observed_values}
+            referenced_metric_ids = {
+                measurement.metric_id for measurement in referenced_measurements
+            }
+            observed_metric_ids = {
+                metric_id for metric_id, _ in self.outcome.observed_values
+            }
             if referenced_metric_ids != observed_metric_ids:
                 raise ValueError("outcome observed values must exactly match referenced metrics")
             observed_by_metric = dict(self.outcome.observed_values)
@@ -176,11 +180,15 @@ class TransformationLifecycle:
                 candidates = [
                     measurement for measurement in self.measurements
                     if measurement.metric_id == metric_id
-                    and measurement.stage in {MeasurementStage.POST_DEPLOYMENT, MeasurementStage.FOLLOW_UP}
+                    and measurement.stage
+                    in {MeasurementStage.POST_DEPLOYMENT, MeasurementStage.FOLLOW_UP}
                     and measurement.window == self.outcome.measurement_period
                 ]
                 if len(candidates) != 1:
-                    raise ValueError("outcome requires exactly one observed measurement per metric and period")
+                    raise ValueError(
+                        "outcome requires exactly one observed measurement per metric "
+                        "and period"
+                    )
                 observed = candidates[0]
                 baseline = baselines[0]
                 if observed.unit != baseline.unit:
@@ -222,13 +230,23 @@ class TransformationLifecycle:
             if replication.target_tenant_id == transformation.tenant_id:
                 raise ValueError("replication target tenant must differ from source")
             if replication.source_outcome_ref is not None:
-                if self.outcome is None or replication.source_outcome_ref != self.outcome.outcome_id:
+                if (
+                    self.outcome is None
+                    or replication.source_outcome_ref != self.outcome.outcome_id
+                ):
                     raise ValueError("replication source outcome reference does not resolve")
             if replication.stage in {ReplicationStage.MEASURED, ReplicationStage.ACCEPTED}:
-                if replication.target_transformation_tenant_id != replication.target_tenant_id:
-                    raise ValueError("replication target transformation tenant does not match target")
+                if (
+                    replication.target_transformation_tenant_id
+                    != replication.target_tenant_id
+                ):
+                    raise ValueError(
+                        "replication target transformation tenant does not match target"
+                    )
                 if replication.target_transformation_version is None:
-                    raise ValueError("qualified replication target transformation version is required")
+                    raise ValueError(
+                        "qualified replication target transformation version is required"
+                    )
                 if replication.target_outcome_tenant_id != replication.target_tenant_id:
                     raise ValueError("replication target outcome tenant does not match target")
             if (
@@ -250,10 +268,18 @@ class TransformationLifecycle:
                 ReplicationStage.ACCEPTED,
                 ReplicationStage.FAILED,
             }:
-                if replication.target_transformation_tenant_id != replication.target_tenant_id:
-                    raise ValueError("replication target transformation tenant does not match target")
+                if (
+                    replication.target_transformation_tenant_id
+                    != replication.target_tenant_id
+                ):
+                    raise ValueError(
+                        "replication target transformation tenant does not match target"
+                    )
                 if replication.target_transformation_version is None:
-                    raise ValueError("deployed or terminal replication requires target transformation version")
+                    raise ValueError(
+                        "deployed or terminal replication requires target transformation "
+                        "version"
+                    )
             if (
                 replication.stage
                 in {
