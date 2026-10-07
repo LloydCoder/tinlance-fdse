@@ -6,10 +6,6 @@ from dataclasses import dataclass
 from ._common import required
 
 # fmt: off
-"""Replication and adaptation contracts."""
-from __future__ import annotations
-from dataclasses import dataclass
-from ._common import required
 @dataclass(frozen=True, slots=True)
 class ReplicationProfile:
     replication_id: str
