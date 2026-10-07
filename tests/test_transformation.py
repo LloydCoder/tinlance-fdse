@@ -885,7 +885,6 @@ def test_enterprise_lifecycle_rejects_dangling_handoff_and_replication_evidence(
     from dataclasses import replace
 
     from fdse.transformation import (
-        Handoff,
         OwnershipTransferStatus,
         ReplicationProfile,
         ReplicationStage,
