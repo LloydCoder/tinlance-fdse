@@ -28,6 +28,7 @@ class Handoff:
     rollback: tuple[str, ...]
     acceptance: str
     ownership_status: OwnershipTransferStatus
+    acceptance_evidence: tuple[str, ...] = ()
     def __post_init__(self) -> None:
         for value, name in ((self.handoff_id, "handoff_id"), (self.transformation_id, "transformation_id"), (self.tenant_id, "tenant_id"), (self.technical_owner, "technical_owner"), (self.operational_owner, "operational_owner"), (self.acceptance, "acceptance")):
             required(value, name)
@@ -37,3 +38,6 @@ class Handoff:
             object.__setattr__(self, name, tuple(required(v, name) for v in getattr(self, name)))
         if not self.delivered_artifacts or not self.runbooks or not self.rollback:
             raise ValueError("handoff requires artifacts, runbooks, and rollback")
+        object.__setattr__(self, "acceptance_evidence", tuple(required(v, "acceptance evidence") for v in self.acceptance_evidence))
+        if self.ownership_status is OwnershipTransferStatus.TRANSFERRED and not self.acceptance_evidence:
+            raise ValueError("transferred ownership requires acceptance evidence")
