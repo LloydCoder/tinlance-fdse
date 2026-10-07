@@ -126,7 +126,9 @@ class TransformationLifecycle:
                 for measurement in self.measurements
                 if measurement.measurement_id in baseline_refs | target_refs
             ]
-            referenced_metric_ids = {measurement.metric_id for measurement in referenced_measurements}
+            referenced_metric_ids = {
+                measurement.metric_id for measurement in referenced_measurements
+            }
             observed_metric_ids = {
                 metric_id for metric_id, _ in self.outcome.observed_values
             }
