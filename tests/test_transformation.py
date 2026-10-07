@@ -11,7 +11,7 @@ from fdse.transformation import (
     Action, Baseline, Classification, DecisionBasis, DecisionConfidence, Handoff,
     Measurement, MeasurementMethod, MeasurementStage, MetricObservation, Outcome,
     OwnershipTransferStatus, Process, ProcessStep, ReplicationProfile, Reversibility,
-    ReplicationStage, RiskLevel, TargetState, Transformation, TransformationLifecycle, digest_value, serialize,
+    ReplicationStage, RiskLevel, TargetState, Transformation, TransformationLifecycle, build_reference_ap_invoice_transformation, digest_value, serialize,
 )
 def evidence(eid: str = "ev-1") -> EvidenceRef:
     return EvidenceRef(eid, "observation", ProvenanceRef("source-1", "rev-1"), "digest-1")
@@ -998,7 +998,7 @@ def test_transformation_lifecycle_transitions_fail_closed() -> None:
 
 
 def test_enterprise_lifecycle_rejects_malformed_container_and_object_types() -> None:
-    reference = __import__("fdse.transformation", fromlist=["build_reference_ap_invoice_transformation"]).build_reference_ap_invoice_transformation()
+    reference = build_reference_ap_invoice_transformation()
     with pytest.raises(TypeError):
         TransformationLifecycle(
             reference.lifecycle.transformation,
