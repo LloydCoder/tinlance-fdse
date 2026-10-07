@@ -8,9 +8,9 @@ not validate runtime inputs.
 """
 from __future__ import annotations
 
+import math
 from dataclasses import asdict, is_dataclass
 from enum import Enum, StrEnum
-import math
 from typing import Any, cast
 from uuid import UUID
 
