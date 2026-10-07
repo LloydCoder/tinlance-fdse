@@ -7,11 +7,6 @@ from enum import StrEnum
 from ._common import required
 
 # fmt: off
-"""Customer ownership handoff semantics."""
-from __future__ import annotations
-from dataclasses import dataclass
-from enum import StrEnum
-from ._common import required
 class OwnershipTransferStatus(StrEnum):
     PENDING = "PENDING"
     ACCEPTED = "ACCEPTED"
