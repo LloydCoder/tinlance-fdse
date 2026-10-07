@@ -7,6 +7,7 @@ from fdse.transformation import (
     AgentSystemBinding,
     EngineeringRealization,
     ExecutionReceiptState, GovernedExecutionReceipt,
+    MeasurementDirection, OutcomeAcceptance,
     Action, Baseline, Classification, DecisionBasis, DecisionConfidence, Handoff,
     Measurement, MeasurementMethod, MeasurementStage, MetricObservation, Outcome,
     OwnershipTransferStatus, Process, ProcessStep, ReplicationProfile, Reversibility,
@@ -273,3 +274,76 @@ def test_governed_execution_receipt_rejects_unevidenced_terminal_state() -> None
             ExecutionReceiptState.SUCCEEDED,
             ("policy-agent-execution",),
         )
+
+
+def test_measurement_requires_complete_post_deployment_comparison() -> None:
+    with pytest.raises(ValueError):
+        Measurement(
+            "m-incomplete",
+            "tr",
+            "t",
+            "r",
+            "metric",
+            MeasurementStage.POST_DEPLOYMENT,
+            8.0,
+            "minutes",
+            "2026-Q4",
+            "ERP",
+            evidence(),
+            12.0,
+            10.0,
+        )
+    measurement = Measurement(
+        "m-complete",
+        "tr",
+        "t",
+        "r",
+        "metric",
+        MeasurementStage.POST_DEPLOYMENT,
+        8.0,
+        "minutes",
+        "2026-Q4",
+        "ERP",
+        evidence(),
+        12.0,
+        10.0,
+        "lower is better",
+        "improved",
+        direction=MeasurementDirection.LOWER_IS_BETTER,
+        acceptance_threshold=10.0,
+    )
+    assert measurement.direction is MeasurementDirection.LOWER_IS_BETTER
+
+
+def test_outcome_requires_matching_variance_metrics() -> None:
+    with pytest.raises(ValueError):
+        Outcome(
+            "out-mismatch",
+            "tr",
+            "t",
+            "v",
+            "period",
+            ("b",),
+            ("t",),
+            (("cycle_time", 8.0),),
+            (("error_rate", -1.0),),
+            "accepted",
+            (evidence(),),
+        )
+
+
+def test_outcome_acceptance_state_is_canonical() -> None:
+    outcome = Outcome(
+        "out-state",
+        "tr",
+        "t",
+        "v",
+        "period",
+        ("b",),
+        ("t",),
+        (("cycle_time", 8.0),),
+        (("cycle_time", -4.0),),
+        "accepted",
+        (evidence(),),
+    )
+    assert outcome.acceptance_state is OutcomeAcceptance.ACCEPTED
