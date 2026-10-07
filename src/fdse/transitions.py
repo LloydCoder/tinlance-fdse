@@ -53,6 +53,7 @@ def transition_change(current: ChangeStatus, target: ChangeStatus) -> ChangeStat
     return target
 
 
+# fmt: off
 _EXECUTION: dict[ExecutionReceiptState, frozenset[ExecutionReceiptState]] = {
     ExecutionReceiptState.PLANNED: frozenset(
         {
@@ -122,3 +123,5 @@ def transition_handoff(
     if target not in _HANDOFF[current]:
         raise ValueError(f"invalid handoff transition: {current} -> {target}")
     return target
+
+# fmt: on
