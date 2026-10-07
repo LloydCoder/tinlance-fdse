@@ -399,3 +399,17 @@ Phase 1 SHALL NOT implement database persistence, HTTP service, UI, workflow exe
 Phase 1 is complete only when the package boundary is documented; the object model is implemented; public API is intentional and minimal; deterministic serialization/digests are tested; scope/evidence invariants are fail-closed; existing FDSE tests remain green; Transformation tests are green; no Agent Platform authority is duplicated; documentation and repository structure are reconciled; and forensic audit confirms the dependency boundary.
 
 This contract does not certify production transformation capability, customer outcomes, or cross-company replication.
+
+## Enterprise closure track P11–P15
+
+The Transformation capability subsequently completed the enterprise closure sequence:
+
+- **P11 — Enterprise Forensic Hardening:** runtime contract validation, referential/state/evidence/measurement integrity, tenant isolation, deterministic serialization, and adversarial regression controls.
+- **P12 — Reference AP/Invoice Transformation:** deterministic synthetic end-to-end golden lifecycle.
+- **P13 — Enterprise Replication Kit:** reusable methodology separated from target-specific adaptation and qualification evidence.
+- **P14 — Agent Platform Integration Proof:** authority-neutral correlation across FDSE, Agent Developer, Agent OS, Platform SDK, and Agent Platform.
+- **P15 — Final Transformation Domain Certification:** repository/domain forensic certification with explicit non-certifications for external production and customer outcomes.
+
+The post-P15 independent forensic review identified and closed residual lifecycle runtime-type and transition-input gaps in PR #49. The remediation was re-gated through Python 3.12/3.13 compatibility, quality CI, and merged-main CI. These controls remain within the existing P15 boundary; no new phase or authority plane was introduced.
+
+See TRANSFORMATION-ENTERPRISE-CLOSURE.md and TRANSFORMATION-FINAL-CERTIFICATION.md for the current certification record.
