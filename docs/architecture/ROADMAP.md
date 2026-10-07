@@ -145,3 +145,7 @@ repository.
 P11–P15 are repository/domain certification gates. They do not certify external
 production, customer outcomes, regulatory compliance, or successful real-world
 replication without independent evidence.
+
+### P12 implementation note
+
+P12 provides a deterministic, explicitly synthetic AP/invoice golden lifecycle. It is a reference contract and test vehicle; its measurements are not customer evidence.
