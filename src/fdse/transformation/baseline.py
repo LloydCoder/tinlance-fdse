@@ -1,3 +1,5 @@
+# ruff: noqa: E501
+# fmt: off
 """Measured starting-state contracts."""
 from __future__ import annotations
 from dataclasses import dataclass
