@@ -1,3 +1,5 @@
+# ruff: noqa: E501, E701
+# fmt: off
 from __future__ import annotations
 import pytest
 from fdse.contracts import EvidenceRef, ProvenanceRef
