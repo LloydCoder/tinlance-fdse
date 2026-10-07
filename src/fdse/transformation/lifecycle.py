@@ -12,7 +12,7 @@ from .handoff import Handoff
 from .measurement import Measurement, MeasurementStage
 from .outcome import Outcome
 from .realization import EngineeringRealization
-from .replication import ReplicationProfile
+from .replication import ReplicationProfile, ReplicationStage
 from .transformation import Transformation
 
 
@@ -31,7 +31,7 @@ class TransformationLifecycle:
     replications: tuple[ReplicationProfile, ...] = ()
 
     def validate_internal_consistency(self) -> None:
-        """Fail closed on cross-object scope and identity mismatches."""
+        """Fail closed on cross-object scope, identity, and reference mismatches."""
         transformation = self.transformation
         if self.baseline.tenant_id != transformation.tenant_id:
             raise ValueError("baseline tenant does not match transformation")
@@ -56,11 +56,10 @@ class TransformationLifecycle:
             if self.binding.tenant_id != transformation.tenant_id:
                 raise ValueError("binding tenant does not match")
 
-        if self.execution_receipts:
-            unique_ids(
-                tuple(receipt.receipt_id for receipt in self.execution_receipts),
-                "receipt_id",
-            )
+        unique_ids(
+            tuple(receipt.receipt_id for receipt in self.execution_receipts),
+            "receipt_id",
+        )
         receipt_run_refs = {receipt.run_ref for receipt in self.execution_receipts}
         for receipt in self.execution_receipts:
             if receipt.transformation_id != transformation.transformation_id:
@@ -72,17 +71,9 @@ class TransformationLifecycle:
         if self.binding is not None and self.binding.execution_ref is not None:
             if self.binding.execution_ref not in receipt_run_refs:
                 raise ValueError("binding execution reference has no matching receipt")
-        measurement_ids = {measurement.measurement_id for measurement in self.measurements}
-        if self.binding is not None and not set(self.binding.measurement_refs).issubset(
-            measurement_ids
-        ):
-            raise ValueError("binding measurement references do not resolve")
 
-        if self.measurements:
-            unique_ids(
-                tuple(measurement.measurement_id for measurement in self.measurements),
-                "measurement_id",
-            )
+        measurement_ids = {measurement.measurement_id for measurement in self.measurements}
+        unique_ids(tuple(measurement_ids), "measurement_id")
         for measurement in self.measurements:
             if measurement.transformation_id != transformation.transformation_id:
                 raise ValueError("measurement transformation does not match")
@@ -90,6 +81,26 @@ class TransformationLifecycle:
                 raise ValueError("measurement tenant does not match")
             if measurement.revision != transformation.revision:
                 raise ValueError("measurement revision does not match")
+
+        evidence_ids = set(self.baseline.evidence_ids)
+        evidence_ids.update(
+            evidence_ref
+            for receipt in self.execution_receipts
+            for evidence_ref in receipt.evidence_refs
+        )
+        evidence_ids.update(
+            measurement.evidence.evidence_id
+            for measurement in self.measurements
+            if measurement.evidence is not None
+        )
+        if self.outcome is not None:
+            evidence_ids.update(evidence.evidence_id for evidence in self.outcome.evidence)
+
+        if self.binding is not None:
+            if not set(self.binding.measurement_refs).issubset(measurement_ids):
+                raise ValueError("binding measurement references do not resolve")
+            if not set(self.binding.evidence_refs).issubset(evidence_ids):
+                raise ValueError("binding evidence references do not resolve")
 
         if self.outcome is not None:
             if self.outcome.transformation_id != transformation.transformation_id:
@@ -104,12 +115,33 @@ class TransformationLifecycle:
                 and self.binding.outcome_ref != self.outcome.outcome_id
             ):
                 raise ValueError("binding outcome reference does not match outcome")
+            baseline_refs = set(self.outcome.baseline_refs)
+            target_refs = set(self.outcome.target_refs)
+            if not baseline_refs.issubset(measurement_ids):
+                raise ValueError("outcome baseline references do not resolve")
+            if not target_refs.issubset(measurement_ids):
+                raise ValueError("outcome target references do not resolve")
+            referenced_measurements = [
+                measurement
+                for measurement in self.measurements
+                if measurement.measurement_id in baseline_refs | target_refs
+            ]
+            referenced_metric_ids = {measurement.metric_id for measurement in referenced_measurements}
+            observed_metric_ids = {
+                metric_id for metric_id, _ in self.outcome.observed_values
+            }
+            if not referenced_metric_ids.issubset(observed_metric_ids):
+                raise ValueError("outcome observed values omit referenced metrics")
             if not any(
-                measurement.stage
-                in {MeasurementStage.POST_DEPLOYMENT, MeasurementStage.FOLLOW_UP}
+                measurement.stage in {
+                    MeasurementStage.POST_DEPLOYMENT,
+                    MeasurementStage.FOLLOW_UP,
+                }
                 for measurement in self.measurements
             ):
-                raise ValueError("outcome requires a post-deployment or follow-up measurement")
+                raise ValueError(
+                    "outcome requires a post-deployment or follow-up measurement"
+                )
 
         if self.handoff is not None:
             if self.handoff.transformation_id != transformation.transformation_id:
@@ -117,16 +149,33 @@ class TransformationLifecycle:
             if self.handoff.tenant_id != transformation.tenant_id:
                 raise ValueError("handoff tenant does not match")
 
-        if self.replications:
-            unique_ids(tuple(rep.replication_id for rep in self.replications), "replication_id")
+        unique_ids(
+            tuple(replication.replication_id for replication in self.replications),
+            "replication_id",
+        )
         for replication in self.replications:
             if replication.source_transformation_id != transformation.transformation_id:
                 raise ValueError("replication source transformation does not match")
             if replication.source_tenant_id != transformation.tenant_id:
                 raise ValueError("replication source tenant does not match")
+            if replication.target_tenant_id == transformation.tenant_id:
+                raise ValueError("replication target tenant must differ from source")
+            if (
+                replication.stage
+                in {
+                    ReplicationStage.DEPLOYED,
+                    ReplicationStage.MEASURED,
+                    ReplicationStage.ACCEPTED,
+                    ReplicationStage.FAILED,
+                }
+                and replication.target_transformation_id is None
+            ):
+                raise ValueError(
+                    "deployed or terminal replication requires target transformation reference"
+                )
 
     def require_ga_contract(self) -> None:
-        """Require the repository-level lifecycle objects without claiming external success."""
+        """Require repository-level lifecycle objects without claiming external success."""
         self.validate_internal_consistency()
         if self.binding is None:
             raise ValueError("GA contract requires an Agent System binding")
