@@ -43,6 +43,7 @@ class TargetState:
             raise ValueError("target state requires acceptance criteria")
         if not self.human_decision_rights:
             raise ValueError("target state requires human decision rights")
+        unique_ids(tuple(c.classification_id for c in self.classifications), "classification_id")
         unique_ids(tuple(c.step_id for c in self.classifications), "classification step_id")
 
 @dataclass(frozen=True, slots=True)
