@@ -879,3 +879,41 @@ def test_agent_platform_integration_proof_is_authority_neutral() -> None:
             "outcome",
             authority_owner="fdse",
         )
+
+
+def test_enterprise_lifecycle_rejects_dangling_handoff_and_replication_evidence() -> None:
+    from dataclasses import replace
+
+    from fdse.transformation import (
+        Handoff,
+        OwnershipTransferStatus,
+        ReplicationProfile,
+        ReplicationStage,
+        build_reference_ap_invoice_transformation,
+    )
+
+    reference = build_reference_ap_invoice_transformation()
+    bad_handoff = replace(
+        reference.lifecycle.handoff,
+        ownership_status=OwnershipTransferStatus.TRANSFERRED,
+        acceptance_evidence=("missing-acceptance-evidence",),
+    )
+    with pytest.raises(ValueError):
+        replace(reference.lifecycle, handoff=bad_handoff).require_ga_contract()
+
+    bad_replication = ReplicationProfile(
+        "rep-bad-evidence",
+        "tr-ap-invoice",
+        "reference-tenant",
+        "target-tenant",
+        ("methodology",),
+        ("adaptation",),
+        ("lesson",),
+        stage=ReplicationStage.MEASURED,
+        source_outcome_ref="outcome-ap-invoice",
+        target_transformation_id="target-tr",
+        target_outcome_ref="target-outcome",
+        evidence_refs=("missing-replication-evidence",),
+    )
+    with pytest.raises(ValueError):
+        replace(reference.lifecycle, replications=(bad_replication,)).validate_internal_consistency()
