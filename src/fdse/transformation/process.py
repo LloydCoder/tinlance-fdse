@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import math
 
 from ._common import required, unique_ids
 
@@ -60,8 +61,23 @@ class Process:
         object.__setattr__(self, "actors", tuple(required(v, "actor") for v in self.actors))
         object.__setattr__(self, "systems", tuple(required(v, "system") for v in self.systems))
         object.__setattr__(self, "boundaries", tuple(required(v, "boundary") for v in self.boundaries))
-        if self.volume is not None and self.volume < 0:
-            raise ValueError("process volume must be non-negative")
+        if self.volume is not None and (not math.isfinite(float(self.volume)) or self.volume < 0):
+            raise ValueError("process volume must be finite and non-negative")
+        graph = {step.step_id: tuple(d for d in step.dependencies if not d.startswith("external:")) for step in self.steps}
+        visiting: set[str] = set()
+        visited: set[str] = set()
+        def visit(step_id: str) -> None:
+            if step_id in visiting:
+                raise ValueError("process dependencies contain a cycle")
+            if step_id in visited:
+                return
+            visiting.add(step_id)
+            for dependency in graph[step_id]:
+                visit(dependency)
+            visiting.remove(step_id)
+            visited.add(step_id)
+        for step_id in graph:
+            visit(step_id)
         if self.frequency is not None:
             object.__setattr__(self, "frequency", required(self.frequency, "frequency"))
         object.__setattr__(self, "evidence_ids", unique_ids(self.evidence_ids, "evidence_id"))

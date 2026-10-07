@@ -158,6 +158,7 @@ FDSE objects are contracts and domain semantics. Consequential actions must cros
 | E4 evidence lineage/incident/resilience semantics | Implemented |
 | E5 production-integration contracts | Implemented; external production evidence required |
 | E6 validation/certification contracts | Implemented; external GA evidence required |
+| Transformation P1–P10 domain capability | Implemented at repository/domain level; external production and customer outcome evidence required |
 
 > [!WARNING]
 > “Implemented” means the FDSE-side contracts, invariants, tests, and documentation exist. It does not mean external production infrastructure, customer integrations, or the Agent Platform are deployed or healthy.
@@ -185,6 +186,8 @@ See [SECURITY.md](SECURITY.md) and [docs/architecture/BOUNDARY.md](docs/architec
 | [Repository structure](docs/architecture/REPOSITORY-STRUCTURE.md) | Source, tests, and documentation map |
 | [M15–M18 architecture](docs/architecture/) | Runtime and ecosystem contracts |
 | [Enterprise validation](docs/architecture/E6-VALIDATION-CERTIFICATION-GA.md) | Validation and GA semantics |
+| [Transformation Domain](docs/architecture/TRANSFORMATION-DOMAIN.md) | P1–P10 transformation lifecycle, Agent-System binding, measurement, handoff, and replication contracts |
+| [Classification Taxonomy](docs/architecture/CLASSIFICATION-TAXONOMY.md) | Canonical DELETE/CODE/AGENT/HUMAN decision semantics |
 | [Operations](docs/operations/SELF-HOSTED-RUNNER.md) | Historical runner decommissioning guidance |
 | [Changelog](CHANGELOG.md) | Release history |
 

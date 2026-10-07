@@ -11,7 +11,7 @@ from fdse.transformation import (
     Action, Baseline, Classification, DecisionBasis, DecisionConfidence, Handoff,
     Measurement, MeasurementMethod, MeasurementStage, MetricObservation, Outcome,
     OwnershipTransferStatus, Process, ProcessStep, ReplicationProfile, Reversibility,
-    ReplicationStage, RiskLevel, TargetState, Transformation, digest_value, serialize,
+    ReplicationStage, RiskLevel, TargetState, Transformation, TransformationLifecycle, digest_value, serialize,
 )
 def evidence(eid: str = "ev-1") -> EvidenceRef:
     return EvidenceRef(eid, "observation", ProvenanceRef("source-1", "rev-1"), "digest-1")
@@ -371,6 +371,7 @@ def test_replication_requires_evidence_and_target_outcome_when_qualified() -> No
         ("ERP mapping",),
         ("lesson",),
         stage=ReplicationStage.ACCEPTED,
+        source_outcome_ref="out-1",
         target_transformation_id="tr-2",
         target_outcome_ref="out-2",
         evidence_refs=("ev-rep",),
@@ -394,3 +395,260 @@ def test_transferred_handoff_requires_acceptance_evidence() -> None:
             "accepted",
             OwnershipTransferStatus.TRANSFERRED,
         )
+
+
+def test_process_rejects_dependency_cycles_and_non_finite_volume() -> None:
+    with pytest.raises(ValueError):
+        Process(
+            "cycle",
+            "tenant",
+            "rev",
+            "v1",
+            "cyclic process",
+            (
+                ProcessStep("a", "a", "actor", "system", dependencies=("b",)),
+                ProcessStep("b", "b", "actor", "system", dependencies=("a",)),
+            ),
+        )
+    with pytest.raises(ValueError):
+        Process(
+            "nan-volume",
+            "tenant",
+            "rev",
+            "v1",
+            "bad volume",
+            (ProcessStep("a", "a", "actor", "system"),),
+            volume=float("nan"),
+        )
+
+
+def test_target_state_rejects_duplicate_classification_ids() -> None:
+    c1, c2 = classifications()
+    duplicate = Classification(
+        c1.classification_id,
+        c2.tenant_id,
+        c2.revision,
+        c2.step_id,
+        c2.action,
+        c2.rationale,
+        c2.decision_owner,
+        expected_effect=c2.expected_effect,
+        evidence=c2.evidence,
+    )
+    with pytest.raises(ValueError):
+        TargetState(
+            "proc-1",
+            ("receive -> approve",),
+            (c1, duplicate),
+            ("manager approval",),
+            ("invoice extraction",),
+            acceptance_criteria=("accepted",),
+            human_decision_rights=("manager",),
+        )
+
+
+def test_transformation_lifecycle_ga_contract_is_cross_scope_consistent() -> None:
+    p = process()
+    tr = Transformation("tr-ga", "tenant-1", "rev-1", "v1", p, target())
+    baseline = Baseline(
+        "base-ga",
+        "tenant-1",
+        "rev-1",
+        "v1",
+        (
+            MetricObservation(
+                "cycle_time",
+                12.0,
+                "minutes",
+                "2026-Q3",
+                "all invoices",
+                MeasurementMethod.OBSERVED,
+                "ERP",
+                evidence("ev-base-ga"),
+            ),
+        ),
+    )
+    realization = EngineeringRealization(
+        "real-ga",
+        "tr-ga",
+        "v1",
+        "proc-1",
+        "fdse-engineer",
+        ("extract invoice fields",),
+        acceptance_criteria=("golden dataset threshold met",),
+    )
+    binding = AgentSystemBinding(
+        "bind-ga",
+        "tr-ga",
+        "v1",
+        "agent-tr-ga",
+        1,
+        "tenant-1",
+        "invoice-agent",
+        "2026.10",
+        "workspace-ga",
+        "task-ga",
+        ("invoice.extract",),
+        execution_ref="run-ga",
+    )
+    receipt = GovernedExecutionReceipt(
+        "receipt-ga",
+        "tr-ga",
+        "bind-ga",
+        "tenant-1",
+        "run-ga",
+        ExecutionReceiptState.SUCCEEDED,
+        ("policy-agent-execution",),
+        evidence_refs=("ev-run-ga",),
+    )
+    measurement = Measurement(
+        "m-ga",
+        "tr-ga",
+        "tenant-1",
+        "rev-1",
+        "cycle_time",
+        MeasurementStage.POST_DEPLOYMENT,
+        8.0,
+        "minutes",
+        "2026-Q4",
+        "ERP",
+        evidence("ev-measure-ga"),
+        12.0,
+        10.0,
+        "lower is better",
+        "improved",
+        direction=MeasurementDirection.LOWER_IS_BETTER,
+    )
+    outcome = Outcome(
+        "out-ga",
+        "tr-ga",
+        "tenant-1",
+        "v1",
+        "2026-Q4",
+        ("m-base",),
+        ("m-target",),
+        (("cycle_time", 8.0),),
+        (("cycle_time", -4.0),),
+        "accepted",
+        (evidence("ev-out-ga"),),
+    )
+    handoff = Handoff(
+        "handoff-ga",
+        "tr-ga",
+        "tenant-1",
+        "tech-owner",
+        "ops-owner",
+        ("artifact",),
+        ("training",),
+        ("runbook",),
+        ("support",),
+        ("recovery",),
+        "accepted",
+        OwnershipTransferStatus.ACCEPTED,
+    )
+    lifecycle = TransformationLifecycle(
+        tr,
+        baseline,
+        realization,
+        binding,
+        (receipt,),
+        (measurement,),
+        outcome,
+        handoff,
+    )
+    lifecycle.require_ga_contract()
+
+
+def test_transformation_lifecycle_rejects_cross_tenant_binding() -> None:
+    tr = Transformation("tr-ga", "tenant-1", "rev-1", "v1", process(), target())
+    baseline = Baseline(
+        "base-ga",
+        "tenant-1",
+        "rev-1",
+        "v1",
+        (
+            MetricObservation(
+                "cycle_time",
+                12.0,
+                "minutes",
+                "2026-Q3",
+                "all invoices",
+                MeasurementMethod.OBSERVED,
+                "ERP",
+                evidence("ev-base-ga"),
+            ),
+        ),
+    )
+    realization = EngineeringRealization(
+        "real-ga",
+        "tr-ga",
+        "v1",
+        "proc-1",
+        "fdse-engineer",
+        ("extract invoice fields",),
+        acceptance_criteria=("accepted",),
+    )
+    binding = AgentSystemBinding(
+        "bind-ga",
+        "tr-ga",
+        "v1",
+        "agent-tr-ga",
+        1,
+        "tenant-2",
+        "invoice-agent",
+        "2026.10",
+        "workspace-ga",
+        "task-ga",
+        ("invoice.extract",),
+    )
+    lifecycle = TransformationLifecycle(tr, baseline, realization, binding)
+    with pytest.raises(ValueError):
+        lifecycle.validate_internal_consistency()
+
+
+def test_transformation_lifecycle_rejects_unresolved_execution_reference() -> None:
+    tr = Transformation("tr-ref", "tenant-1", "rev-1", "v1", process(), target())
+    baseline = Baseline(
+        "base-ref",
+        "tenant-1",
+        "rev-1",
+        "v1",
+        (
+            MetricObservation(
+                "cycle_time",
+                12.0,
+                "minutes",
+                "2026-Q3",
+                "all invoices",
+                MeasurementMethod.OBSERVED,
+                "ERP",
+                evidence("ev-base-ref"),
+            ),
+        ),
+    )
+    realization = EngineeringRealization(
+        "real-ref",
+        "tr-ref",
+        "v1",
+        "proc-1",
+        "fdse-engineer",
+        ("extract",),
+        acceptance_criteria=("accepted",),
+    )
+    binding = AgentSystemBinding(
+        "bind-ref",
+        "tr-ref",
+        "v1",
+        "agent-tr-ref",
+        1,
+        "tenant-1",
+        "invoice-agent",
+        "2026.10",
+        "workspace-ref",
+        "task-ref",
+        ("invoice.extract",),
+        execution_ref="missing-run",
+    )
+    lifecycle = TransformationLifecycle(tr, baseline, realization, binding)
+    with pytest.raises(ValueError):
+        lifecycle.validate_internal_consistency()
