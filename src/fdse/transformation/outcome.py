@@ -1,16 +1,15 @@
 # fmt: off
-# ruff: noqa: E501, I001
-# ruff: noqa: E501, I001
+# ruff: noqa: E501
 """Observed transformation outcomes."""
 from __future__ import annotations
 
 from dataclasses import dataclass
-import math
 from enum import StrEnum
 
 from fdse.contracts import EvidenceRef
 
-from ._common import required, unique_ids
+from ._common import enum_required, finite_number, required, unique_ids, validate_evidence_ref
+
 
 class OutcomeAcceptance(StrEnum):
     PENDING = "pending"
@@ -18,7 +17,7 @@ class OutcomeAcceptance(StrEnum):
     REJECTED = "rejected"
     INCONCLUSIVE = "inconclusive"
 
-# fmt: off
+
 @dataclass(frozen=True, slots=True)
 class Outcome:
     outcome_id: str
@@ -30,18 +29,20 @@ class Outcome:
     target_refs: tuple[str, ...]
     observed_values: tuple[tuple[str, float], ...]
     variance: tuple[tuple[str, float], ...]
-    acceptance_state: str
+    acceptance_state: OutcomeAcceptance
     evidence: tuple[EvidenceRef, ...]
     limitations: tuple[str, ...] = ()
+
     def __post_init__(self) -> None:
-        for value, name in ((self.outcome_id, "outcome_id"), (self.transformation_id, "transformation_id"), (self.tenant_id, "tenant_id"), (self.version, "version"), (self.measurement_period, "measurement_period"), (self.acceptance_state, "acceptance_state")):
+        for value, name in (
+            (self.outcome_id, "outcome_id"), (self.transformation_id, "transformation_id"),
+            (self.tenant_id, "tenant_id"), (self.version, "version"),
+            (self.measurement_period, "measurement_period"),
+        ):
             required(value, name)
-        object.__setattr__(self, "outcome_id", required(self.outcome_id, "outcome_id"))
-        object.__setattr__(self, "transformation_id", required(self.transformation_id, "transformation_id"))
-        object.__setattr__(self, "tenant_id", required(self.tenant_id, "tenant_id"))
-        object.__setattr__(self, "version", required(self.version, "version"))
-        object.__setattr__(self, "measurement_period", required(self.measurement_period, "measurement_period"))
-        object.__setattr__(self, "acceptance_state", OutcomeAcceptance(required(self.acceptance_state, "acceptance_state")))
+        for name in ("outcome_id", "transformation_id", "tenant_id", "version", "measurement_period"):
+            object.__setattr__(self, name, required(getattr(self, name), name))
+        object.__setattr__(self, "acceptance_state", enum_required(self.acceptance_state, OutcomeAcceptance, "acceptance_state"))
         if not self.baseline_refs or not self.target_refs:
             raise ValueError("outcome requires baseline and target references")
         unique_ids(self.baseline_refs, "baseline_ref")
@@ -52,8 +53,20 @@ class Outcome:
         variance_ids = unique_ids(tuple(metric_id for metric_id, _ in self.variance), "variance metric_id")
         if set(observed_ids) != set(variance_ids):
             raise ValueError("outcome variance must match observed metric identifiers")
-        if any(not math.isfinite(value) for _, value in self.observed_values + self.variance):
-            raise ValueError("outcome values must be finite")
+        object.__setattr__(
+            self,
+            "observed_values",
+            tuple((required(metric_id, "observed metric_id"), finite_number(value, "observed value")) for metric_id, value in self.observed_values),
+        )
+        object.__setattr__(
+            self,
+            "variance",
+            tuple((required(metric_id, "variance metric_id"), finite_number(value, "variance value")) for metric_id, value in self.variance),
+        )
         if not self.evidence:
             raise ValueError("outcome requires supporting evidence")
+        object.__setattr__(
+            self, "evidence",
+            tuple(validate_evidence_ref(value, "outcome evidence") for value in self.evidence),
+        )
         object.__setattr__(self, "limitations", tuple(required(v, "limitation") for v in self.limitations))

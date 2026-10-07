@@ -501,6 +501,31 @@ def test_transformation_lifecycle_ga_contract_is_cross_scope_consistent() -> Non
         ("policy-agent-execution",),
         evidence_refs=("ev-run-ga",),
     )
+    baseline_measurement = Measurement(
+        "m-base",
+        "tr-ga",
+        "tenant-1",
+        "rev-1",
+        "cycle_time",
+        MeasurementStage.BASELINE,
+        12.0,
+        "minutes",
+        "2026-Q3",
+        "ERP",
+        evidence("ev-measure-base-ga"),
+    )
+    target_measurement = Measurement(
+        "m-target",
+        "tr-ga",
+        "tenant-1",
+        "rev-1",
+        "cycle_time",
+        MeasurementStage.TARGET,
+        10.0,
+        "minutes",
+        "design",
+        "target-state",
+    )
     measurement = Measurement(
         "m-ga",
         "tr-ga",
@@ -552,7 +577,7 @@ def test_transformation_lifecycle_ga_contract_is_cross_scope_consistent() -> Non
         realization,
         binding,
         (receipt,),
-        (measurement,),
+        (baseline_measurement, target_measurement, measurement),
         outcome,
         handoff,
     )
@@ -652,3 +677,98 @@ def test_transformation_lifecycle_rejects_unresolved_execution_reference() -> No
     lifecycle = TransformationLifecycle(tr, baseline, realization, binding)
     with pytest.raises(ValueError):
         lifecycle.validate_internal_consistency()
+
+
+def test_enterprise_runtime_type_hardening_rejects_malformed_states() -> None:
+    with pytest.raises(TypeError):
+        Measurement("m", "tr", "t", "r", "metric", 1, 1.0, "count", "w", "system", evidence())
+    with pytest.raises(TypeError):
+        AgentSystemBinding("b", "tr", "v1", "agent-tr", True, "t", "agent", "1", "ws", "task", ("cap",))
+    with pytest.raises(TypeError):
+        ReplicationProfile("r", "tr", "t1", "t2", ("method",), ("specific",), ("lesson",), success_claimed=1)
+    with pytest.raises(TypeError):
+        Outcome("o", "tr", "t", "v1", "period", ("b",), ("t",), (("m", True),), (("m", 0.0),), "accepted", (evidence(),))
+
+
+def test_enterprise_enum_values_are_canonicalized_or_rejected() -> None:
+    measurement = Measurement(
+        "m-enum", "tr", "t", "r", "metric", "POST_DEPLOYMENT", 1.0,
+        "count", "window", "system", evidence(), 2.0, 1.0, "lower", "improved",
+        direction="LOWER_IS_BETTER",
+    )
+    assert measurement.stage is MeasurementStage.POST_DEPLOYMENT
+    assert measurement.direction is MeasurementDirection.LOWER_IS_BETTER
+    with pytest.raises(ValueError):
+        Measurement(
+            "m-bad-enum", "tr", "t", "r", "metric", "UNKNOWN", 1.0,
+            "count", "window", "system", evidence(), 2.0, 1.0, "lower", "improved",
+        )
+
+
+def test_enterprise_evidence_reference_is_strict() -> None:
+    with pytest.raises(TypeError):
+        MetricObservation(
+            "metric", 1.0, "count", "window", "all", MeasurementMethod.OBSERVED,
+            "system", "not-an-evidence-ref",
+        )
+    with pytest.raises(ValueError):
+        MetricObservation(
+            "metric", 1.0, "count", "window", "all", MeasurementMethod.OBSERVED,
+            "system", EvidenceRef("ev", "not-a-kind", ProvenanceRef("src", "rev"), "digest"),
+        )
+
+
+def test_enterprise_replication_requires_distinct_source_and_target() -> None:
+    with pytest.raises(ValueError):
+        ReplicationProfile(
+            "rep", "tr", "tenant-1", "tenant-1", ("method",), ("mapping",), ("lesson",)
+        )
+    with pytest.raises(ValueError):
+        ReplicationProfile(
+            "rep", "tr", "tenant-1", "tenant-2", ("method",), ("mapping",), ("lesson",),
+            stage=ReplicationStage.DEPLOYED,
+        )
+
+
+def test_enterprise_lifecycle_rejects_dangling_outcome_references() -> None:
+    tr = Transformation("tr-ref2", "tenant-1", "rev-1", "v1", process(), target())
+    baseline = Baseline(
+        "base-ref2", "tenant-1", "rev-1", "v1",
+        (MetricObservation(
+            "cycle_time", 12.0, "minutes", "2026-Q3", "all",
+            MeasurementMethod.OBSERVED, "ERP", evidence("ev-base-ref2"),
+        ),),
+    )
+    realization = EngineeringRealization(
+        "real-ref2", "tr-ref2", "v1", "proc-1", "fdse-engineer", ("extract",),
+        acceptance_criteria=("accepted",),
+    )
+    measurement = Measurement(
+        "m-post-ref2", "tr-ref2", "tenant-1", "rev-1", "cycle_time",
+        MeasurementStage.POST_DEPLOYMENT, 8.0, "minutes", "2026-Q4", "ERP",
+        evidence("ev-measure-ref2"), 12.0, 10.0, "lower is better", "improved",
+    )
+    outcome = Outcome(
+        "out-ref2", "tr-ref2", "tenant-1", "v1", "2026-Q4",
+        ("missing-baseline",), ("missing-target",),
+        (("cycle_time", 8.0),), (("cycle_time", -4.0),), "accepted",
+        (evidence("ev-out-ref2"),),
+    )
+    lifecycle = TransformationLifecycle(tr, baseline, realization, measurements=(measurement,), outcome=outcome)
+    with pytest.raises(ValueError):
+        lifecycle.validate_internal_consistency()
+
+
+def test_enterprise_serialization_rejects_non_finite_values() -> None:
+    with pytest.raises(ValueError):
+        serialize({"value": float("nan")})
+    with pytest.raises(ValueError):
+        digest_value({"value": float("inf")})
+    with pytest.raises(TypeError):
+        serialize({1: "not-a-canonical-key"})
+
+
+def test_enterprise_objects_remain_immutable() -> None:
+    p = process()
+    with pytest.raises((AttributeError, TypeError)):
+        p.process_id = "changed"  # type: ignore[misc]

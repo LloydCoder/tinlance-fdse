@@ -1,6 +1,5 @@
 # fmt: off
-# ruff: noqa: E501, I001
-# ruff: noqa: E501, I001
+# ruff: noqa: E501
 """Transformation aggregate and target-state contract."""
 from __future__ import annotations
 
@@ -10,7 +9,7 @@ from ._common import required, unique_ids
 from .classification import Classification
 from .process import Process
 
-# fmt: off
+
 @dataclass(frozen=True, slots=True)
 class TargetState:
     process_id: str
@@ -25,26 +24,29 @@ class TargetState:
     human_decision_rights: tuple[str, ...] = ()
     recovery_requirements: tuple[str, ...] = ()
     observability_requirements: tuple[str, ...] = ()
+
     def __post_init__(self) -> None:
         object.__setattr__(self, "process_id", required(self.process_id, "process_id"))
         if not self.desired_topology:
             raise ValueError("target state requires desired topology")
-        object.__setattr__(self, "desired_topology", tuple(required(v, "topology item") for v in self.desired_topology))
-        object.__setattr__(self, "human_responsibilities", tuple(required(v, "human responsibility") for v in self.human_responsibilities))
-        object.__setattr__(self, "system_responsibilities", tuple(required(v, "system responsibility") for v in self.system_responsibilities))
-        object.__setattr__(self, "integration_requirements", tuple(required(v, "integration requirement") for v in self.integration_requirements))
-        object.__setattr__(self, "governance_requirements", tuple(required(v, "governance requirement") for v in self.governance_requirements))
-        object.__setattr__(self, "acceptance_criteria", tuple(required(v, "acceptance criterion") for v in self.acceptance_criteria))
-        object.__setattr__(self, "exception_handling", tuple(required(v, "exception handling") for v in self.exception_handling))
-        object.__setattr__(self, "human_decision_rights", tuple(required(v, "human decision right") for v in self.human_decision_rights))
-        object.__setattr__(self, "recovery_requirements", tuple(required(v, "recovery requirement") for v in self.recovery_requirements))
-        object.__setattr__(self, "observability_requirements", tuple(required(v, "observability requirement") for v in self.observability_requirements))
+        for name in (
+            "desired_topology", "human_responsibilities", "system_responsibilities",
+            "integration_requirements", "governance_requirements", "acceptance_criteria",
+            "exception_handling", "human_decision_rights", "recovery_requirements",
+            "observability_requirements",
+        ):
+            object.__setattr__(self, name, tuple(required(v, name) for v in getattr(self, name)))
+        if not self.classifications:
+            raise ValueError("target state requires classifications")
+        if any(not isinstance(c, Classification) for c in self.classifications):
+            raise TypeError("target state classifications must be Classification objects")
         if not self.acceptance_criteria:
             raise ValueError("target state requires acceptance criteria")
         if not self.human_decision_rights:
             raise ValueError("target state requires human decision rights")
         unique_ids(tuple(c.classification_id for c in self.classifications), "classification_id")
         unique_ids(tuple(c.step_id for c in self.classifications), "classification step_id")
+
 
 @dataclass(frozen=True, slots=True)
 class Transformation:
@@ -54,13 +56,21 @@ class Transformation:
     version: str
     process: Process
     target_state: TargetState
+
     def __post_init__(self) -> None:
-        for value, name in ((self.transformation_id, "transformation_id"), (self.tenant_id, "tenant_id"), (self.revision, "revision"), (self.version, "version")):
+        for value, name in (
+            (self.transformation_id, "transformation_id"),
+            (self.tenant_id, "tenant_id"),
+            (self.revision, "revision"),
+            (self.version, "version"),
+        ):
             required(value, name)
-        object.__setattr__(self, "transformation_id", required(self.transformation_id, "transformation_id"))
-        object.__setattr__(self, "tenant_id", required(self.tenant_id, "tenant_id"))
-        object.__setattr__(self, "revision", required(self.revision, "revision"))
-        object.__setattr__(self, "version", required(self.version, "version"))
+        for name in ("transformation_id", "tenant_id", "revision", "version"):
+            object.__setattr__(self, name, required(getattr(self, name), name))
+        if not isinstance(self.process, Process):
+            raise TypeError("transformation process must be Process")
+        if not isinstance(self.target_state, TargetState):
+            raise TypeError("transformation target_state must be TargetState")
         if self.process.tenant_id != self.tenant_id or self.process.revision != self.revision:
             raise ValueError("transformation scope does not match process")
         if self.target_state.process_id != self.process.process_id:
