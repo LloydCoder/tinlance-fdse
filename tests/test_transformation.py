@@ -604,3 +604,51 @@ def test_transformation_lifecycle_rejects_cross_tenant_binding() -> None:
     lifecycle = TransformationLifecycle(tr, baseline, realization, binding)
     with pytest.raises(ValueError):
         lifecycle.validate_internal_consistency()
+
+
+def test_transformation_lifecycle_rejects_unresolved_execution_reference() -> None:
+    tr = Transformation("tr-ref", "tenant-1", "rev-1", "v1", process(), target())
+    baseline = Baseline(
+        "base-ref",
+        "tenant-1",
+        "rev-1",
+        "v1",
+        (
+            MetricObservation(
+                "cycle_time",
+                12.0,
+                "minutes",
+                "2026-Q3",
+                "all invoices",
+                MeasurementMethod.OBSERVED,
+                "ERP",
+                evidence("ev-base-ref"),
+            ),
+        ),
+    )
+    realization = EngineeringRealization(
+        "real-ref",
+        "tr-ref",
+        "v1",
+        "proc-1",
+        "fdse-engineer",
+        ("extract",),
+        acceptance_criteria=("accepted",),
+    )
+    binding = AgentSystemBinding(
+        "bind-ref",
+        "tr-ref",
+        "v1",
+        "agent-tr-ref",
+        1,
+        "tenant-1",
+        "invoice-agent",
+        "2026.10",
+        "workspace-ref",
+        "task-ref",
+        ("invoice.extract",),
+        execution_ref="missing-run",
+    )
+    lifecycle = TransformationLifecycle(tr, baseline, realization, binding)
+    with pytest.raises(ValueError):
+        lifecycle.validate_internal_consistency()
