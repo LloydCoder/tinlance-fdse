@@ -1,3 +1,4 @@
+# ruff: noqa: E501
 """Canonical DELETE/CODE/AGENT/HUMAN semantics."""
 from __future__ import annotations
 
