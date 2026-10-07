@@ -5,47 +5,90 @@
 [![CI](https://github.com/LloydCoder/tinlance-fdse/actions/workflows/ci.yml/badge.svg)](https://github.com/LloydCoder/tinlance-fdse/actions/workflows/ci.yml) [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
 
 ~~~mermaid
-flowchart TD
-    A[Customer engineering work] --> B[Tinlance FDSE]
-    B --> I[Intake + scope]
-    I --> J[Context + planning]
+flowchart TB
+    C[Customer / Organization] --> F[Tinlance FDSE]
+    F --> I[Intake<br/>Scope • Context • Constraints]
+    I --> R{Select FDSE Domain Route}
 
-    J --> E
-    J --> T
-
-    subgraph E[Engineering path]
-        E1[Engineering discovery + context] --> E2[Engineering design + planning]
-        E2 --> E3[Implementation / remediation]
-        E3 --> E4[Evidence + evaluation]
-        E4 --> E5[Workflow + certification]
+    R --> E1
+    subgraph ENG["ENGINEERING ROUTE"]
+        direction TB
+        E1[Discovery<br/>System • Risk • Requirements]
+        E2[Engineering Design<br/>Architecture • Plan • Controls]
+        E3[Implementation / Remediation<br/>Build • Change • Harden]
+        E4[Evidence Collection<br/>Artifacts • Telemetry • Provenance]
+        E5[Evaluation<br/>Tests • Validation • Findings]
+        E6[Workflow / Certification<br/>Decision • Acceptance • Closure]
+        E1 --> E2 --> E3 --> E4 --> E5 --> E6
     end
 
-    subgraph T[Transformation path]
-        T1[Process discovery + baseline] --> T2[Classification]
-        T2 --> T3[Target-state design]
-        T3 --> T4[Transformation realization]
-        T4 --> T5[Governed execution + evidence]
-        T5 --> T6[Measurement + outcome]
-        T6 --> T7[Handoff + acceptance]
-        T7 --> T8[Replication]
+    R --> T1
+    subgraph TRANS["TRANSFORMATION ROUTE"]
+        direction TB
+        T1[Process Discovery<br/>Current State]
+        T2[Baseline<br/>Metrics • Evidence • Constraints]
+        T3[Classification<br/>Process • Risk • Operating Model]
+        T4[Target-State Design<br/>Future State • Controls • KPIs]
+        T5[Transformation Realization<br/>Change • Configure • Implement]
+        T6[Governed Execution<br/>Controlled Change + Evidence]
+        T7[Measurement<br/>Baseline vs Target]
+        T8[Outcome<br/>Variance • Effectiveness • Acceptance]
+        T9[Handoff<br/>Ownership • Training • Acceptance]
+        T10[Replication<br/>Method • Kit • Adaptation]
+        T1 --> T2 --> T3 --> T4 --> T5 --> T6 --> T7 --> T8 --> T9 --> T10
     end
 
-    E --> G[Versioned governed intent]
-    T --> G
-    G --> P[Tinlance Agent Platform]
-    P --> P1[Identity + authorization]
-    P --> P2[Approvals + policy]
-    P --> P3[Runtime + sandbox]
-    P --> P4[Tools + budgets + audit]
+    E6 --> G1
+    T10 --> G1
+    subgraph GOV["FDSE SHARED GOVERNANCE + EVIDENCE PLANE"]
+        direction LR
+        G1[Versioned Contracts]
+        G2[Evidence + Provenance]
+        G3[Validation + Evaluation]
+        G4[Outcome / Decision Records]
+        G5[Handoff + Certification]
+        G1 --> G2 --> G3 --> G4 --> G5
+    end
 
-    E3 -. governed execution .-> P
-    T4 -. governed execution .-> P
-    P --> E4
-    P --> T5
+    G5 --> O[Governed Intent / Execution Request]
+
+    O -. governed execution .-> A
+    subgraph AGENT["TINLANCE AGENT SYSTEM"]
+        direction TB
+        OS[Agent OS<br/>Workspace • Lifecycle • Fleet]
+        SDK[Agent Platform SDK<br/>Developer Interface]
+        A[Agent Platform<br/>Execution Authority]
+        OS --> SDK --> A
+
+        subgraph AUTH["PLATFORM AUTHORITY"]
+            direction LR
+            A1[Identity + Authorization]
+            A2[Policy + Approvals]
+            A3[Runtime + Sandbox]
+            A4[Tools + MCP]
+            A5[Secrets + Budgets]
+            A6[Evidence + Audit]
+            A7[Observability]
+            A --> A1
+            A --> A2
+            A --> A3
+            A --> A4
+            A --> A5
+            A --> A6
+            A --> A7
+        end
+    end
+
+    A -. execution receipts / evidence .-> E4
+    A -. execution receipts / evidence .-> T6
+    A -. measurements / outcomes .-> T7
+    T10 -. reusable transformation methodology .-> T4
 ~~~
 
 > [!NOTE]
-> FDSE is the engineering-domain layer, not the generic agent authority layer. Identity, authorization, approvals, sandboxing, model access, budgets, and runtime authority belong to the Tinlance Agent Platform. The Transformation domain defines the engineering transformation lifecycle and evidence contracts; it does not become the execution authority.
+> **FDSE has two first-class domain routes: Engineering and Transformation.** Transformation is a bounded capability track inside FDSE, not M19 and not a fifth Agent System repository.
+>
+> FDSE owns domain semantics, evidence, validation, outcomes, and workflow intent. The Tinlance Agent Platform remains authoritative for identity, authorization, policy, approvals, runtime, sandboxing, tools, secrets, budgets, audit, and observability. Consequential execution crosses that platform boundary.
 
 ## Why FDSE
 
@@ -207,6 +250,7 @@ See [SECURITY.md](SECURITY.md) and [docs/architecture/BOUNDARY.md](docs/architec
 | Guide | Purpose |
 |---|---|
 | [Architecture roadmap](docs/architecture/ROADMAP.md) | Canonical M0–M18 and E1–E6 capability map |
+| [Architecture](docs/architecture/FDSE-ARCHITECTURE.md) | Canonical two-domain FDSE architecture and authority flow |
 | [Boundary](docs/architecture/BOUNDARY.md) | FDSE ↔ Agent Platform authority boundary |
 | [Repository structure](docs/architecture/REPOSITORY-STRUCTURE.md) | Source, tests, and documentation map |
 | [M15–M18 architecture](docs/architecture/) | Runtime and ecosystem contracts |
