@@ -445,3 +445,162 @@ def test_target_state_rejects_duplicate_classification_ids() -> None:
             acceptance_criteria=("accepted",),
             human_decision_rights=("manager",),
         )
+
+
+def test_transformation_lifecycle_ga_contract_is_cross_scope_consistent() -> None:
+    p = process()
+    tr = Transformation("tr-ga", "tenant-1", "rev-1", "v1", p, target())
+    baseline = Baseline(
+        "base-ga",
+        "tenant-1",
+        "rev-1",
+        "v1",
+        (
+            MetricObservation(
+                "cycle_time",
+                12.0,
+                "minutes",
+                "2026-Q3",
+                "all invoices",
+                MeasurementMethod.OBSERVED,
+                "ERP",
+                evidence("ev-base-ga"),
+            ),
+        ),
+    )
+    realization = EngineeringRealization(
+        "real-ga",
+        "tr-ga",
+        "v1",
+        "proc-1",
+        "fdse-engineer",
+        ("extract invoice fields",),
+        acceptance_criteria=("golden dataset threshold met",),
+    )
+    binding = AgentSystemBinding(
+        "bind-ga",
+        "tr-ga",
+        "v1",
+        "agent-tr-ga",
+        1,
+        "tenant-1",
+        "invoice-agent",
+        "2026.10",
+        "workspace-ga",
+        "task-ga",
+        ("invoice.extract",),
+        execution_ref="run-ga",
+    )
+    receipt = GovernedExecutionReceipt(
+        "receipt-ga",
+        "tr-ga",
+        "bind-ga",
+        "tenant-1",
+        "run-ga",
+        ExecutionReceiptState.SUCCEEDED,
+        ("policy-agent-execution",),
+        evidence_refs=("ev-run-ga",),
+    )
+    measurement = Measurement(
+        "m-ga",
+        "tr-ga",
+        "tenant-1",
+        "rev-1",
+        "cycle_time",
+        MeasurementStage.POST_DEPLOYMENT,
+        8.0,
+        "minutes",
+        "2026-Q4",
+        "ERP",
+        evidence("ev-measure-ga"),
+        12.0,
+        10.0,
+        "lower is better",
+        "improved",
+        direction=MeasurementDirection.LOWER_IS_BETTER,
+    )
+    outcome = Outcome(
+        "out-ga",
+        "tr-ga",
+        "tenant-1",
+        "v1",
+        "2026-Q4",
+        ("m-base",),
+        ("m-target",),
+        (("cycle_time", 8.0),),
+        (("cycle_time", -4.0),),
+        "accepted",
+        (evidence("ev-out-ga"),),
+    )
+    handoff = Handoff(
+        "handoff-ga",
+        "tr-ga",
+        "tenant-1",
+        "tech-owner",
+        "ops-owner",
+        ("artifact",),
+        ("training",),
+        ("runbook",),
+        ("support",),
+        ("recovery",),
+        "accepted",
+        OwnershipTransferStatus.ACCEPTED,
+    )
+    lifecycle = TransformationLifecycle(
+        tr,
+        baseline,
+        realization,
+        binding,
+        (receipt,),
+        (measurement,),
+        outcome,
+        handoff,
+    )
+    lifecycle.require_ga_contract()
+
+
+def test_transformation_lifecycle_rejects_cross_tenant_binding() -> None:
+    tr = Transformation("tr-ga", "tenant-1", "rev-1", "v1", process(), target())
+    baseline = Baseline(
+        "base-ga",
+        "tenant-1",
+        "rev-1",
+        "v1",
+        (
+            MetricObservation(
+                "cycle_time",
+                12.0,
+                "minutes",
+                "2026-Q3",
+                "all invoices",
+                MeasurementMethod.OBSERVED,
+                "ERP",
+                evidence("ev-base-ga"),
+            ),
+        ),
+    )
+    realization = EngineeringRealization(
+        "real-ga",
+        "tr-ga",
+        "v1",
+        "proc-1",
+        "fdse-engineer",
+        ("extract invoice fields",),
+        acceptance_criteria=("accepted",),
+    )
+    binding = AgentSystemBinding(
+        "bind-ga",
+        "tr-ga",
+        "v1",
+        "agent-tr-ga",
+        1,
+        "tenant-2",
+        "invoice-agent",
+        "2026.10",
+        "workspace-ga",
+        "task-ga",
+        ("invoice.extract",),
+    )
+    lifecycle = TransformationLifecycle(tr, baseline, realization, binding)
+    with pytest.raises(ValueError):
+        lifecycle.validate_internal_consistency()
