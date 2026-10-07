@@ -3,8 +3,8 @@
 """Operational process semantics."""
 from __future__ import annotations
 
-from dataclasses import dataclass
 import math
+from dataclasses import dataclass
 
 from ._common import required, unique_ids
 
