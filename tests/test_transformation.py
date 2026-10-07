@@ -65,3 +65,81 @@ def test_outcome_and_replication_qualification() -> None:
     with pytest.raises(ValueError): ReplicationProfile("r","tr","source","target",("method",),("mapping",),("lesson",),success_claimed=True)
 def test_handoff_acceptance_invariants() -> None:
     with pytest.raises(ValueError): Handoff("h","tr","t","tech","ops",(),("training",),("runbook",),("support",),("rollback",),"accepted",OwnershipTransferStatus.ACCEPTED)
+
+
+def test_process_rejects_unknown_internal_dependency() -> None:
+    with pytest.raises(ValueError):
+        Process(
+            "proc-dep",
+            "tenant-1",
+            "rev-1",
+            "v1",
+            "invoice processing",
+            (
+                ProcessStep("s1", "receive", "AP clerk", "ERP", dependencies=("missing",)),
+            ),
+        )
+
+
+def test_process_allows_explicit_external_dependency() -> None:
+    p = Process(
+        "proc-ext",
+        "tenant-1",
+        "rev-1",
+        "v1",
+        "invoice processing",
+        (
+            ProcessStep(
+                "s1",
+                "receive",
+                "AP clerk",
+                "ERP",
+                dependencies=("external:bank-api",),
+            ),
+        ),
+    )
+    assert p.steps[0].dependencies == ("external:bank-api",)
+
+
+def test_baseline_economic_metric_requires_explicit_derivation() -> None:
+    with pytest.raises(ValueError):
+        MetricObservation(
+            "annual_cost",
+            1000.0,
+            "currency",
+            "2026",
+            "all invoices",
+            MeasurementMethod.CALCULATED,
+            "finance model",
+            evidence(),
+            currency="USD",
+        )
+    economic = MetricObservation(
+        "annual_cost",
+        1000.0,
+        "currency",
+        "2026",
+        "all invoices",
+        MeasurementMethod.CALCULATED,
+        "finance model",
+        evidence(),
+        currency="USD",
+        period="2026",
+        assumptions=("loaded labor cost",),
+        derivation="hours * loaded hourly cost",
+    )
+    assert economic.currency == "USD"
+
+
+def test_baseline_rejects_non_finite_metric() -> None:
+    with pytest.raises(ValueError):
+        MetricObservation(
+            "bad",
+            float("inf"),
+            "count",
+            "2026",
+            "all",
+            MeasurementMethod.OBSERVED,
+            "ERP",
+            evidence(),
+        )
