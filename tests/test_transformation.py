@@ -1,0 +1,61 @@
+from __future__ import annotations
+import pytest
+from fdse.contracts import EvidenceRef, ProvenanceRef
+from fdse.transformation import Action, Baseline, Classification, Handoff, Measurement, MeasurementMethod, MeasurementStage, MetricObservation, Outcome, OwnershipTransferStatus, Process, ProcessStep, ReplicationProfile, TargetState, Transformation, digest_value, serialize
+
+def evidence(eid: str = "ev-1") -> EvidenceRef:
+    return EvidenceRef(eid, "observation", ProvenanceRef("source-1", "rev-1"), "digest-1")
+
+def process() -> Process:
+    return Process("proc-1","tenant-1","rev-1","v1","invoice processing",(ProcessStep("s1","receive","AP clerk","ERP"),ProcessStep("s2","approve","manager","ERP")),actors=("AP clerk","manager"),systems=("ERP",))
+
+def classifications() -> tuple[Classification, ...]:
+    return (Classification("c1","tenant-1","rev-1","s1",Action.CODE,"parse invoice","finance",evidence=(evidence("ev-1"),)),Classification("c2","tenant-1","rev-1","s2",Action.HUMAN,"approve exceptions","finance",evidence=(evidence("ev-2"),)))
+
+def target() -> TargetState:
+    return TargetState("proc-1",("receive -> approve",),classifications(),("manager approval",),("invoice extraction",))
+
+def test_valid_construction_every_canonical_object() -> None:
+    p=process()
+    b=Baseline("base-1","tenant-1","rev-1","v1",(MetricObservation("cycle_time",12.0,"minutes","2026-Q3","all invoices",MeasurementMethod.OBSERVED,"ERP",evidence()),))
+    t=Transformation("tr-1","tenant-1","rev-1","v1",p,target())
+    m=Measurement("m-1","tr-1","tenant-1","rev-1","cycle_time",MeasurementStage.POST_DEPLOYMENT,8.0,"minutes","2026-Q4","ERP",evidence(),12.0,10.0,"lower is better","improved")
+    o=Outcome("out-1","tr-1","tenant-1","v1","2026-Q4",("m-base",),("m-target",),(("cycle_time",8.0),),(("cycle_time",-4.0),),"accepted",(evidence("ev-3"),))
+    r=ReplicationProfile("rep-1","tr-1","tenant-1","tenant-2",("discovery",),("ERP mapping",),("exception lesson",))
+    h=Handoff("h-1","tr-1","tenant-1","tech-owner","ops-owner",("runbook.pdf",),("training",),("runbook",),("support",),("rollback",),"accepted",OwnershipTransferStatus.ACCEPTED)
+    assert all((b,t,m,o,r,h))
+
+def test_blank_and_nul_rejection() -> None:
+    with pytest.raises(ValueError): Process("","tenant-1","rev-1","v1","purpose",(ProcessStep("s1","x","a","sys"),))
+    with pytest.raises(ValueError): Process("p","tenant-1","rev-1","v1","bad\x00purpose",(ProcessStep("s1","x","a","sys"),))
+
+def test_scope_revision_and_classification_rejection() -> None:
+    p=process()
+    with pytest.raises(ValueError): Transformation("tr","tenant-2","rev-1","v1",p,target())
+    bad=TargetState("proc-1",("x",),(Classification("c","tenant-1","rev-2","s1",Action.CODE,"x","owner",evidence=(evidence(),)),Classification("c2","tenant-1","rev-1","s2",Action.HUMAN,"x","owner",evidence=(evidence("ev-2"),))),("human",),("system",))
+    with pytest.raises(ValueError): Transformation("tr","tenant-1","rev-1","v1",p,bad)
+    duplicate=TargetState("proc-1",("x",),(classifications()[0],classifications()[0]),("human",),("system",))
+    with pytest.raises(ValueError): Transformation("tr","tenant-1","rev-1","v1",p,duplicate)
+
+def test_deterministic_serialization_and_digest() -> None:
+    p=process()
+    assert serialize(p)==serialize(p)
+    assert digest_value(p)==digest_value(p)
+    assert b'"tenant_id":"tenant-1"' in serialize(p)
+
+def test_baseline_evidence_and_identifier_collision() -> None:
+    with pytest.raises(ValueError): Classification("c","t","r","s",Action.CODE,"x","owner")
+    with pytest.raises(ValueError): Baseline("b","t","r","v",(MetricObservation("m",1.0,"count","w","all",MeasurementMethod.OBSERVED,"sys",evidence()),MetricObservation("m",2.0,"count","w","all",MeasurementMethod.OBSERVED,"sys",evidence("e2"))))
+
+def test_measurement_stage_semantics() -> None:
+    with pytest.raises(ValueError): Measurement("m","tr","t","r","metric",MeasurementStage.POST_DEPLOYMENT,1.0,"count","w","system")
+    baseline=Measurement("b","tr","t","r","metric",MeasurementStage.BASELINE,10.0,"count","w","system",evidence())
+    target_m=Measurement("t","tr","t","r","metric",MeasurementStage.TARGET,5.0,"count","w","design")
+    assert baseline.baseline_value==10.0 and target_m.target_value==5.0
+
+def test_outcome_and_replication_qualification() -> None:
+    with pytest.raises(ValueError): Outcome("o","tr","t","v","period",("b",),("t",),(("m",1.0),),(("m",0.0),),"accepted",())
+    with pytest.raises(ValueError): ReplicationProfile("r","tr","source","target",("method",),("mapping",),("lesson",),success_claimed=True)
+
+def test_handoff_acceptance_invariants() -> None:
+    with pytest.raises(ValueError): Handoff("h","tr","t","tech","ops",(),("training",),("runbook",),("support",),("rollback",),"accepted",OwnershipTransferStatus.ACCEPTED)
