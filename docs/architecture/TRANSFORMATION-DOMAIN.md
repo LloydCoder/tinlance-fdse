@@ -90,6 +90,24 @@ The Agent Platform remains authoritative for consequential execution. The bindin
 
 Phase 5 is complete when a transformation can be deterministically correlated to the Agent-System transformation contract, agent/workspace/task references, execution/evidence/measurement/outcome references, invalid scope/version inputs fail closed, the public API is stable, and all CI gates are green.
 
+## Phase 6 — Engineering Realization
+
+Phase 6 introduces an authority-neutral engineering realization contract. It maps a target state to explicit engineering requirements, repositories, integrations, agent references, evaluation references, verification references, ownership, and acceptance criteria.
+
+The realization object is not an execution plan in the runtime sense. It does not create workflows, invoke agents, authorize tools, select models, manage credentials, or perform deployments. It records the engineering work required to implement and verify the target state.
+
+### Phase 6 invariants
+
+- Engineering requirements must be explicit.
+- Acceptance criteria must be explicit.
+- Repository, integration, agent, evaluation, and verification references are identifiers, not authority grants.
+- Engineering realization cannot bypass the Agent System governance path.
+- Agent Platform remains authoritative for consequential execution and side effects.
+
+### Phase 6 acceptance gate
+
+Phase 6 is complete when target-state semantics can be mapped to explicit engineering requirements and verification references, the public contract is deterministic and fail-closed, documentation is reconciled, and all CI gates are green.
+
 ## Status
 Phase 1 architectural contract. This document defines the bounded Transformation Domain inside FDSE. It does not claim external production capability, customer outcomes, or replication success.
 
