@@ -76,18 +76,10 @@ _EXECUTION: dict[ExecutionReceiptState, frozenset[ExecutionReceiptState]] = {
 }
 
 _REPLICATION: dict[ReplicationStage, frozenset[ReplicationStage]] = {
-    ReplicationStage.PLANNED: frozenset(
-        {ReplicationStage.CONFIGURED, ReplicationStage.FAILED}
-    ),
-    ReplicationStage.CONFIGURED: frozenset(
-        {ReplicationStage.DEPLOYED, ReplicationStage.FAILED}
-    ),
-    ReplicationStage.DEPLOYED: frozenset(
-        {ReplicationStage.MEASURED, ReplicationStage.FAILED}
-    ),
-    ReplicationStage.MEASURED: frozenset(
-        {ReplicationStage.ACCEPTED, ReplicationStage.FAILED}
-    ),
+    ReplicationStage.PLANNED: frozenset({ReplicationStage.CONFIGURED, ReplicationStage.FAILED}),
+    ReplicationStage.CONFIGURED: frozenset({ReplicationStage.DEPLOYED, ReplicationStage.FAILED}),
+    ReplicationStage.DEPLOYED: frozenset({ReplicationStage.MEASURED, ReplicationStage.FAILED}),
+    ReplicationStage.MEASURED: frozenset({ReplicationStage.ACCEPTED, ReplicationStage.FAILED}),
     ReplicationStage.ACCEPTED: frozenset(),
     ReplicationStage.FAILED: frozenset(),
 }
@@ -99,27 +91,21 @@ _HANDOFF: dict[OwnershipTransferStatus, frozenset[OwnershipTransferStatus]] = {
 }
 
 
-def transition_execution(
-    current: ExecutionReceiptState, target: ExecutionReceiptState
-) -> ExecutionReceiptState:
+def transition_execution(current: ExecutionReceiptState, target: ExecutionReceiptState) -> ExecutionReceiptState:
     """Validate a Transformation execution receipt state transition."""
     if target not in _EXECUTION[current]:
         raise ValueError(f"invalid execution transition: {current} -> {target}")
     return target
 
 
-def transition_replication(
-    current: ReplicationStage, target: ReplicationStage
-) -> ReplicationStage:
+def transition_replication(current: ReplicationStage, target: ReplicationStage) -> ReplicationStage:
     """Validate a Transformation replication lifecycle transition."""
     if target not in _REPLICATION[current]:
         raise ValueError(f"invalid replication transition: {current} -> {target}")
     return target
 
 
-def transition_handoff(
-    current: OwnershipTransferStatus, target: OwnershipTransferStatus
-) -> OwnershipTransferStatus:
+def transition_handoff(current: OwnershipTransferStatus, target: OwnershipTransferStatus) -> OwnershipTransferStatus:
     """Validate a Transformation customer-ownership handoff transition."""
     if target not in _HANDOFF[current]:
         raise ValueError(f"invalid handoff transition: {current} -> {target}")
