@@ -1,3 +1,5 @@
+# fmt: off
+# ruff: noqa: E501
 """Transformation aggregate and target-state contract."""
 from __future__ import annotations
 
