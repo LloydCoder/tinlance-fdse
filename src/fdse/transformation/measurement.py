@@ -1,3 +1,4 @@
+# ruff: noqa: E501
 """Transformation measurement contracts."""
 from __future__ import annotations
 
