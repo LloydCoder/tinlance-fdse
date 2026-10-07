@@ -3,6 +3,7 @@
 from ._common import digest_value, serialize
 from .baseline import Baseline, MeasurementMethod, MetricObservation
 from .binding import AgentSystemBinding
+from .execution import ExecutionReceiptState, GovernedExecutionReceipt
 from .classification import (
     Action,
     Classification,
@@ -27,6 +28,8 @@ __all__ = [
     "DecisionBasis",
     "DecisionConfidence",
     "EngineeringRealization",
+    "ExecutionReceiptState",
+    "GovernedExecutionReceipt",
     "Handoff",
     "Measurement",
     "MeasurementMethod",
