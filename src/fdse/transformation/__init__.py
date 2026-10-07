@@ -11,6 +11,7 @@ from .classification import (
     Reversibility,
     RiskLevel,
 )
+from .execution import ExecutionReceiptState, GovernedExecutionReceipt
 from .handoff import Handoff, OwnershipTransferStatus
 from .measurement import Measurement, MeasurementStage
 from .outcome import Outcome
@@ -27,6 +28,8 @@ __all__ = [
     "DecisionBasis",
     "DecisionConfidence",
     "EngineeringRealization",
+    "ExecutionReceiptState",
+    "GovernedExecutionReceipt",
     "Handoff",
     "Measurement",
     "MeasurementMethod",
