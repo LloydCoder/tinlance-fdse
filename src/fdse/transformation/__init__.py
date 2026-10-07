@@ -13,8 +13,8 @@ from .classification import (
 )
 from .execution import ExecutionReceiptState, GovernedExecutionReceipt
 from .handoff import Handoff, OwnershipTransferStatus
-from .measurement import Measurement, MeasurementStage
-from .outcome import Outcome
+from .measurement import Measurement, MeasurementDirection, MeasurementStage
+from .outcome import Outcome, OutcomeAcceptance
 from .process import Process, ProcessStep
 from .realization import EngineeringRealization
 from .replication import ReplicationProfile
@@ -32,10 +32,12 @@ __all__ = [
     "GovernedExecutionReceipt",
     "Handoff",
     "Measurement",
+    "MeasurementDirection",
     "MeasurementMethod",
     "MeasurementStage",
     "MetricObservation",
     "Outcome",
+    "OutcomeAcceptance",
     "OwnershipTransferStatus",
     "Process",
     "ProcessStep",

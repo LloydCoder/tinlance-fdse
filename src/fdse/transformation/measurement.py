@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import math
 from enum import StrEnum
 
 from fdse.contracts import EvidenceRef
@@ -17,6 +18,13 @@ class MeasurementStage(StrEnum):
     TARGET = "TARGET"
     POST_DEPLOYMENT = "POST_DEPLOYMENT"
     FOLLOW_UP = "FOLLOW_UP"
+
+class MeasurementDirection(StrEnum):
+    UNSPECIFIED = "UNSPECIFIED"
+    LOWER_IS_BETTER = "LOWER_IS_BETTER"
+    HIGHER_IS_BETTER = "HIGHER_IS_BETTER"
+    TARGET_BAND = "TARGET_BAND"
+    EQUALS = "EQUALS"
 
 @dataclass(frozen=True, slots=True)
 class Measurement:
@@ -35,6 +43,8 @@ class Measurement:
     target_value: float | None = None
     comparison: str | None = None
     result_status: str | None = None
+    direction: MeasurementDirection = MeasurementDirection.UNSPECIFIED
+    acceptance_threshold: float | None = None
     def __post_init__(self) -> None:
         for value, name in ((self.measurement_id, "measurement_id"), (self.transformation_id, "transformation_id"), (self.tenant_id, "tenant_id"), (self.revision, "revision"), (self.metric_id, "metric_id"), (self.unit, "unit"), (self.window, "window"), (self.method, "method")):
             required(value, name)
@@ -46,6 +56,11 @@ class Measurement:
         object.__setattr__(self, "unit", required(self.unit, "unit"))
         object.__setattr__(self, "window", required(self.window, "window"))
         object.__setattr__(self, "method", required(self.method, "method"))
+        if not math.isfinite(self.value):
+            raise ValueError("measurement value must be finite")
+        for candidate, name in ((self.baseline_value, "baseline_value"), (self.target_value, "target_value"), (self.acceptance_threshold, "acceptance_threshold")):
+            if candidate is not None and not math.isfinite(candidate):
+                raise ValueError(f"{name} must be finite")
         if self.stage != MeasurementStage.TARGET and self.evidence is None:
             raise ValueError("non-target measurement requires evidence")
         if self.stage == MeasurementStage.BASELINE and self.baseline_value is None:
@@ -56,3 +71,8 @@ class Measurement:
             object.__setattr__(self, "comparison", required(self.comparison, "comparison"))
         if self.result_status is not None:
             object.__setattr__(self, "result_status", required(self.result_status, "result_status"))
+        if self.stage in {MeasurementStage.POST_DEPLOYMENT, MeasurementStage.FOLLOW_UP}:
+            if self.baseline_value is None or self.target_value is None:
+                raise ValueError("observed measurement requires baseline and target values")
+            if self.comparison is None or self.result_status is None:
+                raise ValueError("observed measurement requires comparison and result status")

@@ -5,10 +5,18 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import math
+from enum import StrEnum
 
 from fdse.contracts import EvidenceRef
 
-from ._common import required
+from ._common import required, unique_ids
+
+class OutcomeAcceptance(StrEnum):
+    PENDING = "pending"
+    ACCEPTED = "accepted"
+    REJECTED = "rejected"
+    INCONCLUSIVE = "inconclusive"
 
 # fmt: off
 @dataclass(frozen=True, slots=True)
@@ -33,11 +41,17 @@ class Outcome:
         object.__setattr__(self, "tenant_id", required(self.tenant_id, "tenant_id"))
         object.__setattr__(self, "version", required(self.version, "version"))
         object.__setattr__(self, "measurement_period", required(self.measurement_period, "measurement_period"))
-        object.__setattr__(self, "acceptance_state", required(self.acceptance_state, "acceptance_state"))
+        object.__setattr__(self, "acceptance_state", OutcomeAcceptance(required(self.acceptance_state, "acceptance_state")))
         if not self.baseline_refs or not self.target_refs:
             raise ValueError("outcome requires baseline and target references")
         if not self.observed_values:
             raise ValueError("outcome requires observed values")
+        observed_ids = unique_ids(tuple(metric_id for metric_id, _ in self.observed_values), "observed metric_id")
+        variance_ids = unique_ids(tuple(metric_id for metric_id, _ in self.variance), "variance metric_id")
+        if set(observed_ids) != set(variance_ids):
+            raise ValueError("outcome variance must match observed metric identifiers")
+        if any(not math.isfinite(value) for _, value in self.observed_values + self.variance):
+            raise ValueError("outcome values must be finite")
         if not self.evidence:
             raise ValueError("outcome requires supporting evidence")
         object.__setattr__(self, "limitations", tuple(required(v, "limitation") for v in self.limitations))
