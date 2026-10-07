@@ -2,6 +2,7 @@
 
 from ._common import digest_value, serialize
 from .baseline import Baseline, MeasurementMethod, MetricObservation
+from .binding import AgentSystemBinding
 from .classification import (
     Action,
     Classification,
@@ -19,6 +20,7 @@ from .transformation import TargetState, Transformation
 
 __all__ = [
     "Action",
+    "AgentSystemBinding",
     "Baseline",
     "Classification",
     "DecisionBasis",
