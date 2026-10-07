@@ -1,3 +1,5 @@
+# fmt: off
+# ruff: noqa: E501
 """Private validation and deterministic serialization helpers.
 
 These helpers are deliberately strict because transformation objects are
