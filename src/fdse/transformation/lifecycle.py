@@ -153,6 +153,9 @@ class TransformationLifecycle:
                 raise ValueError("handoff transformation does not match")
             if self.handoff.tenant_id != transformation.tenant_id:
                 raise ValueError("handoff tenant does not match")
+            if self.handoff.ownership_status.value == "TRANSFERRED":
+                if not set(self.handoff.acceptance_evidence).issubset(evidence_ids):
+                    raise ValueError("transferred handoff acceptance evidence does not resolve")
 
         unique_ids(
             tuple(replication.replication_id for replication in self.replications),
@@ -178,6 +181,16 @@ class TransformationLifecycle:
                 raise ValueError(
                     "deployed or terminal replication requires target transformation reference"
                 )
+            if (
+                replication.stage
+                in {
+                    ReplicationStage.MEASURED,
+                    ReplicationStage.ACCEPTED,
+                    ReplicationStage.FAILED,
+                }
+                and not set(replication.evidence_refs).issubset(evidence_ids)
+            ):
+                raise ValueError("replication evidence references do not resolve")
 
     def require_ga_contract(self) -> None:
         """Require repository-level lifecycle objects without claiming external success."""
