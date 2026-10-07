@@ -15,6 +15,7 @@ from .handoff import Handoff, OwnershipTransferStatus
 from .measurement import Measurement, MeasurementStage
 from .outcome import Outcome
 from .process import Process, ProcessStep
+from .realization import EngineeringRealization
 from .replication import ReplicationProfile
 from .transformation import TargetState, Transformation
 
@@ -25,6 +26,7 @@ __all__ = [
     "Classification",
     "DecisionBasis",
     "DecisionConfidence",
+    "EngineeringRealization",
     "Handoff",
     "Measurement",
     "MeasurementMethod",

@@ -5,6 +5,7 @@ import pytest
 from fdse.contracts import EvidenceRef, ProvenanceRef
 from fdse.transformation import (
     AgentSystemBinding,
+    EngineeringRealization,
     Action, Baseline, Classification, DecisionBasis, DecisionConfidence, Handoff,
     Measurement, MeasurementMethod, MeasurementStage, MetricObservation, Outcome,
     OwnershipTransferStatus, Process, ProcessStep, ReplicationProfile, Reversibility,
@@ -201,4 +202,44 @@ def test_agent_system_binding_requires_capability_and_valid_version() -> None:
             "workspace-1",
             "task-1",
             (),
+        )
+
+
+def test_engineering_realization_is_explicit_and_non_executable() -> None:
+    realization = EngineeringRealization(
+        "real-1",
+        "tr-1",
+        "v1",
+        "proc-1",
+        "fdse-engineer",
+        ("extract invoice fields", "route exceptions"),
+        repository_refs=("repo-invoice",),
+        integration_refs=("erp-api",),
+        agent_refs=("invoice-agent",),
+        evaluation_refs=("eval-invoice",),
+        verification_refs=("ci-green",),
+        acceptance_criteria=("golden dataset threshold met",),
+    )
+    assert realization.agent_refs == ("invoice-agent",)
+
+
+def test_engineering_realization_requires_requirements_and_acceptance() -> None:
+    with pytest.raises(ValueError):
+        EngineeringRealization(
+            "real-1",
+            "tr-1",
+            "v1",
+            "proc-1",
+            "fdse-engineer",
+            (),
+            acceptance_criteria=("accepted",),
+        )
+    with pytest.raises(ValueError):
+        EngineeringRealization(
+            "real-1",
+            "tr-1",
+            "v1",
+            "proc-1",
+            "fdse-engineer",
+            ("requirement",),
         )
