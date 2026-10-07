@@ -1,3 +1,5 @@
+# fmt: off
+# ruff: noqa: E501, E701, I001
 # ruff: noqa: E501, E701, I001
 from __future__ import annotations
 
