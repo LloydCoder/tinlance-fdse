@@ -43,6 +43,7 @@ class AgentSystemBinding:
             (self.task_ref, "task_ref"),
         ):
             required(value, name)
+
         for name in (
             "binding_id",
             "transformation_id",
@@ -55,8 +56,10 @@ class AgentSystemBinding:
             "task_ref",
         ):
             object.__setattr__(self, name, required(getattr(self, name), name))
+
         if self.agent_transformation_version < 1:
             raise ValueError("agent transformation version must be positive")
+
         object.__setattr__(
             self,
             "capability_refs",
@@ -64,18 +67,31 @@ class AgentSystemBinding:
         )
         if not self.capability_refs:
             raise ValueError("binding requires at least one capability reference")
+
         if self.execution_ref is not None:
             object.__setattr__(
-                self, "execution_ref", required(self.execution_ref, "execution_ref")
+                self,
+                "execution_ref",
+                required(self.execution_ref, "execution_ref"),
             )
+
         object.__setattr__(
-            self, "evidence_refs", unique_ids(self.evidence_refs, "evidence_ref")
+            self,
+            "evidence_refs",
+            unique_ids(self.evidence_refs, "evidence_ref"),
         )
         object.__setattr__(
-            self, "measurement_refs", unique_ids(self.measurement_refs, "measurement_ref")
+            self,
+            "measurement_refs",
+            unique_ids(self.measurement_refs, "measurement_ref"),
         )
+
         if self.outcome_ref is not None:
-            object.__setattr__(self, "outcome_ref", required(self.outcome_ref, "outcome_ref"))
+            object.__setattr__(
+                self,
+                "outcome_ref",
+                required(self.outcome_ref, "outcome_ref"),
+            )
 
 
 __all__ = ["AgentSystemBinding"]
