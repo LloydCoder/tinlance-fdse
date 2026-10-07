@@ -1,4 +1,10 @@
-# ruff: noqa: E501
+"""Operational process semantics."""
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+from ._common import required, unique_ids
+
 # fmt: off
 """Operational process semantics."""
 from __future__ import annotations
