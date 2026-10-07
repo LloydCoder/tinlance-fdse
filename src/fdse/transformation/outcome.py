@@ -1,3 +1,5 @@
+# ruff: noqa: E501
+# fmt: off
 """Observed transformation outcomes."""
 from __future__ import annotations
 from dataclasses import dataclass
