@@ -49,7 +49,14 @@ class Process:
         object.__setattr__(self, "purpose", required(self.purpose, "process purpose"))
         if not self.steps:
             raise ValueError("process requires at least one step")
-        unique_ids(tuple(step.step_id for step in self.steps), "step_id")
+        step_ids = unique_ids(tuple(step.step_id for step in self.steps), "step_id")
+        step_id_set = set(step_ids)
+        for step in self.steps:
+            for dependency in step.dependencies:
+                if dependency.startswith("external:"):
+                    required(dependency.removeprefix("external:"), "external dependency")
+                elif dependency not in step_id_set:
+                    raise ValueError(f"unknown process dependency: {dependency}")
         object.__setattr__(self, "actors", tuple(required(v, "actor") for v in self.actors))
         object.__setattr__(self, "systems", tuple(required(v, "system") for v in self.systems))
         object.__setattr__(self, "boundaries", tuple(required(v, "boundary") for v in self.boundaries))
