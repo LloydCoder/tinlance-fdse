@@ -49,6 +49,24 @@ Baseline metric observations now require finite numeric values. Economic observa
 
 Phase 3 is complete when process topology validation, baseline economic semantics, finite-value validation, deterministic serialization, regression coverage, documentation reconciliation, and all FDSE CI gates are green.
 
+## Phase 4 — Target-State Design
+
+Phase 4 makes the target operating model explicit. A target state now requires acceptance criteria and human decision rights, and may record exception handling, recovery requirements, and observability requirements. These fields describe the intended operating design; they do not execute it or grant authority.
+
+The target state remains linked to the classified process revision. Every process step must still have exactly one canonical classification, and scope mismatches remain fail-closed.
+
+### Phase 4 invariants
+
+- A target state must contain explicit acceptance criteria.
+- A target state must contain explicit human decision rights.
+- Exception, recovery, and observability requirements are descriptive contracts.
+- Target-state metadata cannot authorize tools, models, agents, systems, or customer-side changes.
+- Agent Platform remains the sole generic authorization and consequential execution boundary.
+
+### Phase 4 acceptance gate
+
+Phase 4 is complete when target-state semantics are explicit, acceptance and human decision rights are mandatory, process/classification scope remains fail-closed, regression coverage is green, and documentation is reconciled.
+
 ## Status
 Phase 1 architectural contract. This document defines the bounded Transformation Domain inside FDSE. It does not claim external production capability, customer outcomes, or replication success.
 
