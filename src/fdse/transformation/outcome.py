@@ -1,4 +1,4 @@
-# ruff: noqa: E501
+# ruff: noqa: E501, I001
 """Observed transformation outcomes."""
 from __future__ import annotations
 
