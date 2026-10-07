@@ -13,6 +13,7 @@ from .classification import (
 )
 from .execution import ExecutionReceiptState, GovernedExecutionReceipt
 from .handoff import Handoff, OwnershipTransferStatus
+from .integration_proof import AgentPlatformIntegrationProof
 from .lifecycle import TransformationLifecycle
 from .measurement import Measurement, MeasurementDirection, MeasurementStage
 from .outcome import Outcome, OutcomeAcceptance
@@ -38,6 +39,7 @@ __all__ = [
     "ExecutionReceiptState",
     "GovernedExecutionReceipt",
     "Handoff",
+    "AgentPlatformIntegrationProof",
     "Measurement",
     "TransformationLifecycle",
     "MeasurementDirection",
