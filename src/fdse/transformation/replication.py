@@ -33,6 +33,9 @@ class ReplicationProfile:
     source_outcome_ref: str | None = None
     target_transformation_id: str | None = None
     target_outcome_ref: str | None = None
+    target_transformation_tenant_id: str | None = None
+    target_transformation_version: str | None = None
+    target_outcome_tenant_id: str | None = None
     evidence_refs: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
@@ -58,7 +61,14 @@ class ReplicationProfile:
         object.__setattr__(self, "adaptation_parameters", tuple((required(k, "parameter key"), required(v, "parameter value")) for k, v in self.adaptation_parameters))
         if not self.methodology:
             raise ValueError("replication profile requires reusable methodology")
-        for name in ("source_outcome_ref", "target_transformation_id", "target_outcome_ref"):
+        for name in (
+            "source_outcome_ref",
+            "target_transformation_id",
+            "target_transformation_tenant_id",
+            "target_transformation_version",
+            "target_outcome_ref",
+            "target_outcome_tenant_id",
+        ):
             value = getattr(self, name)
             if value is not None:
                 object.__setattr__(self, name, required(value, name))
@@ -68,6 +78,12 @@ class ReplicationProfile:
         if self.stage in {ReplicationStage.MEASURED, ReplicationStage.ACCEPTED}:
             if self.target_outcome_ref is None or self.source_outcome_ref is None:
                 raise ValueError("qualified replication requires source and target outcome references")
+            if self.target_transformation_tenant_id != self.target_tenant_id:
+                raise ValueError("target transformation tenant must match target tenant")
+            if self.target_transformation_version is None:
+                raise ValueError("qualified replication requires target transformation version")
+            if self.target_outcome_tenant_id != self.target_tenant_id:
+                raise ValueError("target outcome tenant must match target tenant")
         if self.stage in {
             ReplicationStage.DEPLOYED, ReplicationStage.MEASURED,
             ReplicationStage.ACCEPTED, ReplicationStage.FAILED,

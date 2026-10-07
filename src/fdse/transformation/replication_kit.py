@@ -40,6 +40,9 @@ class EnterpriseReplicationKit:
     source_outcome_ref: str | None = None
     target_transformation_id: str | None = None
     target_outcome_ref: str | None = None
+    target_transformation_tenant_id: str | None = None
+    target_transformation_version: str | None = None
+    target_outcome_tenant_id: str | None = None
     evidence_refs: tuple[str, ...] = ()
     stage: ReplicationStage = ReplicationStage.PLANNED
 
@@ -105,7 +108,10 @@ class EnterpriseReplicationKit:
         for name in (
             "source_outcome_ref",
             "target_transformation_id",
+            "target_transformation_tenant_id",
+            "target_transformation_version",
             "target_outcome_ref",
+            "target_outcome_tenant_id",
         ):
             value = getattr(self, name)
             if value is not None:
@@ -147,6 +153,9 @@ class EnterpriseReplicationKit:
             source_outcome_ref=self.source_outcome_ref,
             target_transformation_id=self.target_transformation_id,
             target_outcome_ref=self.target_outcome_ref,
+            target_transformation_tenant_id=self.target_transformation_tenant_id,
+            target_transformation_version=self.target_transformation_version,
+            target_outcome_tenant_id=self.target_outcome_tenant_id,
             evidence_refs=self.evidence_refs,
         )
 
