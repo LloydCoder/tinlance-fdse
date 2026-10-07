@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, is_dataclass
 from enum import StrEnum
-from typing import Any
+from typing import Any, cast
 from uuid import UUID
 
 from fdse.evidence import canonical_json, digest
@@ -34,7 +34,7 @@ def json_value(value: Any) -> Any:
     if isinstance(value, StrEnum):
         return value.value
     if is_dataclass(value):
-        return {key: json_value(item) for key, item in asdict(value).items()}
+        return {key: json_value(item) for key, item in asdict(cast(Any, value)).items()}
     if isinstance(value, dict):
         return {str(key): json_value(item) for key, item in value.items()}
     if isinstance(value, (tuple, list)):
