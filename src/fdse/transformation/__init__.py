@@ -15,8 +15,8 @@ from .handoff import Handoff, OwnershipTransferStatus
 from .measurement import Measurement, MeasurementStage
 from .outcome import Outcome
 from .process import Process, ProcessStep
-from .replication import ReplicationProfile
 from .realization import EngineeringRealization
+from .replication import ReplicationProfile
 from .transformation import TargetState, Transformation
 
 __all__ = [
