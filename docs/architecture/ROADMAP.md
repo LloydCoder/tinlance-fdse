@@ -157,3 +157,7 @@ P13 provides an enterprise replication kit contract separating reusable methodol
 ### P14 implementation note
 
 P14 provides an authority-neutral trace contract across FDSE, Agent Developer, Agent OS, Platform SDK, and Agent Platform. It proves contract structure, not external production execution.
+
+### P15 final certification
+
+P15 is the final repository/domain certification gate for Transformation. Certification requires a final forensic review plus fully green PR and merged-main CI. It does not assert external production or customer success.
