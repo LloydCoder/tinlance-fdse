@@ -1,3 +1,5 @@
+# fmt: off
+# ruff: noqa: E501
 """Authority-neutral FDSE-to-Agent System transformation binding."""
 from __future__ import annotations
 
