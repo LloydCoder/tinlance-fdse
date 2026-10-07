@@ -1,3 +1,10 @@
+## Post-P15 forensic remediation
+
+- Hardened TransformationLifecycle runtime boundaries so malformed aggregate, container, and nested-object inputs fail closed with structured TypeError results.
+- Hardened lifecycle transition helpers to canonicalize enum inputs and reject invalid transition values with domain errors rather than leaking mapping errors.
+- Added regression coverage for malformed lifecycle containers and binding types.
+- PR #49 passed Python 3.12/3.13 compatibility and quality CI before squash merge; merged-main CI also passed.
+
 # Changelog
 
 All notable changes to Tinlance FDSE are documented here.
