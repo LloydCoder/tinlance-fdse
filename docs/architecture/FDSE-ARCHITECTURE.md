@@ -66,10 +66,11 @@ flowchart TB
     O -. governed execution .-> A
     subgraph AGENT["TINLANCE AGENT SYSTEM"]
         direction TB
+        AD[Agent Developer<br/>Agent construction • development • composition]
         OS[Agent OS<br/>Workspace • Lifecycle • Fleet]
         SDK[Agent Platform SDK<br/>Developer Interface]
         A[Agent Platform<br/>Execution Authority]
-        OS --> SDK --> A
+        AD --> OS --> SDK --> A
 
         subgraph AUTH["PLATFORM AUTHORITY"]
             direction LR
@@ -170,15 +171,19 @@ This convergence does **not** mean that Engineering and Transformation become on
 
 The Tinlance Agent System is external to the FDSE domain layer.
 
-The authority chain is:
+The authority/integration chain is:
 
 ```text
+Agent Developer
+    ↓
 Agent OS
     ↓
 Agent Platform SDK
     ↓
 Agent Platform
 ```
+
+Agent Developer is the developer-facing construction and composition layer in the Tinlance Agent System. It does not replace or absorb Agent OS lifecycle/workspace authority, the SDK developer interface, or Agent Platform execution/policy authority.
 
 The Agent Platform owns generic authority and execution primitives, including:
 
