@@ -138,6 +138,18 @@ Outcomes now use a canonical acceptance state and require the variance metric id
 
 Phase 8 is complete when measurement semantics can distinguish baseline, target, deployment observation, and follow-up results; outcomes are internally consistent and evidence-backed; and all CI gates are green.
 
+## Phase 9 — Handoff and Replication Qualification
+
+Phase 9 turns handoff and replication into evidence-qualified lifecycle contracts. Replication now progresses through PLANNED, CONFIGURED, DEPLOYED, MEASURED, ACCEPTED, or FAILED. Measured/accepted/failed states require evidence, and a qualified accepted/measured replication must reference a target outcome.
+
+Ownership transfer to TRANSFERRED now requires acceptance evidence. Handoff artifacts, training, runbooks, escalation, recovery, and acceptance remain descriptive operational contracts.
+
+Replication success cannot be self-certified. The source outcome, target transformation, target outcome, and evidence must remain explicit so reuse can be distinguished from proven business replication.
+
+### Phase 9 acceptance gate
+
+Phase 9 is complete when ownership transfer and replication states are evidence-qualified, target outcomes are explicitly linked, self-certification is impossible, and all CI gates are green.
+
 ## Status
 Phase 1 architectural contract. This document defines the bounded Transformation Domain inside FDSE. It does not claim external production capability, customer outcomes, or replication success.
 
