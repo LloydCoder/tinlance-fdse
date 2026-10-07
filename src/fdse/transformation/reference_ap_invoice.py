@@ -26,7 +26,7 @@ from .execution import ExecutionReceiptState, GovernedExecutionReceipt
 from .handoff import Handoff, OwnershipTransferStatus
 from .lifecycle import TransformationLifecycle
 from .measurement import Measurement, MeasurementDirection, MeasurementStage
-from .outcome import Outcome
+from .outcome import Outcome, OutcomeAcceptance
 from .process import Process, ProcessStep
 from .realization import EngineeringRealization
 from .transformation import TargetState, Transformation
@@ -112,7 +112,6 @@ def build_reference_ap_invoice_transformation() -> ReferenceAPInvoiceTransformat
             risk_level=RiskLevel.HIGH,
             reversibility=Reversibility.REVERSIBLE,
             confidence=DecisionConfidence.MEDIUM,
-            human_decision_rights=("AP analyst resolves validation exceptions",),
         ),
         Classification(
             "class-code",
@@ -303,8 +302,8 @@ def build_reference_ap_invoice_transformation() -> ReferenceAPInvoiceTransformat
         ("m-target-cycle",),
         (("cycle_time", 14.0),),
         (("cycle_time", -6.0),),
-        "inconclusive",
-        (_evidence("ev-outcome"),),
+        OutcomeAcceptance.INCONCLUSIVE,
+        (_evidence("ev-outcome"),)
         limitations=("synthetic fixture; not a customer result",),
     )
 
