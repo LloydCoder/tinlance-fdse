@@ -143,3 +143,23 @@ def test_baseline_rejects_non_finite_metric() -> None:
             "ERP",
             evidence(),
         )
+
+
+def test_target_state_requires_acceptance_and_human_decision_rights() -> None:
+    p = process()
+    cs = classifications()
+    with pytest.raises(ValueError):
+        TargetState("proc-1", ("receive -> approve",), cs, (), ("invoice extraction",))
+    target_state = TargetState(
+        "proc-1",
+        ("receive -> approve",),
+        cs,
+        ("manager approval",),
+        ("invoice extraction",),
+        acceptance_criteria=("cycle time <= target",),
+        human_decision_rights=("manager approves exceptions",),
+        exception_handling=("route low-confidence invoices to manager",),
+        recovery_requirements=("restore previous mapping",),
+        observability_requirements=("record extraction confidence",),
+    )
+    assert target_state.human_decision_rights == ("manager approves exceptions",)
