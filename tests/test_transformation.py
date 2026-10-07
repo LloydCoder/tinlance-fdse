@@ -146,7 +146,6 @@ def test_baseline_rejects_non_finite_metric() -> None:
 
 
 def test_target_state_requires_acceptance_and_human_decision_rights() -> None:
-    p = process()
     cs = classifications()
     with pytest.raises(ValueError):
         TargetState("proc-1", ("receive -> approve",), cs, (), ("invoice extraction",))
