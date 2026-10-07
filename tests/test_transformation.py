@@ -785,3 +785,52 @@ def test_reference_ap_invoice_transformation_is_deterministic_and_synthetic() ->
     assert first.lifecycle.outcome is not None
     assert first.lifecycle.outcome.acceptance_state is OutcomeAcceptance.INCONCLUSIVE
     first.validate()
+
+
+def test_enterprise_replication_kit_requires_lineage_and_projects_to_profile() -> None:
+    from fdse.transformation import EnterpriseReplicationKit
+
+    kit = EnterpriseReplicationKit(
+        "kit-1",
+        "tr-source",
+        "tenant-source",
+        "tenant-target",
+        ("reuse discovery",),
+        ("process boundary",),
+        ("DELETE/CODE/AGENT/HUMAN",),
+        ("approval matrix",),
+        ("eval-suite",),
+        ("golden-dataset",),
+        ("cycle-time",),
+        ("measurement-contract",),
+        ("deploy",),
+        ("rollback",),
+        ("runbook",),
+        ("training",),
+        customer_specific=("ERP mapping",),
+        learned_adaptations=("exception routing",),
+    )
+    kit.validate()
+    profile = kit.to_replication_profile()
+    assert profile.source_transformation_id == "tr-source"
+    assert profile.target_tenant_id == "tenant-target"
+
+    with pytest.raises(ValueError):
+        EnterpriseReplicationKit(
+            "kit-bad",
+            "tr-source",
+            "tenant-source",
+            "tenant-source",
+            ("reuse",),
+            ("boundary",),
+            ("taxonomy",),
+            ("governance",),
+            ("eval",),
+            ("golden",),
+            ("kpi",),
+            ("measurement",),
+            ("deploy",),
+            ("rollback",),
+            ("handoff",),
+            ("training",),
+        )

@@ -149,3 +149,7 @@ replication without independent evidence.
 ### P12 implementation note
 
 P12 provides a deterministic, explicitly synthetic AP/invoice golden lifecycle. It is a reference contract and test vehicle; its measurements are not customer evidence.
+
+### P13 implementation note
+
+P13 provides an enterprise replication kit contract separating reusable methodology, customer-specific adaptation, learned material, evaluation/golden datasets, measurement, deployment, rollback, handoff, training, and qualification evidence.

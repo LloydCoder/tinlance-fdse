@@ -23,6 +23,7 @@ from .reference_ap_invoice import (
     build_reference_ap_invoice_transformation,
 )
 from .replication import ReplicationProfile, ReplicationStage
+from .replication_kit import EnterpriseReplicationKit
 from .transformation import TargetState, Transformation
 
 __all__ = [
@@ -33,6 +34,7 @@ __all__ = [
     "DecisionBasis",
     "DecisionConfidence",
     "EngineeringRealization",
+    "EnterpriseReplicationKit",
     "ExecutionReceiptState",
     "GovernedExecutionReceipt",
     "Handoff",
