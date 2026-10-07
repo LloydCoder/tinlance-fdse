@@ -58,3 +58,5 @@ class ReplicationProfile:
             raise ValueError("measured replication stage requires evidence references")
         if self.stage in {ReplicationStage.MEASURED, ReplicationStage.ACCEPTED} and self.target_outcome_ref is None:
             raise ValueError("qualified replication requires a target outcome reference")
+        if self.stage in {ReplicationStage.MEASURED, ReplicationStage.ACCEPTED} and self.source_outcome_ref is None:
+            raise ValueError("qualified replication requires a source outcome reference")
