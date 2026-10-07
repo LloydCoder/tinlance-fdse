@@ -37,6 +37,8 @@ class TransformationLifecycle:
             raise ValueError("baseline tenant does not match transformation")
         if self.baseline.revision != transformation.revision:
             raise ValueError("baseline revision does not match transformation")
+        if self.baseline.version != transformation.version:
+            raise ValueError("baseline version does not match transformation")
         if self.realization.transformation_id != transformation.transformation_id:
             raise ValueError("realization transformation does not match")
         if self.realization.transformation_version != transformation.version:
@@ -59,6 +61,7 @@ class TransformationLifecycle:
                 tuple(receipt.receipt_id for receipt in self.execution_receipts),
                 "receipt_id",
             )
+        receipt_run_refs = {receipt.run_ref for receipt in self.execution_receipts}
         for receipt in self.execution_receipts:
             if receipt.transformation_id != transformation.transformation_id:
                 raise ValueError("execution receipt transformation does not match")
@@ -66,6 +69,12 @@ class TransformationLifecycle:
                 raise ValueError("execution receipt tenant does not match")
             if self.binding is None or receipt.binding_id != self.binding.binding_id:
                 raise ValueError("execution receipt binding does not match")
+        if self.binding is not None and self.binding.execution_ref is not None:
+            if self.binding.execution_ref not in receipt_run_refs:
+                raise ValueError("binding execution reference has no matching receipt")
+        measurement_ids = {measurement.measurement_id for measurement in self.measurements}
+        if self.binding is not None and not set(self.binding.measurement_refs).issubset(measurement_ids):
+            raise ValueError("binding measurement references do not resolve")
 
         if self.measurements:
             unique_ids(
@@ -87,6 +96,8 @@ class TransformationLifecycle:
                 raise ValueError("outcome tenant does not match")
             if self.outcome.version != transformation.version:
                 raise ValueError("outcome version does not match")
+            if self.binding is not None and self.binding.outcome_ref is not None and self.binding.outcome_ref != self.outcome.outcome_id:
+                raise ValueError("binding outcome reference does not match outcome")
             if not any(
                 measurement.stage
                 in {MeasurementStage.POST_DEPLOYMENT, MeasurementStage.FOLLOW_UP}
