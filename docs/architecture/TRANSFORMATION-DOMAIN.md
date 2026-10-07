@@ -108,6 +108,18 @@ The realization object is not an execution plan in the runtime sense. It does no
 
 Phase 6 is complete when target-state semantics can be mapped to explicit engineering requirements and verification references, the public contract is deterministic and fail-closed, documentation is reconciled, and all CI gates are green.
 
+## Phase 7 — Governed Execution and Evidence Receipt
+
+Phase 7 formalizes the FDSE-side receipt of governed Agent-System execution. `GovernedExecutionReceipt` records the transformation/binding/run correlation, policy references, optional approval references, evidence references, outputs, execution state, and limitations.
+
+This is a receipt, not a second runtime. FDSE does not authorize execution, approve actions, issue credentials, select models, invoke tools, manage budgets, or store authoritative execution evidence. Those responsibilities remain with Agent Platform.
+
+Terminal states (SUCCEEDED, FAILED, CANCELLED, PARTIAL) require evidence references so technical execution claims remain auditable. A technical execution result is still distinct from business outcome acceptance.
+
+### Phase 7 acceptance gate
+
+Phase 7 is complete when governed execution can be correlated to the transformation and binding, terminal execution states require evidence, authority remains entirely in Agent Platform, and all CI gates are green.
+
 ## Status
 Phase 1 architectural contract. This document defines the bounded Transformation Domain inside FDSE. It does not claim external production capability, customer outcomes, or replication success.
 
