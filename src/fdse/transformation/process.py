@@ -1,3 +1,5 @@
+# fmt: off
+# ruff: noqa: E501
 """Operational process semantics."""
 from __future__ import annotations
 
