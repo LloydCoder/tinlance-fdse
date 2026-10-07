@@ -9,13 +9,6 @@ from fdse.contracts import EvidenceRef
 from ._common import required, unique_ids
 
 # fmt: off
-"""Measured starting-state contracts."""
-from __future__ import annotations
-from dataclasses import dataclass
-from enum import StrEnum
-from fdse.contracts import EvidenceRef
-from ._common import required, unique_ids
-
 class MeasurementMethod(StrEnum):
     OBSERVED = "observed"
     SYSTEM_REPORT = "system_report"
