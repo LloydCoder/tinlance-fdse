@@ -4,10 +4,10 @@ from __future__ import annotations
 import pytest
 from fdse.contracts import EvidenceRef, ProvenanceRef
 from fdse.transformation import (
-    Action, Baseline, Classification, ClassificationDecision, ClassificationPolicy, DecisionBasis, DecisionConfidence, Handoff,
+    Action, Baseline, Classification, DecisionBasis, DecisionConfidence, Handoff,
     Measurement, MeasurementMethod, MeasurementStage, MetricObservation, Outcome,
     OwnershipTransferStatus, Process, ProcessStep, ReplicationProfile, Reversibility,
-    RiskLevel, TargetState, Transformation, default_policy, digest_value, serialize,
+    RiskLevel, TargetState, Transformation, digest_value, serialize,
 )
 def evidence(eid: str = "ev-1") -> EvidenceRef:
     return EvidenceRef(eid, "observation", ProvenanceRef("source-1", "rev-1"), "digest-1")
