@@ -1,5 +1,22 @@
 # Transformation Domain Contract
 
+## Phase 2 — Classification Taxonomy
+
+Phase 2 extends the Phase 1 classification primitive without changing the canonical action set. The only valid actions remain DELETE, CODE, AGENT, and HUMAN. Taxonomy metadata records risk, reversibility, decision basis, confidence, rationale, decision ownership, constraints, and evidence. These records are descriptive domain contracts; they do not authorize execution.
+
+`ClassificationDecision` requires supporting evidence. `ClassificationPolicy` is conservative metadata for review and requires evidence for every action. Default policy metadata is intentionally fail-closed: DELETE, CODE, and AGENT require rollback planning, and all actions require human decision ownership. These requirements do not replace Agent Platform policy or approval authority.
+
+### Phase 2 invariants
+- No fifth action category may be introduced.
+- A classification decision without evidence is invalid.
+- Taxonomy metadata cannot grant execution capability.
+- Risk and reversibility describe the decision; they do not authorize it.
+- Agent Platform remains the authoritative authorization, approval, sandbox, secret, budget, tool, runtime, and audit boundary.
+
+### Phase 2 acceptance gate
+The taxonomy is complete when canonical action exclusivity, evidence requirements, conservative policy metadata, deterministic serialization, public API stability, documentation, and all FDSE CI gates are green.
+
+
 ## Status
 Phase 1 architectural contract. This document defines the bounded Transformation Domain inside FDSE. It does not claim external production capability, customer outcomes, or replication success.
 
