@@ -26,7 +26,7 @@ from .reference_ap_invoice import (
 from .replication import ReplicationProfile, ReplicationStage
 from .replication_kit import EnterpriseReplicationKit
 from .transformation import TargetState, Transformation
-from .transitions import transition_execution, transition_handoff, transition_replication
+from fdse.transitions import transition_execution, transition_handoff, transition_replication
 
 __all__ = [
     "Action",
