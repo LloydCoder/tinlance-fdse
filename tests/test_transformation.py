@@ -16,7 +16,7 @@ def process() -> Process:
 def classifications() -> tuple[Classification, ...]:
     return (Classification("c1","tenant-1","rev-1","s1",Action.CODE,"parse invoice","finance",expected_effect="extract invoice",evidence=(evidence("ev-1"),),decision_basis=DecisionBasis.ANALYSIS,risk_level=RiskLevel.MEDIUM,reversibility=Reversibility.REVERSIBLE,confidence=DecisionConfidence.HIGH),Classification("c2","tenant-1","rev-1","s2",Action.HUMAN,"approve exceptions","finance",expected_effect="approve exception",evidence=(evidence("ev-2"),),decision_basis=DecisionBasis.POLICY,risk_level=RiskLevel.HIGH,reversibility=Reversibility.REVERSIBLE,confidence=DecisionConfidence.HIGH))
 def target() -> TargetState:
-    return TargetState("proc-1",("receive -> approve",),classifications(),("manager approval",),("invoice extraction",))
+    return TargetState("proc-1",("receive -> approve",),classifications(),("manager approval",),("invoice extraction",),acceptance_criteria=("cycle time <= target",),human_decision_rights=("manager approves exceptions",))
 def test_valid_construction_every_canonical_object() -> None:
     p=process()
     baseline=Baseline("base-1","tenant-1","rev-1","v1",(MetricObservation("cycle_time",12.0,"minutes","2026-Q3","all invoices",MeasurementMethod.OBSERVED,"ERP",evidence()),))
@@ -45,9 +45,9 @@ def test_blank_and_nul_rejection() -> None:
 def test_scope_revision_and_classification_rejection() -> None:
     p=process()
     with pytest.raises(ValueError): Transformation("tr","tenant-2","rev-1","v1",p,target())
-    bad=TargetState("proc-1",("x",),(Classification("c","tenant-1","rev-2","s1",Action.CODE,"x","owner",expected_effect="code",evidence=(evidence(),)),Classification("c2","tenant-1","rev-1","s2",Action.HUMAN,"x","owner",expected_effect="human",evidence=(evidence("ev-2"),))),("human",),("system",))
+    bad=TargetState("proc-1",("x",),(Classification("c","tenant-1","rev-2","s1",Action.CODE,"x","owner",expected_effect="code",evidence=(evidence(),)),Classification("c2","tenant-1","rev-1","s2",Action.HUMAN,"x","owner",expected_effect="human",evidence=(evidence("ev-2"),))),("human",),("system",),acceptance_criteria=("accepted",),human_decision_rights=("owner",))
     with pytest.raises(ValueError): Transformation("tr","tenant-1","rev-1","v1",p,bad)
-    with pytest.raises(ValueError): TargetState("proc-1",("x",),(classifications()[0],classifications()[0]),("human",),("system",))
+    with pytest.raises(ValueError): TargetState("proc-1",("x",),(classifications()[0],classifications()[0]),("human",),("system",),acceptance_criteria=("accepted",),human_decision_rights=("owner",))
 def test_deterministic_serialization_and_digest() -> None:
     p=process()
     assert serialize(p)==serialize(p)
@@ -143,3 +143,22 @@ def test_baseline_rejects_non_finite_metric() -> None:
             "ERP",
             evidence(),
         )
+
+
+def test_target_state_requires_acceptance_and_human_decision_rights() -> None:
+    cs = classifications()
+    with pytest.raises(ValueError):
+        TargetState("proc-1", ("receive -> approve",), cs, (), ("invoice extraction",))
+    target_state = TargetState(
+        "proc-1",
+        ("receive -> approve",),
+        cs,
+        ("manager approval",),
+        ("invoice extraction",),
+        acceptance_criteria=("cycle time <= target",),
+        human_decision_rights=("manager approves exceptions",),
+        exception_handling=("route low-confidence invoices to manager",),
+        recovery_requirements=("restore previous mapping",),
+        observability_requirements=("record extraction confidence",),
+    )
+    assert target_state.human_decision_rights == ("manager approves exceptions",)

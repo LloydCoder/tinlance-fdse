@@ -21,6 +21,10 @@ class TargetState:
     integration_requirements: tuple[str, ...] = ()
     governance_requirements: tuple[str, ...] = ()
     acceptance_criteria: tuple[str, ...] = ()
+    exception_handling: tuple[str, ...] = ()
+    human_decision_rights: tuple[str, ...] = ()
+    recovery_requirements: tuple[str, ...] = ()
+    observability_requirements: tuple[str, ...] = ()
     def __post_init__(self) -> None:
         object.__setattr__(self, "process_id", required(self.process_id, "process_id"))
         if not self.desired_topology:
@@ -31,6 +35,14 @@ class TargetState:
         object.__setattr__(self, "integration_requirements", tuple(required(v, "integration requirement") for v in self.integration_requirements))
         object.__setattr__(self, "governance_requirements", tuple(required(v, "governance requirement") for v in self.governance_requirements))
         object.__setattr__(self, "acceptance_criteria", tuple(required(v, "acceptance criterion") for v in self.acceptance_criteria))
+        object.__setattr__(self, "exception_handling", tuple(required(v, "exception handling") for v in self.exception_handling))
+        object.__setattr__(self, "human_decision_rights", tuple(required(v, "human decision right") for v in self.human_decision_rights))
+        object.__setattr__(self, "recovery_requirements", tuple(required(v, "recovery requirement") for v in self.recovery_requirements))
+        object.__setattr__(self, "observability_requirements", tuple(required(v, "observability requirement") for v in self.observability_requirements))
+        if not self.acceptance_criteria:
+            raise ValueError("target state requires acceptance criteria")
+        if not self.human_decision_rights:
+            raise ValueError("target state requires human decision rights")
         unique_ids(tuple(c.step_id for c in self.classifications), "classification step_id")
 
 @dataclass(frozen=True, slots=True)
