@@ -18,11 +18,11 @@ from .measurement import Measurement, MeasurementDirection, MeasurementStage
 from .outcome import Outcome, OutcomeAcceptance
 from .process import Process, ProcessStep
 from .realization import EngineeringRealization
-from .replication import ReplicationProfile, ReplicationStage
 from .reference_ap_invoice import (
     ReferenceAPInvoiceTransformation,
     build_reference_ap_invoice_transformation,
 )
+from .replication import ReplicationProfile, ReplicationStage
 from .transformation import TargetState, Transformation
 
 __all__ = [
