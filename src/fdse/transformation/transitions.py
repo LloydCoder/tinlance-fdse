@@ -1,3 +1,4 @@
+# ruff: noqa: I001
 """Authoritative Transformation lifecycle transition rules."""
 
 from __future__ import annotations
@@ -9,7 +10,11 @@ from .replication import ReplicationStage
 
 _EXECUTION: dict[ExecutionReceiptState, frozenset[ExecutionReceiptState]] = {
     ExecutionReceiptState.PLANNED: frozenset(
-        {ExecutionReceiptState.RUNNING, ExecutionReceiptState.FAILED, ExecutionReceiptState.CANCELLED}
+        {
+            ExecutionReceiptState.RUNNING,
+            ExecutionReceiptState.FAILED,
+            ExecutionReceiptState.CANCELLED,
+        }
     ),
     ExecutionReceiptState.RUNNING: frozenset(
         {
