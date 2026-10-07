@@ -134,13 +134,13 @@ P11–P15 are the final repository/domain hardening sequence for the Transformat
 capability. They do not create an M19 and do not create a fifth Agent System
 repository.
 
-| Phase | Scope | Gate |
-|---|---|---|
-| P11 | Enterprise forensic hardening: runtime contract validation, reference integrity, state/evidence/measurement integrity, tenant isolation, deterministic serialization, adversarial tests | Full CI + independent forensic re-audit |
-| P12 | Canonical AP/invoice reference transformation from discovery through measured outcome | Full CI + reference-object audit |
-| P13 | Reusable enterprise replication kit with explicit source/target/customer-specific lineage | Full CI + replication integrity audit |
-| P14 | FDSE → Agent Developer/OS → SDK → Agent Platform integration proof | Full CI + authority-boundary audit |
-| P15 | Final Transformation Domain certification and whole-repository forensic audit | Full CI + final independent audit |
+| Phase | Scope | Status | Gate |
+|---|---|---|---|
+| P11 | Enterprise forensic hardening: runtime contract validation, reference integrity, state/evidence/measurement integrity, tenant isolation, deterministic serialization, adversarial tests | Implemented | Full CI + independent forensic re-audit |
+| P12 | Canonical AP/invoice reference transformation from discovery through measured outcome | Implemented | Full CI + reference-object audit |
+| P13 | Reusable enterprise replication kit with explicit source/target/customer-specific lineage | Implemented | Full CI + replication integrity audit |
+| P14 | FDSE → Agent Developer/OS → SDK → Agent Platform integration proof | Implemented | Full CI + authority-boundary audit |
+| P15 | Final Transformation Domain certification and whole-repository forensic audit | Implemented | Full CI + final independent audit |
 
 P11–P15 are repository/domain certification gates. They do not certify external
 production, customer outcomes, regulatory compliance, or successful real-world
