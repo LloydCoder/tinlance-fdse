@@ -31,29 +31,17 @@ _EXECUTION: dict[ExecutionReceiptState, frozenset[ExecutionReceiptState]] = {
 }
 
 _REPLICATION: dict[ReplicationStage, frozenset[ReplicationStage]] = {
-    ReplicationStage.PLANNED: frozenset(
-        {ReplicationStage.CONFIGURED, ReplicationStage.FAILED}
-    ),
-    ReplicationStage.CONFIGURED: frozenset(
-        {ReplicationStage.DEPLOYED, ReplicationStage.FAILED}
-    ),
-    ReplicationStage.DEPLOYED: frozenset(
-        {ReplicationStage.MEASURED, ReplicationStage.FAILED}
-    ),
-    ReplicationStage.MEASURED: frozenset(
-        {ReplicationStage.ACCEPTED, ReplicationStage.FAILED}
-    ),
+    ReplicationStage.PLANNED: frozenset({ReplicationStage.CONFIGURED, ReplicationStage.FAILED}),
+    ReplicationStage.CONFIGURED: frozenset({ReplicationStage.DEPLOYED, ReplicationStage.FAILED}),
+    ReplicationStage.DEPLOYED: frozenset({ReplicationStage.MEASURED, ReplicationStage.FAILED}),
+    ReplicationStage.MEASURED: frozenset({ReplicationStage.ACCEPTED, ReplicationStage.FAILED}),
     ReplicationStage.ACCEPTED: frozenset(),
     ReplicationStage.FAILED: frozenset(),
 }
 
 _HANDOFF: dict[OwnershipTransferStatus, frozenset[OwnershipTransferStatus]] = {
-    OwnershipTransferStatus.PENDING: frozenset(
-        {OwnershipTransferStatus.ACCEPTED}
-    ),
-    OwnershipTransferStatus.ACCEPTED: frozenset(
-        {OwnershipTransferStatus.TRANSFERRED}
-    ),
+    OwnershipTransferStatus.PENDING: frozenset({OwnershipTransferStatus.ACCEPTED}),
+    OwnershipTransferStatus.ACCEPTED: frozenset({OwnershipTransferStatus.TRANSFERRED}),
     OwnershipTransferStatus.TRANSFERRED: frozenset(),
 }
 
