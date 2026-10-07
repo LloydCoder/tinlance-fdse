@@ -1,3 +1,4 @@
+# fmt: off
 """Authority-neutral engineering realization of a transformation target state."""
 from __future__ import annotations
 
