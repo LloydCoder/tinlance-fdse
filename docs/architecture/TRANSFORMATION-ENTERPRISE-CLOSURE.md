@@ -73,6 +73,10 @@ This track does not claim real customer outcomes, production deployment,
 cross-company replication, third-party attestation, or formal compliance
 certification. Those require external evidence.
 
+## Post-P15 forensic remediation
+
+The final certification gate was followed by an independent adversarial review. Residual runtime type-boundary and lifecycle-transition-input gaps were closed in PR #49. The remediation was re-gated through Python 3.12/3.13 compatibility, quality checks, and merged-main CI before closure remained valid.
+
 ## Phase sequence
 
 - P11 — Enterprise Forensic Hardening
