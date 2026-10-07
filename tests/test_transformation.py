@@ -374,6 +374,9 @@ def test_replication_requires_evidence_and_target_outcome_when_qualified() -> No
         source_outcome_ref="out-1",
         target_transformation_id="tr-2",
         target_outcome_ref="out-2",
+        target_transformation_tenant_id="tenant-2",
+        target_transformation_version="1.0",
+        target_outcome_tenant_id="tenant-2",
         evidence_refs=("ev-rep",),
     )
     assert qualified.stage is ReplicationStage.ACCEPTED
