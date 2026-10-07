@@ -73,7 +73,9 @@ class TransformationLifecycle:
             if self.binding.execution_ref not in receipt_run_refs:
                 raise ValueError("binding execution reference has no matching receipt")
         measurement_ids = {measurement.measurement_id for measurement in self.measurements}
-        if self.binding is not None and not set(self.binding.measurement_refs).issubset(measurement_ids):
+        if self.binding is not None and not set(self.binding.measurement_refs).issubset(
+            measurement_ids
+        ):
             raise ValueError("binding measurement references do not resolve")
 
         if self.measurements:
@@ -96,7 +98,11 @@ class TransformationLifecycle:
                 raise ValueError("outcome tenant does not match")
             if self.outcome.version != transformation.version:
                 raise ValueError("outcome version does not match")
-            if self.binding is not None and self.binding.outcome_ref is not None and self.binding.outcome_ref != self.outcome.outcome_id:
+            if (
+                self.binding is not None
+                and self.binding.outcome_ref is not None
+                and self.binding.outcome_ref != self.outcome.outcome_id
+            ):
                 raise ValueError("binding outcome reference does not match outcome")
             if not any(
                 measurement.stage
