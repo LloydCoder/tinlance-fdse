@@ -11,7 +11,7 @@ from fdse.transformation import (
     Action, Baseline, Classification, DecisionBasis, DecisionConfidence, Handoff,
     Measurement, MeasurementMethod, MeasurementStage, MetricObservation, Outcome,
     OwnershipTransferStatus, Process, ProcessStep, ReplicationProfile, Reversibility,
-    RiskLevel, TargetState, Transformation, digest_value, serialize,
+    ReplicationStage, RiskLevel, TargetState, Transformation, digest_value, serialize,
 )
 def evidence(eid: str = "ev-1") -> EvidenceRef:
     return EvidenceRef(eid, "observation", ProvenanceRef("source-1", "rev-1"), "digest-1")
@@ -347,3 +347,50 @@ def test_outcome_acceptance_state_is_canonical() -> None:
         (evidence(),),
     )
     assert outcome.acceptance_state is OutcomeAcceptance.ACCEPTED
+
+
+def test_replication_requires_evidence_and_target_outcome_when_qualified() -> None:
+    with pytest.raises(ValueError):
+        ReplicationProfile(
+            "rep-qualified",
+            "tr-1",
+            "tenant-1",
+            "tenant-2",
+            ("discovery",),
+            ("ERP mapping",),
+            ("lesson",),
+            stage=ReplicationStage.ACCEPTED,
+            evidence_refs=("ev-rep",),
+        )
+    qualified = ReplicationProfile(
+        "rep-qualified",
+        "tr-1",
+        "tenant-1",
+        "tenant-2",
+        ("discovery",),
+        ("ERP mapping",),
+        ("lesson",),
+        stage=ReplicationStage.ACCEPTED,
+        target_transformation_id="tr-2",
+        target_outcome_ref="out-2",
+        evidence_refs=("ev-rep",),
+    )
+    assert qualified.stage is ReplicationStage.ACCEPTED
+
+
+def test_transferred_handoff_requires_acceptance_evidence() -> None:
+    with pytest.raises(ValueError):
+        Handoff(
+            "h-transfer",
+            "tr",
+            "tenant",
+            "tech",
+            "ops",
+            ("artifact",),
+            ("training",),
+            ("runbook",),
+            ("support",),
+            ("recovery",),
+            "accepted",
+            OwnershipTransferStatus.TRANSFERRED,
+        )
