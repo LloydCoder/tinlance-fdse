@@ -1,4 +1,5 @@
 """Authoritative Transformation lifecycle transition rules."""
+# ruff: noqa: I001
 
 from __future__ import annotations
 
