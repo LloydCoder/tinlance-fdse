@@ -11,7 +11,7 @@ from fdse.transformation import (
     Action, Baseline, Classification, DecisionBasis, DecisionConfidence, Handoff,
     Measurement, MeasurementMethod, MeasurementStage, MetricObservation, Outcome,
     OwnershipTransferStatus, Process, ProcessStep, ReplicationProfile, Reversibility,
-    ReplicationStage, RiskLevel, TargetState, Transformation, digest_value, serialize,
+    ReplicationStage, RiskLevel, TargetState, Transformation, TransformationLifecycle, digest_value, serialize,
 )
 def evidence(eid: str = "ev-1") -> EvidenceRef:
     return EvidenceRef(eid, "observation", ProvenanceRef("source-1", "rev-1"), "digest-1")
