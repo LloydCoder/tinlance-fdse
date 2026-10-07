@@ -7,6 +7,7 @@ from enum import StrEnum
 from fdse.contracts import EvidenceRef
 
 from ._common import required
+from .classification import Action
 
 
 class RiskLevel(StrEnum):
