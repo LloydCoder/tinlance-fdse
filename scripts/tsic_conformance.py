@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Fail-closed FDSE verification against the canonical TSIC adapter."""
+
 # fmt: off
 from __future__ import annotations
 
