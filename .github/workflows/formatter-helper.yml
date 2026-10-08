@@ -1,0 +1,21 @@
+name: Formatter helper
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: astral-sh/ruff-action@f0c9d3b2e3e6b2b5d7f0a1e9b1c7e9d1b7f1f8e8
+        with:
+          version: "0.13.0"
+          args: "format scripts/tsic_conformance.py"
+      - name: Print formatted source
+        run: cat scripts/tsic_conformance.py
+      - name: Check formatted source
+        run: ruff format --check scripts/tsic_conformance.py
