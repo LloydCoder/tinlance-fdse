@@ -45,6 +45,8 @@ jobs:
         run: python -m build --no-isolation
       - name: Documentation validation
         run: python scripts/check_docs.py
+      - name: Verify TSIC integration contract
+        run: python scripts/tsic_conformance.py
       - name: Inspect generated artifacts
         run: |
           python - <<'PY'
