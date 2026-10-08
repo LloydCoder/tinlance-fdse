@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Fail-closed FDSE verification against the canonical TSIC adapter."""
+# fmt: off
 from __future__ import annotations
 
 import json
@@ -60,3 +61,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+# fmt: on
