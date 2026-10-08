@@ -36,7 +36,9 @@ def main() -> None:
     assert adapter["source_system"] == "tsic"
     assert adapter["target_system"] == "fdse"
     assert adapter["status"] == "reference-contract"
-    assert {item["tsic_contract"] for item in adapter["contract_bindings"]} == REQUIRED
+    assert (
+        {item["tsic_contract"] for item in adapter["contract_bindings"]} == REQUIRED
+    )
     assert {item["id"] for item in registry["contracts"]} >= REQUIRED
 
     authority = adapter["authority"]
