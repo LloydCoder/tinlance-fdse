@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Fail-closed FDSE verification against the canonical TSIC adapter."""
-
 from __future__ import annotations
 
 import json
 from urllib.request import urlopen
 
 TSIC_REVISION = "b30a5926e8af88d9df935b50a45dd21d30cd304a"
-RAW_ROOT = f"https://raw.githubusercontent.com/LloydCoder/tinlance-system-integration/{TSIC_REVISION}"
+RAW_ROOT = (
+    "https://raw.githubusercontent.com/LloydCoder/tinlance-system-integration/"
+    f"{TSIC_REVISION}"
+)
 REQUIRED = {
     "identity-context",
     "event-envelope",
