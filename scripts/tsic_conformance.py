@@ -19,11 +19,7 @@ REQUIRED = {
 }
 
 def get(path: str) -> dict:
-    request = Request(
-        f"{RAW_ROOT}/{path}",
-        headers={"Accept": "application/json", "User-Agent": "tinlance-fdse-ci"},
-    )
-    with urlopen(request, timeout=15) as response:  # noqa: S310
+    with urlopen(f"{RAW_ROOT}/{path}", timeout=15) as response:  # noqa: S310
         return json.load(response)
 
 def main() -> None:
